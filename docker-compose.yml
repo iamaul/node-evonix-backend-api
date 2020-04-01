@@ -1,0 +1,42 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: evonix-ucp-backend-api
+    env_file: .env
+    environment:
+      - MYSQL_USER="${MYSQL_USER}"
+      - MYSQL_PASSWORD="${MYSQL_PASSWORD}"
+      - MYSQL_HOST=mariadb
+      - MYSQL_PORT="${MYSQL_PORT}"
+      - MYSQL_DATABASE="${MYSQL_DATABASE}"
+    networks:
+      - backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/home/iamaul/evonix-ucp-backend-api
+    restart: unless-stopped
+
+  mariadb:
+    container_name: mysqldb
+    image: mariadb:10.4
+    command: --default-authentication-plugin=mysql_native_password
+    env_file: .env
+    environment:
+      - MYSQL_USER="${MYSQL_USER}"
+      - MYSQL_PASSWORD="${MYSQL_PASSWORD}"
+      - MYSQL_HOST=localhost
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=samp_evxrp_dev
+    ports:
+      - "3307:3306"
+    volumes:
+      - /var/lib/mysql
+    restart: unless-stopped
+
+networks:
+  backend:
+    driver: bridge
