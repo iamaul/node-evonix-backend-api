@@ -152,7 +152,7 @@ exports.authNewValidation = () => {
             .exists()
             .withMessage('Password is required.')
             .isLength({ min: 6, max: 20 })
-            .withMessage('Password must be at least 6 characters long.')
+            .withMessage('Password must be at least 6 or 20 characters long.')
     ];
 }
 
@@ -175,7 +175,7 @@ exports.authNewUser = async (req, res, next) => {
         });
 
         const userEmail = await User.findOne({
-            where: { email: email }
+            where: { email }
         });
 
         if (userName) {
@@ -196,7 +196,7 @@ exports.authNewUser = async (req, res, next) => {
             });
         }
 
-        const user = User.build({
+        let user = User.build({
             name: username,
             email,
             password,
