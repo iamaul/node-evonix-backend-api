@@ -1,8 +1,8 @@
 const express = require('express');
-const database = require('./config/database');
-
 const dotenv = require('dotenv');
 dotenv.config({ path: './config/config.env' });
+
+const database = require('./config/database');
 
 // Database Connection
 database

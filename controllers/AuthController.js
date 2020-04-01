@@ -54,8 +54,6 @@ exports.authValidation = () => {
         check('password')
             .exists()
             .withMessage('Password is required.')
-            .isLength({ min: 6, max: 8 })
-            .withMessage('Password must be at least 6 or 8 characters long.')
     ];
 }
 
@@ -153,8 +151,8 @@ exports.authNewValidation = () => {
         check('password')
             .exists()
             .withMessage('Password is required.')
-            .isLength({ min: 6, max: 8 })
-            .withMessage('Password must be at least 6 or 8 characters long.')
+            .isLength({ min: 6, max: 20 })
+            .withMessage('Password must be at least 6 characters long.')
     ];
 }
 
@@ -172,25 +170,33 @@ exports.authNewUser = async (req, res, next) => {
     const { username, email, password } = req.body;
 
     try {
-        const user = await User.findOne({
-            where: {
-                [Op.or]: [
-                    { name: username },
-                    { email: email }
-                ]
-            }
+        const userName = await User.findOne({
+            where: { name: username }
         });
 
-        if (user) {
+        const userEmail = await User.findOne({
+            where: { email: email }
+        });
+
+        if (userName) {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'The username or email that you\'ve entered is already exists.'
+                    message: 'The username that you\'ve entered is already exists.'
                 }]
             });
         }
 
-        user = User.build({
+        if (userEmail) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    message: 'The email that you\'ve entered is already exists.'
+                }]
+            });
+        }
+
+        const user = User.build({
             name: username,
             email,
             password,

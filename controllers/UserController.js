@@ -224,8 +224,8 @@ exports.userReqForgotPasswordValidation = () => {
         check('password')
             .exists()
             .withMessage('Password is required.')
-            .isLength({ min: 6, max: 8 })
-            .withMessage('Password must be at least 6 or 8 characters long.')
+            .isLength({ min: 6, max: 20 })
+            .withMessage('Password must be at least 6 or 20 characters long.')
     ];
 }
 
@@ -298,8 +298,8 @@ exports.userChangePasswordValidation = () => {
         check('password')
             .exists()
             .withMessage('Password is required.')
-            .isLength({ min: 6, max: 8 })
-            .withMessage('Password must be at least 6 or 8 characters long.')
+            .isLength({ min: 6, max: 20 })
+            .withMessage('Password must be at least 6 or 20 characters long.')
     ];
 }
 
