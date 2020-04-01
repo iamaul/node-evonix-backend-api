@@ -203,7 +203,7 @@ exports.authNewUser = async (req, res, next) => {
             email,
             password,
             regdate: Date.now(),
-            ucp_register_ip: req.connection.remoteAddress
+            ucp_register_ip: req.ip
         });
 
         const salt = await bcrypt.genSalt(12);
