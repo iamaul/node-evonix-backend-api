@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         regdate: { type: DataTypes.INTEGER(11) },
         admin: { type: DataTypes.INTEGER(11) },
         lastlog: { type: DataTypes.INTEGER(11) },
-        ucp_register_ip: { type: DataTypes.STRING(20) },
-        ucp_login_ip: { type: DataTypes.STRING(20) }
+        register_ip: { type: DataTypes.STRING(20) },
+        login_ip: { type: DataTypes.STRING(20) }
     }, { tableName: 'users' });
 }

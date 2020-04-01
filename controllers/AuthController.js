@@ -203,9 +203,8 @@ exports.authNewUser = async (req, res, next) => {
             email,
             password,
             regdate: Date.now(),
-            register_ip: req.ip
+            register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
         });
-        console.log(user.register_ip);
 
         const salt = await bcrypt.genSalt(12);
         user.password = await bcrypt.hash(password, salt);
