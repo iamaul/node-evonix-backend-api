@@ -28,7 +28,7 @@ app.get('/', (req, res) => res.send({ status: 'success', message: 'EvoniX Rolepl
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/user', user);
 
-const SERVER_PORT = process.env.PORT || 8000;
+const SERVER_PORT = process.env.PORT || 3000;
 
 app.listen(SERVER_PORT, () =>
     console.log(`[log] backend-api-server started running in ${process.env.NODE_ENV} mode on port ${SERVER_PORT}`)
