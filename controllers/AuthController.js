@@ -171,11 +171,9 @@ exports.authNewUser = async (req, res, next) => {
 
     try {
         const userName = await User.findOne({
-            where: { name: username }
-        });
-
-        const userEmail = await User.findOne({
-            where: { email }
+            where: { 
+                name: username 
+            }
         });
 
         if (userName) {
@@ -186,6 +184,10 @@ exports.authNewUser = async (req, res, next) => {
                 }]
             });
         }
+
+        const userEmail = await User.findOne({
+            where: { email }
+        });
 
         if (userEmail) {
             return res.status(400).json({
@@ -201,7 +203,7 @@ exports.authNewUser = async (req, res, next) => {
             email,
             password,
             regdate: Date.now(),
-            ucp_register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            ucp_register_ip: req.connection.remoteAddress
         });
 
         const salt = await bcrypt.genSalt(12);
