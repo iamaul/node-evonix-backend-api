@@ -1,4 +1,8 @@
 version: '3'
+networks:
+  mariadb:
+    driver: bridge
+
 services:
   database:
     container_name: database
@@ -8,6 +12,8 @@ services:
       - MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}"
     ports:
       - "3307:3306"
+    networks:
+      - mariadb
     restart: unless-stopped
 
   api:
@@ -22,15 +28,14 @@ services:
       - MYSQL_PASSWORD="${DB_PASSWORD}"
       - MYSQL_HOST=database
       - MYSQL_PORT="${DB_PORT}"
-      - MYSQL_DATABASE="${DB_DATABASE}"
+      - MYSQL_DATABASE="${DB_NAME}"
     networks:
-      - backend
+      - default
+      - mariadb
     ports:
       - "3000:3000"
+    depends_on:
+      - mariadb
     volumes:
       - ./:/home/iamaul/evonix-ucp-backend-api
     restart: unless-stopped
-
-networks:
-  backend:
-    driver: bridge
