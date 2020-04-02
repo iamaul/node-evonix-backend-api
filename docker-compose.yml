@@ -21,16 +21,11 @@ services:
     restart: unless-stopped
 
   mariadb:
-    container_name: mysqldb
+    container_name: mariadb
     image: mariadb:10.4
-    command: --default-authentication-plugin=mysql_native_password
     env_file: .env
     environment:
-      - MYSQL_USER="${MYSQL_USER}"
-      - MYSQL_PASSWORD="${MYSQL_PASSWORD}"
-      - MYSQL_HOST=localhost
-      - MYSQL_PORT=3306
-      - MYSQL_DATABASE=samp_evxrp_dev
+      - MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}"
     ports:
       - "3307:3306"
     volumes:
