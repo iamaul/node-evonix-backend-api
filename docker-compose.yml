@@ -4,8 +4,7 @@ networks:
     driver: bridge
 
 services:
-  database:
-    container_name: database
+  mariadb:
     image: mariadb:10.4
     env_file: .env
     environment:
@@ -20,17 +19,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: backend-api
     image: evonix-ucp-backend-api
     env_file: .env
     environment:
       - MYSQL_USER="${DB_USER}"
       - MYSQL_PASSWORD="${DB_PASSWORD}"
-      - MYSQL_HOST=database
+      - MYSQL_HOST=mariadb
       - MYSQL_PORT="${DB_PORT}"
       - MYSQL_DATABASE="${DB_NAME}"
     networks:
-      - default
       - mariadb
     ports:
       - "3000:3000"
