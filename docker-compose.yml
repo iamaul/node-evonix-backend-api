@@ -1,36 +1,43 @@
-version: '3'
+version: "3"
 networks:
-  mariadb:
+  evonix:
     driver: bridge
 
 services:
   mariadb:
-    image: mariadb:10.4
+    image: mariadb:10.4.12-bionic
+    container_name: mariadb
     env_file: .env
     environment:
-      - MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}"
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
       - "3307:3306"
     networks:
-      - mariadb
+      - evonix
     restart: unless-stopped
 
   api:
     build:
       context: .
       dockerfile: Dockerfile
-    image: evonix-ucp-backend-api
+    image: "evonixdev/evonix-ucp-backend-api:latest"
+    container_name: evonix-api
     env_file: .env
     environment:
-      - MYSQL_USER="${DB_USER}"
-      - MYSQL_PASSWORD="${DB_PASSWORD}"
       - MYSQL_HOST=mariadb
-      - MYSQL_PORT="${DB_PORT}"
-      - MYSQL_DATABASE="${DB_NAME}"
-    networks:
-      - mariadb
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_PORT=${DB_PORT}
     ports:
-      - "3000:3000"
+      - "5000:5000"
+    expose:
+      - 5000
+    networks:
+      - evonix
     depends_on:
       - mariadb
     volumes:
