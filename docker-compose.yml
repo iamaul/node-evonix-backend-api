@@ -8,6 +8,8 @@ services:
   mariadb:
     image: mariadb:10.4.12
     container_name: mariadb
+    volumes:
+      - /mysql-data:/var/lib/mysql
     restart: unless-stopped
     env_file: .env
     environment:
@@ -38,3 +40,7 @@ services:
       - "5000:5000"
     networks:
       - evonix
+
+volumes:
+  mysql-data:
+    driver: local
