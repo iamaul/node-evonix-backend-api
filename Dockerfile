@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM node:12.16.1-alpine
 
 RUN mkdir -p /home/iamaul/evonix-ucp-backend-api
 
@@ -8,6 +8,6 @@ COPY . .
 
 RUN npm install
 
-EXPOSE 3000
+EXPOSE 5000
 
 CMD ["npm", "run", "start"]
