@@ -22,7 +22,7 @@ exports.authReqToken = async (req, res, next) => {
                 id: req.user.userid 
             },
             attributes: {
-                exclude: ['pass']
+                exclude: ['password']
             }
         });
         return res.status(201).json({ status: true, user });
@@ -90,7 +90,7 @@ exports.authUser = async (req, res, next) => {
             });
         }
 
-        const verify = await bcrypt.compare(password, user.pass);
+        const verify = await bcrypt.compare(password, user.password);
         if (!verify) {
             return res.status(400).json({
                 errors: [{
@@ -202,8 +202,8 @@ exports.authNewUser = async (req, res, next) => {
             name: username,
             email,
             password,
-            regdate: Date.now(),
-            register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            registered_date: Date.now(),
+            ucp_register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
         });
 
         const salt = await bcrypt.genSalt(12);

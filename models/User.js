@@ -6,12 +6,12 @@ module.exports = (sequelize, DataTypes) => {
         },
         email: { type: DataTypes.STRING(100) },
         email_verified: { type: DataTypes.TINYINT },
-        pass: { type: DataTypes.STRING(129) },
+        password: { type: DataTypes.STRING(129) },
         ipv4: { type: DataTypes.INTEGER(11) },
-        regdate: { type: DataTypes.INTEGER(11) },
+        registered_date: { type: DataTypes.BIGINT },
         admin: { type: DataTypes.INTEGER(11) },
-        lastlog: { type: DataTypes.INTEGER(11) },
-        register_ip: { type: DataTypes.STRING(20) },
-        login_ip: { type: DataTypes.STRING(20) }
+        lastlogin: { type: DataTypes.INTEGER(11) },
+        ucp_register_ip: { type: DataTypes.STRING(20) },
+        ucp_login_ip: { type: DataTypes.STRING(20) }
     }, { tableName: 'users' });
 }

@@ -15,7 +15,7 @@ const UserSessionModel = require('../models/UserSession');
 const UserSession = UserSessionModel(database, DataTypes);
 
 /**
- * @route   POST /api/v1/user/email/verification
+ * @route   POST /api/v1/users/email/verification
  * @desc    Verify user email
  * @access  Private
  */
@@ -59,10 +59,11 @@ exports.userVerifyEmail = async (req, res, next) => {
         });
 
         const message = {
+            to: user.email,
             from: 'EvoniX Roleplay UCP <no-reply@evonix-rp.com>',
             subject: 'Email Verification ✅',
             html: `<p>Hey ${user.name},<br><br>To verify your email, please click the following link below:<br>` +
-            `http://localhost:5000/api/v1/user/email/verification/${user_session.code}`
+            `http://103.129.222.3:5000/api/v1/users/email/verification/${user_session.code}`
         }
         await transporter.sendMail(message);
 
@@ -79,7 +80,7 @@ exports.userVerifyEmail = async (req, res, next) => {
 }
 
 /**
- * @route   GET /api/v1/user/email/verification/:code
+ * @route   GET /api/v1/users/email/verification/:code
  * @desc    Confirm email verification
  * @access  Private
  */
@@ -150,7 +151,7 @@ exports.userForgotPasswordValidation = () => {
 }
 
 /**
- * @route   POST /api/v1/user/forgot/password
+ * @route   POST /api/v1/users/forgot/password
  * @desc    Forgot password
  * @access  Public
  */
@@ -197,10 +198,11 @@ exports.userForgotPassword = async (req, res, next) => {
         });
 
         const message = {
+            to: email,
             from: 'EvoniX Roleplay UCP <no-reply@evonix-rp.com>',
             subject: 'Forgot Password 🔒',
             html: `<p>Hey ${user.name},<br><br>To change a new password, please click the following link below:<br>` +
-            `http://localhost:5000/api/v1/user/forgot/password/${user_session.code}`
+            `http://103.129.222.3:5000/api/v1/user/forgot/password/${user_session.code}`
         }
         await transporter.sendMail(message);
 
@@ -230,7 +232,7 @@ exports.userReqForgotPasswordValidation = () => {
 }
 
 /**
- * @route   GET /api/v1/user/forgot/password/:code
+ * @route   GET /api/v1/users/forgot/password/:code
  * @desc    User request a new password
  * @access  Public
  */
@@ -257,7 +259,7 @@ exports.userReqForgotPassword = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'The link does\'nt seems right. We couldn\'t help you to verify email.'
+                    message: 'The link does\'nt seems right. We couldn\'t help you to request a new password.'
                 }]
             });
         }
@@ -266,7 +268,7 @@ exports.userReqForgotPassword = async (req, res, next) => {
         const new_password = await bcrypt.hash(password, salt);
 
         await User.update(
-            { pass: new_password },
+            { password: new_password },
             { where: { id: user_session.userid } }
         );
         
@@ -304,7 +306,7 @@ exports.userChangePasswordValidation = () => {
 }
 
 /**
- * @route   POST /api/v1/user/change/password
+ * @route   POST /api/v1/users/change/password
  * @desc    Change a new password
  * @access  Private
  */
@@ -337,7 +339,7 @@ exports.userChangePassword = async (req, res, next) => {
         const new_password = await bcrypt.hash(password, salt);
 
         await User.update(
-            { pass: new_password },
+            { password: new_password },
             { where: { id: req.user.userid } }
         );
 

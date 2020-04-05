@@ -1,5 +1,5 @@
 {
-  "name": "backend-api-server",
+  "name": "evonix-backend-api",
   "version": "1.0.0",
   "description": "An API service for the SA-MP EvoniX Roleplay",
   "main": "index.js",
