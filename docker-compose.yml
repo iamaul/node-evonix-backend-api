@@ -5,6 +5,19 @@ networks:
     driver: bridge
 
 services:
+  mariadb:
+    image: mariadb:10.4.12
+    container_name: mariadb
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    networks:
+      - evonix
+
   api:
     build:
       context: .
@@ -19,6 +32,8 @@ services:
       - MYSQL_HOST=${DB_HOST}
       - MYSQL_PORT=${DB_PORT}
       - MYSQL_DATABASE=${DB_NAME}
+    depends_on:
+      - mariadb
     ports:
       - "5000:5000"
     networks:
