@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         ipv4: { type: DataTypes.INTEGER(11) },
         registered_date: { type: DataTypes.BIGINT },
         admin: { type: DataTypes.INTEGER(11) },
+        helper: { type: DataTypes.INTEGER(11) },
         lastlogin: { type: DataTypes.INTEGER(11) },
         ucp_register_ip: { type: DataTypes.STRING(20) },
         ucp_login_ip: { type: DataTypes.STRING(20) }

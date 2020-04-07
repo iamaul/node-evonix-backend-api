@@ -107,7 +107,9 @@ exports.authUser = async (req, res, next) => {
 
         const payload = {
             user: { 
-                userid: user.id 
+                userid: user.id,
+                admin: user.admin,
+                helper: user.helper 
             }
         }
 
