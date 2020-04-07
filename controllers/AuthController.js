@@ -205,6 +205,8 @@ exports.authNewUser = async (req, res, next) => {
             email,
             password,
             registered_date: Date.now(),
+            admin: 0,
+            helper: 0,
             ucp_register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
         });
 
