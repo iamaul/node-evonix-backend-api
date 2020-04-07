@@ -9,7 +9,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: "evonixdev/evonix-ucp-backend-api:latest"
+    image: "iamaul/evonix-backend-api:latest"
     container_name: evonix-api
     restart: unless-stopped
     env_file: .env
