@@ -159,7 +159,7 @@ exports.authNewValidation = () => {
 }
 
 /**
- * @route   POST /api/v1/auth/new
+ * @route   POST /api/v1/auth/create
  * @desc    Create a new user auth
  * @access  Public
  */

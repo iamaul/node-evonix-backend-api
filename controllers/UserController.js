@@ -63,7 +63,7 @@ exports.userVerifyEmail = async (req, res, next) => {
             from: 'EvoniX Roleplay UCP <no-reply@evonix-rp.com>',
             subject: 'Email Verification ✅',
             html: `<p>Hey ${user.name},<br><br>To verify your email, please click the following link below:<br>` +
-            `http://103.129.222.3:5000/api/v1/users/email/verification/${user_session.code}`
+            `http://dev.evonix-rp.com/api/v1/users/email/verification/${user_session.code}`
         }
         await transporter.sendMail(message);
 
@@ -202,7 +202,7 @@ exports.userForgotPassword = async (req, res, next) => {
             from: 'EvoniX Roleplay UCP <no-reply@evonix-rp.com>',
             subject: 'Forgot Password 🔒',
             html: `<p>Hey ${user.name},<br><br>To change a new password, please click the following link below:<br>` +
-            `http://103.129.222.3:5000/api/v1/user/forgot/password/${user_session.code}`
+            `http://dev.evonix-rp.com/api/v1/users/forgot/password/${user_session.code}`
         }
         await transporter.sendMail(message);
 

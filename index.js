@@ -19,6 +19,7 @@ database
 // Routes
 const auth = require('./routes/auth');
 const user = require('./routes/user');
+const character = require('./routes/character');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => res.send({ status: 'success', message: 'EvoniX Backend API v1.' }));
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', user);
+app.use('/api/v1/characters', character);
 
 const SERVER_PORT = process.env.PORT || 5000;
 

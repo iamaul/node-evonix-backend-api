@@ -26,7 +26,7 @@ exports.getUserChars = async (req, res, next) => {
     }
 
     try {
-        let chars = await Character.findAll({
+        const chars = await Character.findAll({
             where: {
                 userid: req.user.userid
             },
@@ -70,7 +70,7 @@ exports.createCharValidation = () => {
 }
 
 /**
- * @route   POST /api/v1/character
+ * @route   POST /api/v1/characters/create
  * @desc    User create a character
  * @access  Private
  */

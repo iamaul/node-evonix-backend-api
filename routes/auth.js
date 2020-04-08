@@ -23,7 +23,7 @@ router
  * @route   /api/v1/auth/new
  */
 router
-    .route('/new')
+    .route('/create')
     .post(authNewValidation(), authNewUser);
 
 module.exports = router;
