@@ -1,11 +1,8 @@
-const { check, oneOf, validationResult } = require('express-validator');
-const { Op, DataTypes } = require('sequelize');
+const { check, validationResult } = require('express-validator');
+const { DataTypes } = require('sequelize');
 
 // Connection
 const database = require('../config/database');
-
-// Middleware
-const auth = require('../middleware/auth');
 
 // Models
 const UserModel = require('../models/User');
