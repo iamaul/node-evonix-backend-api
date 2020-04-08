@@ -51,9 +51,9 @@ module.exports = (sequelize, DataTypes) => {
         job_timer: { type: DataTypes.TINYINT },
         faction_sqlid: { type: DataTypes.INTEGER },
         faction_rank: { type: DataTypes.INTEGER },
-        faction_rankname: { type: DataTypes.VARCHAR(30) },
+        faction_rankname: { type: DataTypes.STRING(30) },
         faction_div: { type: DataTypes.INTEGER },
-        faction_divname: { type: DataTypes.VARCHAR(30) },
+        faction_divname: { type: DataTypes.STRING(30) },
         faction_duty: { type: DataTypes.TINYINT },
         faction_dutytime: { type: DataTypes.INTEGER },
         faction_skin: { type: DataTypes.INTEGER },
@@ -72,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
         license_flying: { type: DataTypes.INTEGER },
         license_sealing: { type: DataTypes.INTEGER },
         admin_jail_timer: { type: DataTypes.INTEGER },
-        admin_jail_issuer: { type: DataTypes.VARCHAR(24) },
-        admin_jail_reason: { type: DataTypes.VARCHAR(100) }
+        admin_jail_issuer: { type: DataTypes.STRING(24) },
+        admin_jail_reason: { type: DataTypes.STRING(100) }
     }, { tableName: 'characters' });
 }
