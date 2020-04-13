@@ -24,10 +24,10 @@ router
     .post(authValidation(), authUser);
 
 /**
- * @route   /api/v1/auth/create
+ * @route   /api/v1/auth/new
  */
 router
-    .route('/create')
+    .route('/new')
     .post(authNewValidation(), authNewUser);
 
 /**
