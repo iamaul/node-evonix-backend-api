@@ -244,6 +244,23 @@ exports.authNewUser = async (req, res, next) => {
 }
 
 /**
+ * @desc    User forgot password validation
+ */
+exports.authForgotPasswordValidation = () => {
+    return [
+        oneOf([
+            check('email')
+                .exists()
+                .withMessage('Email is required.'),
+
+            check('email')
+                .isEmail()
+                .withMessage('Invalid email address.')
+        ])
+    ];
+}
+
+/**
  * @route   POST /api/v1/auth/reset
  * @desc    Forgot password
  * @access  Public

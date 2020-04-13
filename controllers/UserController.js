@@ -134,23 +134,6 @@ exports.userConfirmEmailVerification = async (req, res, next) => {
 }
 
 /**
- * @desc    User forgot password validation
- */
-exports.userForgotPasswordValidation = () => {
-    return [
-        oneOf([
-            check('email')
-                .exists()
-                .withMessage('Email is required.'),
-
-            check('email')
-                .isEmail()
-                .withMessage('Invalid email address.')
-        ])
-    ];
-}
-
-/**
  * @desc    User change a new password validation
  */
 exports.userChangePasswordValidation = () => {
