@@ -242,3 +242,144 @@ exports.authNewUser = async (req, res, next) => {
         });
     }
 }
+
+/**
+ * @route   POST /api/v1/auth/reset
+ * @desc    Forgot password
+ * @access  Public
+ */
+exports.authForgotPassword = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({
+            where: {
+                email: email
+            },
+            attributes: ['id', 'name']
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    message: 'The email address that you\'ve entered does not exists.'
+                }]
+            });
+        }
+
+        const user_session = UserSession.build({
+            userid: user.id,
+            code: uuid.v4(),
+            type: 'forgot_password'
+        });
+        await user_session.save();
+
+        let transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: process.env.SMTP_SECURE,
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASSWORD
+            }
+        });
+
+        const message = {
+            to: email,
+            from: 'EvoniX Roleplay UCP <no-reply@evonix-rp.com>',
+            subject: 'Forgot Password 🔒',
+            html: `<p>Hey ${user.name},<br><br>To change a new password, please click the following link below:<br>` +
+            `http://dev.evonix-rp.com/api/v1/users/forgot/password/${user_session.code}`
+        }
+        await transporter.sendMail(message);
+
+        return res.status(201).json({ status: true, message: 'We\'ve sent an email to you, please check your email in Inbox or Spam.' });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                message: error.message
+            }]
+        });
+    }
+}
+
+/**
+ * @desc    User request a new password validation
+ */
+exports.authReqForgotPasswordValidation = () => {
+    return [
+        check('password')
+            .exists()
+            .withMessage('Password is required.')
+            .isLength({ min: 6, max: 20 })
+            .withMessage('Password must be at least 6 or 20 characters long.')
+    ];
+}
+
+/**
+ * @route   GET /api/v1/auth/reset/:code
+ * @desc    User request a new password
+ * @access  Public
+ */
+exports.authReqForgotPassword = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { password } = req.body;
+
+    try {
+        const user_session = UserSession.findOne({
+            where: {
+                [Op.and]: [
+                    { code: req.params.code },
+                    { type: 'forgot_password' }
+                ]
+            },
+            attributes: ['userid']
+        });
+
+        if (!user_session) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    message: 'The link does\'nt seems right. We couldn\'t help you to request a new password.'
+                }]
+            });
+        }
+
+        const salt = await bcrypt.genSalt(12);
+        const new_password = await bcrypt.hash(password, salt);
+
+        await User.update(
+            { password: new_password },
+            { where: { id: user_session.userid } }
+        );
+        
+        await UserSession.destroy({
+            where: {
+                userid: user_session.userid
+            },
+            truncate: true
+        });
+
+        return res.status(201).json({ status: true, message: 'You have changed a new password.' });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                message: error.message
+            }]
+        });
+    }
+}

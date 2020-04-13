@@ -29,20 +29,6 @@ router
     .post(auth, userConfirmEmailVerification);
 
 /**
- * @route   /api/v1/user/forgot/password
- */
-router
-    .route('/forgot/password')
-    .post(userForgotPasswordValidation(), userForgotPassword);
-
-/**
- * @route   /api/v1/user/forgot/password/:code
- */
-router
-    .route('/forgot/password/:code')
-    .get(userReqForgotPasswordValidation(), userReqForgotPassword);
-
-/**
  * @route   /api/v1/user/change/password
  */
 router

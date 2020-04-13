@@ -6,7 +6,11 @@ const {
     authValidation,
     authUser,
     authNewValidation,
-    authNewUser
+    authNewUser,
+    authForgotPasswordValidation,
+    authForgotPassword,
+    authReqForgotPasswordValidation,
+    authReqForgotPassword
 } = require('../controllers/AuthController');
 
 const auth = require('../middleware/auth');
@@ -20,10 +24,24 @@ router
     .post(authValidation(), authUser);
 
 /**
- * @route   /api/v1/auth/new
+ * @route   /api/v1/auth/create
  */
 router
     .route('/create')
     .post(authNewValidation(), authNewUser);
+
+/**
+ * @route   /api/v1/auth/reset
+ */
+router
+    .route('/reset')
+    .post(authForgotPasswordValidation(), authForgotPassword);
+
+/**
+ * @route   /api/v1/auth/reset/:code
+ */
+router
+    .route('/reset/:code')
+    .get(authReqForgotPasswordValidation(), authReqForgotPassword);
 
 module.exports = router;
