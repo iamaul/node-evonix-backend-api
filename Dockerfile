@@ -1,8 +1,8 @@
 FROM node:12.16.1-alpine
 
-RUN mkdir -p /home/iamaul/evonix-backend-api
+RUN mkdir -p /evonix-backend-api
 
-WORKDIR /home/iamaul/evonix-backend-api
+WORKDIR /evonix-backend-api
 
 COPY . .
 
