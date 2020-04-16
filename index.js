@@ -1,4 +1,16 @@
 const express = require('express');
+const cors = require('cors');
+
+var whitelist = ['http://103.129.222.3:3000', 'http://ucp.evonix-rp.com']
+var corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('You\'re not allowed to access this site by CORS!'))
+        }
+    }
+}
 
 require('dotenv').config()
 
@@ -15,6 +27,8 @@ database
         // Kill process failure to connect to database
         process.exit(1);
     });
+
+app.use(cors(corsOptions));
 
 // Routes
 const auth = require('./routes/auth');
