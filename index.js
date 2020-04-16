@@ -1,13 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 
-var whitelist = ['http://103.129.222.3:3000', 'http://ucp.evonix-rp.com']
-var corsOptions = {
+const whitelist = ['http://103.129.222.3:3000', 'http://ucp.evonix-rp.com']
+const message = { status: 'false', message: 'evonix-backend-api v1.' };
+const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1) {
             callback(null, true)
         } else {
-            callback(new Error('You\'re not allowed to access this site by CORS!'))
+            callback(message)
         }
     }
 }
