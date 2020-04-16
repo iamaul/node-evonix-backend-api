@@ -31,7 +31,7 @@ exports.authReqToken = async (req, res, next) => {
         return res.status(500).json({
             errors: [{
                 status: false,
-                message: error.message
+                msg: error.message
             }]
         });
     }
@@ -85,7 +85,7 @@ exports.authUser = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'The username or email that you\'ve entered does not exists.'
+                    msg: 'The username or email that you\'ve entered does not exists.'
                 }]
             });
         }
@@ -95,7 +95,7 @@ exports.authUser = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'The password that you\'ve entered is incorrect.'
+                    msg: 'The password that you\'ve entered is incorrect.'
                 }]
             });
         }
@@ -127,7 +127,7 @@ exports.authUser = async (req, res, next) => {
         return res.status(500).json({
             errors: [{
                 status: false,
-                message: error.message
+                msg: error.message
             }]
         });
     }
@@ -182,7 +182,7 @@ exports.authNewUser = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'The username that you\'ve entered is already exists.'
+                    msg: 'The username that you\'ve entered is already exists.'
                 }]
             });
         }
@@ -195,7 +195,7 @@ exports.authNewUser = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'The email that you\'ve entered is already exists.'
+                    msg: 'The email that you\'ve entered is already exists.'
                 }]
             });
         }
@@ -237,7 +237,7 @@ exports.authNewUser = async (req, res, next) => {
         return res.status(500).json({
             errors: [{
                 status: false,
-                message: error.message
+                msg: error.message
             }]
         });
     }
@@ -285,7 +285,7 @@ exports.authForgotPassword = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'The email address that you\'ve entered does not exists.'
+                    msg: 'The email address that you\'ve entered does not exists.'
                 }]
             });
         }
@@ -316,13 +316,13 @@ exports.authForgotPassword = async (req, res, next) => {
         }
         await transporter.sendMail(message);
 
-        return res.status(201).json({ status: true, message: 'We\'ve sent an email to you, please check your email in Inbox or Spam.' });
+        return res.status(201).json({ status: true, msg: 'We\'ve sent an email to you, please check your email in Inbox or Spam.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
             errors: [{
                 status: false,
-                message: error.message
+                msg: error.message
             }]
         });
     }
@@ -369,7 +369,7 @@ exports.authReqForgotPassword = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'The link does\'nt seems right. We couldn\'t help you to request a new password.'
+                    msg: 'The link does\'nt seems right. We couldn\'t help you to request a new password.'
                 }]
             });
         }
@@ -389,13 +389,13 @@ exports.authReqForgotPassword = async (req, res, next) => {
             truncate: true
         });
 
-        return res.status(201).json({ status: true, message: 'You have changed a new password.' });
+        return res.status(201).json({ status: true, msg: 'You have changed a new password.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
             errors: [{
                 status: false,
-                message: error.message
+                msg: error.message
             }]
         });
     }

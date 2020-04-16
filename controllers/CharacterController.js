@@ -34,7 +34,7 @@ exports.getUserChars = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'You haven\'t created any characters yet.'
+                    msg: 'You haven\'t created any characters yet.'
                 }]
             });
         }
@@ -45,7 +45,7 @@ exports.getUserChars = async (req, res, next) => {
         return res.status(500).json({
             errors: [{
                 status: false,
-                message: error.message
+                msg: error.message
             }]
         });
     }
@@ -175,7 +175,7 @@ exports.createChar = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'You cannot create any more characters.'
+                    msg: 'You cannot create any more characters.'
                 }]
             });
         }
@@ -188,7 +188,7 @@ exports.createChar = async (req, res, next) => {
         return res.status(500).json({
             errors: [{
                 status: false,
-                message: error.message
+                msg: error.message
             }]
         });
     }

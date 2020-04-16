@@ -37,7 +37,7 @@ exports.userVerifyEmail = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'Your email is verified.'
+                    msg: 'Your email is verified.'
                 }]
             });
         }
@@ -67,13 +67,13 @@ exports.userVerifyEmail = async (req, res, next) => {
         }
         await transporter.sendMail(message);
 
-        return res.status(201).json({ status: true, message: 'We\'ve sent an email verification to you, please check your email in Inbox or Spam.' });
+        return res.status(201).json({ status: true, msg: 'We\'ve sent an email verification to you, please check your email in Inbox or Spam.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
             errors: [{
                 status: false,
-                message: error.message
+                msg: error.message
             }]
         });
     }
@@ -104,7 +104,7 @@ exports.userConfirmEmailVerification = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'The link does\'nt seems right. We couldn\'t help you to verify email.'
+                    msg: 'The link does\'nt seems right. We couldn\'t help you to verify email.'
                 }]
             });
         }
@@ -121,13 +121,13 @@ exports.userConfirmEmailVerification = async (req, res, next) => {
             truncate: true
         });
 
-        return res.status(201).json({ status: true, message: 'You\'ve successfully verified your email account.' });
+        return res.status(201).json({ status: true, msg: 'You\'ve successfully verified your email account.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
             errors: [{
                 status: false,
-                message: error.message
+                msg: error.message
             }]
         });
     }
@@ -172,7 +172,7 @@ exports.userChangePassword = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    message: 'Incorrect old password.'
+                    msg: 'Incorrect old password.'
                 }]
             });
         }
@@ -185,13 +185,13 @@ exports.userChangePassword = async (req, res, next) => {
             { where: { id: req.user.userid } }
         );
 
-        return res.status(201).json({ status: true, message: 'You have changed a new password.' });
+        return res.status(201).json({ status: true, msg: 'You have changed a new password.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
             errors: [{
                 status: false,
-                message: error.message
+                msg: error.message
             }]
         });
     }
