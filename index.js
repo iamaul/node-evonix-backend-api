@@ -28,14 +28,14 @@ database
         process.exit(1);
     });
 
-app.use(cors(corsOptions));
-
 // Routes
 const auth = require('./routes/auth');
 const user = require('./routes/user');
 const character = require('./routes/character');
 
 const app = express();
+
+app.use(cors(corsOptions));
 
 app.use(express.json({ extended: false }));
 
