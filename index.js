@@ -8,7 +8,7 @@ const corsOptions = {
         if (whitelist.indexOf(origin) !== -1) {
             callback(null, true)
         } else {
-            callback(message)
+            callback(`{ status: ${message.status}, message: ${message.message} }`)
         }
     }
 }
