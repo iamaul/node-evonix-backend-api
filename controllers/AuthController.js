@@ -17,7 +17,7 @@ const User = UserModel(database, DataTypes);
  */
 exports.authReqToken = async (req, res, next) => {
     try {
-        const user = await User.findAll({
+        const user = await User.findOne({
             where: {
                 id: req.user.userid 
             },
@@ -109,9 +109,7 @@ exports.authUser = async (req, res, next) => {
 
         const payload = {
             user: { 
-                userid: user.id,
-                admin: user.admin,
-                helper: user.helper 
+                userid: user.id
             }
         }
 
@@ -221,9 +219,7 @@ exports.authNewUser = async (req, res, next) => {
 
         const payload = {
             user: {
-                userid: user.id,
-                admin: user.admin,
-                helper: user.helper
+                userid: user.id
             }
         }
 
