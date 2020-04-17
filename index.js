@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
-const whitelist = ['http://103.129.222.3:3000', 'http://ucp.evonix-rp.com']
-const message = { status: 'false', message: 'evonix-backend-api v1.' };
+const whitelist = ['http://103.129.222.3:3000', 'http://ucp.evonix-rp.com', 'http://dev.evonix-rp.com']
+const message = { status: 'false', message: 'You\'re not authorized to access this API.' };
 const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1) {
