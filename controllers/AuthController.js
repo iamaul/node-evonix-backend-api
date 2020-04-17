@@ -17,7 +17,7 @@ const User = UserModel(database, DataTypes);
  */
 exports.authReqToken = async (req, res, next) => {
     try {
-        const user = await User.findAll({
+        const user = await User.findByPk({
             where: {
                 id: req.user.userid 
             },
