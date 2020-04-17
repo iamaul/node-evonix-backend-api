@@ -59,7 +59,8 @@ exports.createCharValidation = () => {
         check('firstname', 'First Name is required.').not().isEmpty(),
         check('lastname', 'Last Name is required.').not().isEmpty(),
         check('gender')
-            .exists()
+            .not()
+            .isEmpty()
             .withMessage('Gender is required.')
             .isNumeric()
             .withMessage('Only numbers are allowed.')

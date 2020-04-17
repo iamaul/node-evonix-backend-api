@@ -12,12 +12,12 @@ const User = UserModel(database, DataTypes);
 
 /**
  * @route   GET /api/v1/auth
- * @desc    Get request user auth
+ * @desc    Get request user auth token
  * @access  Public
  */
 exports.authReqToken = async (req, res, next) => {
     try {
-        const user = await User.findAll({
+        const user = await User.findByPk({
             where: {
                 id: req.user.userid 
             },
@@ -44,7 +44,8 @@ exports.authValidation = () => {
     return [
         oneOf([
             check('usermail')
-                .exists()
+                .not()
+                .isEmpty()
                 .withMessage('Username is required.'),
 
             check('usermail')
@@ -52,7 +53,8 @@ exports.authValidation = () => {
                 .withMessage('Invalid email address.')
         ]),
         check('password')
-            .exists()
+            .not()
+            .isEmpty()
             .withMessage('Password is required.')
     ];
 }
@@ -139,7 +141,8 @@ exports.authUser = async (req, res, next) => {
 exports.authNewValidation = () => {
     return [
         check('username')
-            .exists()
+            .not()
+            .isEmpty()
             .withMessage('Username is required.')
             .isLength({ min: 3, max: 20 })
             .withMessage('Username must be between 3-20 characters.')
@@ -151,7 +154,8 @@ exports.authNewValidation = () => {
             .withMessage('Invalid email address.'),
 
         check('password')
-            .exists()
+            .not()
+            .isEmpty()
             .withMessage('Password is required.')
             .isLength({ min: 6, max: 20 })
             .withMessage('Password must be at least 6 or 20 characters long.')
@@ -159,7 +163,7 @@ exports.authNewValidation = () => {
 }
 
 /**
- * @route   POST /api/v1/auth/create
+ * @route   POST /api/v1/auth/new
  * @desc    Create a new user auth
  * @access  Public
  */
@@ -250,7 +254,8 @@ exports.authForgotPasswordValidation = () => {
     return [
         oneOf([
             check('email')
-                .exists()
+                .not()
+                .isEmpty()
                 .withMessage('Email is required.'),
 
             check('email')
@@ -334,7 +339,8 @@ exports.authForgotPassword = async (req, res, next) => {
 exports.authReqForgotPasswordValidation = () => {
     return [
         check('password')
-            .exists()
+            .not()
+            .isEmpty()
             .withMessage('Password is required.')
             .isLength({ min: 6, max: 20 })
             .withMessage('Password must be at least 6 or 20 characters long.')
@@ -369,7 +375,7 @@ exports.authReqForgotPassword = async (req, res, next) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'The link does\'nt seems right. We couldn\'t help you to request a new password.'
+                    msg: 'The link does\'nt seem right. We couldn\'t help you to reset a new password.'
                 }]
             });
         }
