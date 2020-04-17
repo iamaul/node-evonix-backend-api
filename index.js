@@ -1,18 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 
-const whitelist = ['http://103.129.222.3:3000', 'http://103.129.222.3:5000']
-const message = { status: 'false', message: 'You\'re not authorized to access this API.' };
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(`{ status: ${message.status}, message: ${message.message} }`)
-        }
-    }
-}
-
 require('dotenv').config()
 
 const database = require('./config/database');
@@ -36,7 +24,7 @@ const character = require('./routes/character');
 
 const app = express();
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(express.json({ extended: false }));
 
