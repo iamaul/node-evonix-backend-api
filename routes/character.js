@@ -10,14 +10,14 @@ const {
 const auth = require('../middleware/auth');
 
 /**
- * @route   /api/v1/characters
+ * @route   GET /api/v1/characters
  */
 router
     .route('/')
     .get(auth, getUserChars);
 
 /**
- * @route   /api/v1/characters/create
+ * @route   POST /api/v1/characters/create
  */
 router
     .route('/create')

@@ -16,7 +16,8 @@ const {
 const auth = require('../middleware/auth');
 
 /**
- * @route   /api/v1/auth
+ * @route   GET /api/v1/auth
+ * @route   POST /api/v1/auth
  */
 router
     .route('/')
@@ -24,21 +25,21 @@ router
     .post(authValidation(), authUser);
 
 /**
- * @route   /api/v1/auth/new
+ * @route   POST /api/v1/auth/new
  */
 router
     .route('/new')
     .post(authNewValidation(), authNewUser);
 
 /**
- * @route   /api/v1/auth/reset
+ * @route   POST /api/v1/auth/reset
  */
 router
     .route('/reset')
     .post(authForgotPasswordValidation(), authForgotPassword);
 
 /**
- * @route   /api/v1/auth/reset/:code
+ * @route   GET /api/v1/auth/reset/:code
  */
 router
     .route('/reset/:code')
