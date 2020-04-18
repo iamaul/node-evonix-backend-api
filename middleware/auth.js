@@ -11,11 +11,16 @@ module.exports = function(req, res, next) {
 
     // Verify token
     try {
-        const decoded = jwt.verify(token, process.env.JWT_TOKEN);
-        req.user = decoded.user;
-        next();
+        jwt.verify(token, process.env.JWT_TOKEN, (error, decoded) => {
+            if (error) {
+                return res.status(401).json({ status: false, msg: 'Invalid token.' });
+            } else {
+                req.user = decoded.user;
+                next();
+            }
+        });
     } catch (error) {
         console.error(error.message);
-        return res.status(401).json({ status: false, msg: 'Invalid token.' });
+        return res.status(500).json({ status: false, msg: 'An unexpected error has occurred.' });
     }
 }
