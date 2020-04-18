@@ -119,7 +119,7 @@ exports.authUser = async (req, res, next) => {
             { expiresIn: 360000 },
             (error, token) => {
                 if (error) throw error;
-                return res.status(201).json({ status: true, token });
+                return res.json({ token });
             }
         );
     } catch (error) {
@@ -229,7 +229,7 @@ exports.authNewUser = async (req, res, next) => {
             { expiresIn: 360000 },
             (error, token) => {
                 if (error) throw error;
-                return res.status(201).json({ status: true, token });
+                return res.json({ token });
             }
         );
     } catch (error) {
