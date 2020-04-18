@@ -45,9 +45,7 @@ exports.authValidation = () => {
         check('usermail')
             .not()
             .isEmpty()
-            .withMessage('Username is required.')
-            .isEmail()
-            .withMessage('Invalid email address.'),
+            .withMessage('Username is required.'),
 
         check('password')
             .not()
