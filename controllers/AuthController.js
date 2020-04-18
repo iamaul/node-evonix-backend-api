@@ -19,7 +19,7 @@ exports.authReqToken = async (req, res, next) => {
     try {
         const user = await User.findOne({
             where: {
-                id: req.user.userid 
+                id: req.user.id
             },
             attributes: {
                 exclude: ['password']
@@ -109,7 +109,7 @@ exports.authUser = async (req, res, next) => {
 
         const payload = {
             user: { 
-                userid: user.id
+                id: user.id
             }
         }
 
@@ -219,7 +219,7 @@ exports.authNewUser = async (req, res, next) => {
 
         const payload = {
             user: {
-                userid: user.id
+                id: user.id
             }
         }
 
@@ -276,9 +276,7 @@ exports.authForgotPassword = async (req, res, next) => {
 
     try {
         const user = await User.findOne({
-            where: {
-                email
-            },
+            where: { email },
             attributes: ['id', 'name']
         });
 
