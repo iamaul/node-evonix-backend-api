@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const uuid = require('uuid');
-const { check, oneOf, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 const { Op, DataTypes } = require('sequelize');
 
 // Connection

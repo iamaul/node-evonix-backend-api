@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { check, oneOf, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 const { Op, DataTypes } = require('sequelize');
 
 // Connection
@@ -42,16 +42,13 @@ exports.authReqToken = async (req, res, next) => {
  */
 exports.authValidation = () => {
     return [
-        oneOf([
-            check('usermail')
-                .not()
-                .isEmpty()
-                .withMessage('Username is required.'),
+        check('usermail')
+            .not()
+            .isEmpty()
+            .withMessage('Username is required.')
+            .isEmail()
+            .withMessage('Invalid email address.'),
 
-            check('usermail')
-                .isEmail()
-                .withMessage('Invalid email address.')
-        ]),
         check('password')
             .not()
             .isEmpty()
@@ -248,16 +245,12 @@ exports.authNewUser = async (req, res, next) => {
  */
 exports.authForgotPasswordValidation = () => {
     return [
-        oneOf([
-            check('email')
-                .not()
-                .isEmpty()
-                .withMessage('Email is required.'),
-
-            check('email')
-                .isEmail()
-                .withMessage('Invalid email address.')
-        ])
+        check('email')
+            .not()
+            .isEmpty()
+            .withMessage('Email is required.')
+            .isEmail()
+            .withMessage('Invalid email address.')
     ];
 }
 
