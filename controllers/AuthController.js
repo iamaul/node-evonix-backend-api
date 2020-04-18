@@ -394,7 +394,7 @@ exports.authReqForgotPassword = async (req, res, next) => {
         });
 
         // return res.status(201).json({ status: true, msg: 'You have changed a new password.' });
-        res.json({ msg: 'You have changed a new password.' });
+        res.json({ msg: 'You have changed a new password.' })
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
