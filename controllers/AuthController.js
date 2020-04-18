@@ -277,7 +277,7 @@ exports.authForgotPassword = async (req, res, next) => {
     try {
         const user = await User.findOne({
             where: {
-                email: email
+                email
             },
             attributes: ['id', 'name']
         });
