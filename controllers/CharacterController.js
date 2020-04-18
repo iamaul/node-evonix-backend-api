@@ -56,11 +56,10 @@ exports.getUserChars = async (req, res, next) => {
  */
 exports.createCharValidation = () => {
     return [
-        check('firstname', 'First Name is required.').not().isEmpty(),
-        check('lastname', 'Last Name is required.').not().isEmpty(),
+        check('firstname', 'First name is required.').not().isEmpty(),
+        check('lastname', 'Last name is required.').not().isEmpty(),
         check('gender')
-            .not()
-            .isEmpty()
+            .exists()
             .withMessage('Gender is required.')
             .isNumeric()
             .withMessage('Only numbers are allowed.')

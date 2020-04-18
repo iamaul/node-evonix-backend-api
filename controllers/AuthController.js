@@ -43,13 +43,11 @@ exports.authReqToken = async (req, res, next) => {
 exports.authValidation = () => {
     return [
         check('usermail')
-            .not()
-            .isEmpty()
+            .exists()
             .withMessage('Username is required.'),
 
         check('password')
-            .not()
-            .isEmpty()
+            .exists()
             .withMessage('Password is required.')
     ];
 }
@@ -134,8 +132,7 @@ exports.authUser = async (req, res, next) => {
 exports.authNewValidation = () => {
     return [
         check('username')
-            .not()
-            .isEmpty()
+            .exists()
             .withMessage('Username is required.')
             .isLength({ min: 3, max: 20 })
             .withMessage('Username must be between 3-20 characters.')
@@ -147,8 +144,7 @@ exports.authNewValidation = () => {
             .withMessage('Invalid email address.'),
 
         check('password')
-            .not()
-            .isEmpty()
+            .exists()
             .withMessage('Password is required.')
             .isLength({ min: 6, max: 20 })
             .withMessage('Password must be at least 6 or 20 characters long.')
@@ -244,8 +240,7 @@ exports.authNewUser = async (req, res, next) => {
 exports.authForgotPasswordValidation = () => {
     return [
         check('email')
-            .not()
-            .isEmpty()
+            .exists()
             .withMessage('Email is required.')
             .isEmail()
             .withMessage('Invalid email address.')
@@ -324,8 +319,7 @@ exports.authForgotPassword = async (req, res, next) => {
 exports.authReqForgotPasswordValidation = () => {
     return [
         check('password')
-            .not()
-            .isEmpty()
+            .exists()
             .withMessage('Password is required.')
             .isLength({ min: 6, max: 20 })
             .withMessage('Password must be at least 6 or 20 characters long.')

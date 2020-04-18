@@ -140,8 +140,7 @@ exports.userChangePasswordValidation = () => {
     return [
         check('old_password', 'Old password is required.').not().isEmpty(),
         check('password')
-            .not()
-            .isEmpty()
+            .exists()
             .withMessage('Password is required.')
             .isLength({ min: 6, max: 20 })
             .withMessage('Password must be at least 6 or 20 characters long.')
