@@ -30,9 +30,9 @@ database
 // }
 
 // Routes
-const auth = require('./routes/auth');
-const user = require('./routes/user');
-const character = require('./routes/character');
+const auth = require('./routes/api/auth');
+const user = require('./routes/api.user');
+const character = require('./routes/api/character');
 
 const app = express();
 

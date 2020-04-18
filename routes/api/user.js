@@ -1,3 +1,6 @@
+const express = require('express');
+const router = express.Router();
+
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const uuid = require('uuid');
@@ -6,6 +9,9 @@ const { Op, DataTypes } = require('sequelize');
 
 // Connection
 const database = require('../config/database');
+
+// Middleware
+const auth = require('../../middleware/auth');
 
 // Models
 const UserModel = require('../models/User');
@@ -19,7 +25,7 @@ const UserSession = UserSessionModel(database, DataTypes);
  * @desc    Verify user email
  * @access  Private
  */
-exports.userVerifyEmail = async (req, res, next) => {
+router.post('/email/verification', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -77,14 +83,14 @@ exports.userVerifyEmail = async (req, res, next) => {
             }]
         });
     }
-}
+});
 
 /**
  * @route   GET /api/v1/users/email/verification/:code
  * @desc    Confirm email verification
  * @access  Private
  */
-exports.userConfirmEmailVerification = async (req, res, next) => {
+router.post('/email/verification/:code', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -131,28 +137,21 @@ exports.userConfirmEmailVerification = async (req, res, next) => {
             }]
         });
     }
-}
-
-/**
- * @desc    User change a new password validation
- */
-exports.userChangePasswordValidation = () => {
-    return [
-        check('old_password', 'Old password is required.').not().isEmpty(),
-        check('password')
-            .exists()
-            .withMessage('Password is required.')
-            .isLength({ min: 6, max: 20 })
-            .withMessage('Password must be at least 6 or 20 characters long.')
-    ];
-}
+});
 
 /**
  * @route   POST /api/v1/users/change/password
  * @desc    Change a new password
  * @access  Private
  */
-exports.userChangePassword = async (req, res, next) => {
+router.post('/change/password', [auth, [
+    check('old_password', 'Old password is required.').not().isEmpty(),
+    check('password')
+        .exists()
+        .withMessage('Password is required.')
+        .isLength({ min: 6, max: 20 })
+        .withMessage('Password must be at least 6 or 20 characters long.')
+]], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -195,4 +194,4 @@ exports.userChangePassword = async (req, res, next) => {
             }]
         });
     }
-}
+});

@@ -1,3 +1,6 @@
+const express = require('express');
+const router = express.Router();
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
@@ -5,6 +8,9 @@ const { Op, DataTypes } = require('sequelize');
 
 // Connection
 const database = require('../config/database');
+
+// Middleware
+const auth = require('../../middleware/auth');
 
 // Models
 const UserModel = require('../models/User');
@@ -15,7 +21,7 @@ const User = UserModel(database, DataTypes);
  * @desc    Get request user auth token
  * @access  Public
  */
-exports.authReqToken = async (req, res, next) => {
+router.get('/', auth, async (req, res) => {
     try {
         const user = await User.findOne({
             where: {
@@ -35,29 +41,17 @@ exports.authReqToken = async (req, res, next) => {
             }]
         });
     }
-}
-
-/**
- * @desc    User authenticate validation
- */
-exports.authValidation = () => {
-    return [
-        check('usermail')
-            .exists()
-            .withMessage('Username is required.'),
-
-        check('password')
-            .exists()
-            .withMessage('Password is required.')
-    ];
-}
+});
 
 /**
  * @route   POST /api/v1/auth
  * @desc    Authenticate user along their token
  * @access  Public
  */
-exports.authUser = async (req, res, next) => {
+router.post('/', [
+    check('usermail', 'Username is required.').not().isEmpty(),
+    check('password', 'Password is required.').exists()
+], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -124,39 +118,31 @@ exports.authUser = async (req, res, next) => {
             }]
         });
     }
-}
-
-/**
- * @desc    User new authenticate validation
- */
-exports.authNewValidation = () => {
-    return [
-        check('username')
-            .exists()
-            .withMessage('Username is required.')
-            .isLength({ min: 3, max: 20 })
-            .withMessage('Username must be between 3-20 characters.')
-            .matches(/^[a-zA-Z0-9_.]+$/, 'i')
-            .withMessage('Only these characters are allowed (a-z, A-Z, 0-9).'),
-
-        check('email')
-            .isEmail()
-            .withMessage('Invalid email address.'),
-
-        check('password')
-            .exists()
-            .withMessage('Password is required.')
-            .isLength({ min: 6, max: 20 })
-            .withMessage('Password must be at least 6 or 20 characters long.')
-    ];
-}
+});
 
 /**
  * @route   POST /api/v1/auth/new
  * @desc    Create a new user auth
  * @access  Public
  */
-exports.authNewUser = async (req, res, next) => {
+router.post('/new', [
+    check('username')
+        .not()
+        .isEmpty()
+        .withMessage('Username is required.')
+        .isLength({ min: 3, max: 20 })
+        .withMessage('Username must be between 3-20 characters.')
+        .matches(/^[a-zA-Z0-9_.]+$/, 'i')
+        .withMessage('Only these characters are allowed (a-z, A-Z, 0-9).'),
+    check('email')
+        .isEmail()
+        .withMessage('Invalid email address.'),
+    check('password')
+        .exists()
+        .withMessage('Password is required.')
+        .isLength({ min: 6, max: 20 })
+        .withMessage('Password must be at least 6 or 20 characters long.')
+], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -232,27 +218,16 @@ exports.authNewUser = async (req, res, next) => {
             }]
         });
     }
-}
-
-/**
- * @desc    User forgot password validation
- */
-exports.authForgotPasswordValidation = () => {
-    return [
-        check('email')
-            .exists()
-            .withMessage('Email is required.')
-            .isEmail()
-            .withMessage('Invalid email address.')
-    ];
-}
+});
 
 /**
  * @route   POST /api/v1/auth/reset
  * @desc    Forgot password
  * @access  Public
  */
-exports.authForgotPassword = async (req, res, next) => {
+router.post('/reset', [
+    check('email', 'Invalid email address.').isEmail()
+], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -311,27 +286,20 @@ exports.authForgotPassword = async (req, res, next) => {
             }]
         });
     }
-}
-
-/**
- * @desc    User request a new password validation
- */
-exports.authReqForgotPasswordValidation = () => {
-    return [
-        check('password')
-            .exists()
-            .withMessage('Password is required.')
-            .isLength({ min: 6, max: 20 })
-            .withMessage('Password must be at least 6 or 20 characters long.')
-    ];
-}
+});
 
 /**
  * @route   GET /api/v1/auth/reset/:code
  * @desc    User request a new password
  * @access  Public
  */
-exports.authReqForgotPassword = async (req, res, next) => {
+router.get('/reset/:code', [
+    check('password')
+        .exists()
+        .withMessage('Password is required.')
+        .isLength({ min: 6, max: 20 })
+        .withMessage('Password must be at least 6 or 20 characters long.')
+], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -384,4 +352,4 @@ exports.authReqForgotPassword = async (req, res, next) => {
             }]
         });
     }
-}
+});
