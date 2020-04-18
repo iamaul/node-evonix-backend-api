@@ -36,8 +36,6 @@ const character = require('./routes/character');
 
 const app = express();
 
-app.use(express.json({ extended: false }));
-
 app.use(cors());
 
 app.get('/', (req, res) => res.send({ status: 'success', message: 'EvoniX Backend API v1.' }));

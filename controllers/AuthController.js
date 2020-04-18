@@ -25,7 +25,8 @@ exports.authReqToken = async (req, res, next) => {
                 exclude: ['password']
             }
         });
-        return res.status(201).json({ status: true, user });
+        // return res.status(201).json({ status: true, user });
+        res.json({ user });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -119,7 +120,8 @@ exports.authUser = async (req, res, next) => {
             { expiresIn: 360000 },
             (error, token) => {
                 if (error) throw error;
-                return res.status(201).json({ status: true, token });
+                // return res.status(201).json({ status: true, token });
+                res.json({ token });
             }
         );
     } catch (error) {
@@ -229,7 +231,8 @@ exports.authNewUser = async (req, res, next) => {
             { expiresIn: 360000 },
             (error, token) => {
                 if (error) throw error;
-                return res.status(201).json({ status: true, token });
+                // return res.status(201).json({ status: true, token });
+                res.json({ token });
             }
         );
     } catch (error) {
@@ -315,7 +318,8 @@ exports.authForgotPassword = async (req, res, next) => {
         }
         await transporter.sendMail(message);
 
-        return res.status(201).json({ status: true, msg: 'We\'ve sent an email to you, please check your email in Inbox or Spam.' });
+        // return res.status(201).json({ status: true, msg: 'We\'ve sent an email to you, please check your email in Inbox or Spam.' });
+        res.json({ msg: 'We\'ve sent an email to you, please check your email in Inbox or Spam.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -389,7 +393,8 @@ exports.authReqForgotPassword = async (req, res, next) => {
             truncate: true
         });
 
-        return res.status(201).json({ status: true, msg: 'You have changed a new password.' });
+        // return res.status(201).json({ status: true, msg: 'You have changed a new password.' });
+        res.json({ msg: 'You have changed a new password.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
