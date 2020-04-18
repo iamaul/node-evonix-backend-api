@@ -8,16 +8,16 @@ const { check, validationResult } = require('express-validator');
 const { Op, DataTypes } = require('sequelize');
 
 // Connection
-const database = require('../config/database');
+const database = require('../../config/database');
 
 // Middleware
 const auth = require('../../middleware/auth');
 
 // Models
-const UserModel = require('../models/User');
+const UserModel = require('../../models/User');
 const User = UserModel(database, DataTypes);
 
-const UserSessionModel = require('../models/UserSession');
+const UserSessionModel = require('../../models/UserSession');
 const UserSession = UserSessionModel(database, DataTypes);
 
 /**
