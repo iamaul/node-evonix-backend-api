@@ -353,3 +353,5 @@ router.get('/reset/:code', [
         });
     }
 });
+
+module.exports = router;

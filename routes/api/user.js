@@ -195,3 +195,5 @@ router.post('/change/password', [auth, [
         });
     }
 });
+
+module.exports = router;

@@ -192,3 +192,5 @@ router.post('/create', [auth, [
         });
     }
 });
+
+module.exports = router;
