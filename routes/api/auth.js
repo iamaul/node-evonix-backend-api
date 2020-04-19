@@ -16,6 +16,9 @@ const auth = require('../../middleware/auth');
 const UserModel = require('../../models/User');
 const User = UserModel(database, DataTypes);
 
+const UserSessionModel = require('../../models/UserSession');
+const UserSession = UserSessionModel(database, DataTypes);
+
 /**
  * @route   GET /api/v1/auth
  * @desc    Get request user auth token
