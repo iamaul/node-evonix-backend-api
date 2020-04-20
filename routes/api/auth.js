@@ -3,6 +3,7 @@ const router = express.Router();
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
 const { Op, DataTypes } = require('sequelize');
 
@@ -255,7 +256,7 @@ router.post('/reset', [
 
         const user_session = UserSession.build({
             userid: user.id,
-            code: uuid.v4(),
+            code: uuidv4(),
             type: 'forgot_password'
         });
         await user_session.save();

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
-const uuid = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
 const { Op, DataTypes } = require('sequelize');
 
@@ -50,7 +50,7 @@ router.post('/email/verification', auth, async (req, res) => {
 
         const user_session = UserSession.build({
             userid: req.user.userid,
-            code: uuid.v4(),
+            code: uuidv4(),
             type: 'email_verification'
         });
 
