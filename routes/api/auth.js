@@ -3,6 +3,7 @@ const router = express.Router();
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
 const { Op, DataTypes } = require('sequelize');
