@@ -27,14 +27,37 @@ const UserSession = UserSessionModel(database, DataTypes);
  * @access  Public
  */
 router.get('/', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     try {
-        const user = await User.findOne({
-            where: { id: req.user.id },
-            attributes: {
-                exclude: ['password']
+        // const user = await User.findOne({
+        //     where: { id: req.user.id },
+        //     attributes: {
+        //         exclude: ['password']
+        //     }
+        // });
+        await User.findByPk(req.user.id, { attributes: { exclude: ['password'] } }).then((res) => {
+            if (!res) {
+                return res.status(400).json({
+                    errors: [{
+                        status: false,
+                        msg: 'No users aren\'t found for this id.'
+                    }]
+                });
+            } else {
+                return res.status(201).json({ status: true, res });
             }
+        }).catch((err) => {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: err
+                }]
+            });
         });
-        return res.status(201).json({ status: true, user });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
