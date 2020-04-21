@@ -28,9 +28,7 @@ const UserSession = UserSessionModel(database, DataTypes);
 router.get('/', auth, async (req, res) => {
     try {
         const user = await User.findOne({
-            where: {
-                id: req.user.id
-            },
+            where: { id: req.user.id },
             attributes: {
                 exclude: ['password']
             }
