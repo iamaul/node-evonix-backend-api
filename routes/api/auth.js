@@ -39,25 +39,17 @@ router.get('/', auth, async (req, res) => {
         //         exclude: ['password']
         //     }
         // });
-        await User.findByPk(req.user.id, { attributes: { exclude: ['password'] } }).then((res) => {
-            if (!res) {
-                return res.status(400).json({
-                    errors: [{
-                        status: false,
-                        msg: 'No users aren\'t found for this id.'
-                    }]
-                });
-            } else {
-                return res.status(201).json({ status: true, res });
-            }
-        }).catch((err) => {
+        const user = await User.findByPk(req.user.id, { attributes: { exclude: ['password'] } });
+        if (user === null) {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: err
+                    msg: 'No users aren\'t found for this id.'
                 }]
             });
-        });
+        } else {
+            return res.status(201).json({ status: true, res });
+        }
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
