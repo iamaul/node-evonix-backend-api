@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 
 require('dotenv').config()
 
@@ -17,18 +16,6 @@ database
         process.exit(1);
     });
 
-// const whitelist = ['http://103.129.222.3:3000', 'http://ucp.evonix-rp.com'];
-// const msg = { status: 'false', msg: 'evonix-backend-api v1.' };
-// const corsOptions = {
-//     origin: function (origin, callback) {
-//         if (whitelist.indexOf(origin) !== -1) {
-//             callback(null, true);
-//         } else {
-//             callback(`status: ${msg.status}, message: ${msg.msg}`);
-//         }
-//     }
-// }
-
 // Routes
 const auth = require('./routes/api/auth');
 const user = require('./routes/api/user');
@@ -37,7 +24,12 @@ const character = require('./routes/api/character');
 const app = express();
 
 app.use(express.json({ extended: false }));
-app.use(cors());
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    next();
+});
 
 app.get('/', (req, res) => res.send({ status: 'success', message: 'EvoniX Backend API v1.' }));
 app.use('/v1/auth', auth);
