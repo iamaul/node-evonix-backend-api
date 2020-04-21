@@ -34,7 +34,7 @@ router.get('/', auth, async (req, res) => {
                 exclude: ['password']
             }
         });
-        return res.status(201).json({ status: true, user });
+        return res.status(201).json(user);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
