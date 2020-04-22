@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const moment = require('moment');
 const { v4: uuidv4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
 const { Op, DataTypes } = require('sequelize');
@@ -182,11 +183,13 @@ router.post('/new', [
             });
         }
 
+        const unix_timestamp = moment().unix();
+
         let user = User.build({
             name: username,
             email,
             password,
-            registered_date: Date.now(),
+            registered_date: unix_timestamp,
             admin: 0,
             helper: 0,
             ucp_register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
