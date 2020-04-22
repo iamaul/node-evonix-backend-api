@@ -93,7 +93,7 @@ router.post('/', [
             });
         }
 
-        User.update(
+        await User.update(
             { ucp_login_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress },
             { where: { id: user.id } } 
         );
@@ -332,12 +332,12 @@ router.get('/reset/:code', [
         const salt = await bcrypt.genSalt(12);
         const new_password = await bcrypt.hash(password, salt);
 
-        User.update(
+        await User.update(
             { password: new_password },
             { where: { id: user_session.userid } }
         );
         
-        UserSession.destroy({
+        await UserSession.destroy({
             where: {
                 userid: user_session.userid
             },
