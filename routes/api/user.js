@@ -201,7 +201,7 @@ router.put('/change/password', [auth, [
  * @desc    Change a new email
  * @access  Private
  */
-router.put('/change/email', [auth, [
+router.post('/change/email', [auth, [
     check('email', 'Invalid email address.').isEmail()
 ]], async (req, res) => {
     const errors = validationResult(req);
