@@ -93,7 +93,7 @@ router.post('/', [
             });
         }
 
-        await User.update(
+        User.update(
             { ucp_login_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress },
             { where: { id: user.id } } 
         );
@@ -307,6 +307,8 @@ router.get('/reset/:code', [
         return res.status(400).json({ errors: errors.array() });
     }
 
+    const { password } = req.body;
+
     try {
         const user_session = UserSession.findOne({
             where: {
@@ -328,14 +330,14 @@ router.get('/reset/:code', [
         }
 
         const salt = await bcrypt.genSalt(12);
-        const new_password = await bcrypt.hash(req.body.password, salt);
+        const new_password = await bcrypt.hash(password, salt);
 
-        await User.update(
+        User.update(
             { password: new_password },
             { where: { id: user_session.userid } }
         );
         
-        await UserSession.destroy({
+        UserSession.destroy({
             where: {
                 userid: user_session.userid
             },

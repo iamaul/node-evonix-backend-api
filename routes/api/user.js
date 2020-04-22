@@ -115,12 +115,12 @@ router.get('/email/verification/:code', auth, async (req, res) => {
             });
         }
 
-        await User.update(
+        User.update(
             { email_verified: 1 },
             { where: { id: req.user.id } }
         );
 
-        await UserSession.destroy({
+        UserSession.destroy({
             where: {
                 userid: req.user.id
             },
@@ -179,7 +179,7 @@ router.put('/change/password', [auth, [
         const salt = await bcrypt.genSalt(12);
         const new_password = await bcrypt.hash(password, salt);
 
-        await User.update(
+        User.update(
             { password: new_password },
             { where: { id: req.user.id } }
         );
@@ -197,7 +197,7 @@ router.put('/change/password', [auth, [
 });
 
 /**
- * @route   POST /api/v1/users/change/email
+ * @route   PUT /api/v1/users/change/email
  * @desc    Change a new email
  * @access  Private
  */
@@ -227,13 +227,10 @@ router.put('/change/email', [auth, [
 
         const verifiedStatus = user.email_verified ? 0 : 1;
 
-        console.log(email);
-        console.log(verifiedStatus);
-
-        await User.update({ 
+        User.update({ 
             email, 
             email_verified: verifiedStatus 
-        }, { where: { id: req.user.id } });
+        }, { where: { id: req.user.id } }).then(update => console.log(update)).catch(err => console.log(err));
 
         return res.status(201).json({ status: true, msg: 'You have changed a new email.' });
     } catch (error) {
