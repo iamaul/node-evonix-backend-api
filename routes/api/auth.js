@@ -130,20 +130,16 @@ router.post('/', [
  * @access  Public
  */
 router.post('/new', [
-    check('username')
+    check('username', 'Username is required.')
         .not()
         .isEmpty()
-        .withMessage('Username is required.')
         .isLength({ min: 3, max: 20 })
         .withMessage('Username must be between 3-20 characters.')
         .matches(/^[a-zA-Z0-9_.]+$/, 'i')
         .withMessage('Only these characters are allowed (a-z, A-Z, 0-9).'),
-    check('email')
-        .isEmail()
-        .withMessage('Invalid email address.'),
-    check('password')
+    check('email', 'Invalid email address.').isEmail(),
+    check('password', 'Password is required.')
         .exists()
-        .withMessage('Password is required.')
         .isLength({ min: 6, max: 20 })
         .withMessage('Password must be at least 6 or 20 characters long.')
 ], async (req, res) => {
@@ -232,7 +228,11 @@ router.post('/new', [
  * @access  Public
  */
 router.post('/reset', [
-    check('email', 'Invalid email address.').isEmail()
+    check('email', 'Email is required.')
+        .not()
+        .isEmpty()
+        .isEmail()
+        .withMessage('Invalid email address.')
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

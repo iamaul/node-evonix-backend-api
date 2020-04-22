@@ -202,7 +202,11 @@ router.put('/change/password', [auth, [
  * @access  Private
  */
 router.post('/change/email', [auth, [
-    check('email', 'Invalid email address.').isEmail()
+    check('email', 'Email is required.')
+        .not()
+        .isEmpty()
+        .isEmail()
+        .withMessage('Invalid email address.')
 ]], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
