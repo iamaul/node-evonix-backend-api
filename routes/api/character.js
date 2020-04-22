@@ -31,7 +31,7 @@ router.get('/', auth, async (req, res) => {
     try {
         const chars = await Character.findAll({
             where: {
-                userid: req.user.userid
+                userid: req.user.id
             },
             include: [User]
         });
@@ -143,7 +143,7 @@ router.post('/create', [auth, [
     } = req.body;
 
     const charData = {};
-    charData.userid = req.user.userid;
+    charData.userid = req.user.id;
 
     if (firstname && lastname) {
         charData.name = firstname + "_" + lastname;
@@ -166,7 +166,7 @@ router.post('/create', [auth, [
     try {
         const user_chars = Character.count({
             where: {
-                userid: req.user.userid
+                userid: req.user.id
             }
         });
 

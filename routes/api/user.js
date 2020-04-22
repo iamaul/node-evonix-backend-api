@@ -34,7 +34,7 @@ router.post('/email/verification', auth, async (req, res) => {
     try {
         const user = await User.findOne({
             where: {
-                id: req.user.userid
+                id: req.user.id
             },
             attributes: ['name', 'email', 'email_verified']
         });
@@ -49,7 +49,7 @@ router.post('/email/verification', auth, async (req, res) => {
         }
 
         const user_session = UserSession.build({
-            userid: req.user.userid,
+            userid: req.user.id,
             code: uuidv4(),
             type: 'email_verification'
         });
@@ -117,12 +117,12 @@ router.post('/email/verification/:code', auth, async (req, res) => {
 
         await User.update(
             { email_verified: 1 },
-            { where: { id: req.user.userid } }
+            { where: { id: req.user.id } }
         );
 
         await UserSession.destroy({
             where: {
-                userid: req.user.userid
+                userid: req.user.id
             },
             truncate: true
         });
@@ -162,7 +162,7 @@ router.post('/change/password', [auth, [
     try {
         const user = await User.findOne({
             where: {
-                id: req.user.userid
+                id: req.user.id
             }
         });
 
@@ -181,7 +181,7 @@ router.post('/change/password', [auth, [
 
         await User.update(
             { password: new_password },
-            { where: { id: req.user.userid } }
+            { where: { id: req.user.id } }
         );
 
         return res.status(201).json({ status: true, msg: 'You have changed a new password.' });
@@ -227,6 +227,7 @@ router.post('/change/email', [auth, [
 
         await User.update(
             { email },
+            { email_verified: 0 },
             { where: { id: req.user.id } }
         );
 
