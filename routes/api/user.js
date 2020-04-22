@@ -90,7 +90,7 @@ router.post('/email/verification', auth, async (req, res) => {
  * @desc    Confirm email verification
  * @access  Private
  */
-router.post('/email/verification/:code', auth, async (req, res) => {
+router.get('/email/verification/:code', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -144,7 +144,7 @@ router.post('/email/verification/:code', auth, async (req, res) => {
  * @desc    Change a new password
  * @access  Private
  */
-router.post('/change/password', [auth, [
+router.put('/change/password', [auth, [
     check('old_password', 'Old password is required.').not().isEmpty(),
     check('password')
         .exists()
@@ -201,7 +201,7 @@ router.post('/change/password', [auth, [
  * @desc    Change a new email
  * @access  Private
  */
-router.post('/change/email', [auth, [
+router.put('/change/email', [auth, [
     check('email', 'Invalid email address.').isEmail()
 ]], async (req, res) => {
     const errors = validationResult(req);
@@ -226,7 +226,7 @@ router.post('/change/email', [auth, [
         }
 
         await User.update(
-            { email },
+            { email: email },
             { email_verified: 0 },
             { where: { id: req.user.id } }
         );
