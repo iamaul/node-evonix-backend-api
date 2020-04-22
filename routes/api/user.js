@@ -196,4 +196,50 @@ router.post('/change/password', [auth, [
     }
 });
 
+/**
+ * @route   POST /api/v1/users/change/email
+ * @desc    Change a new email
+ * @access  Private
+ */
+router.post('/change/email', [auth, [
+    check('email', 'Invalid email address.').isEmail()
+]], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({
+            where: { email }
+        });
+
+        if (user.email) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'The email that you\'ve entered is already exists.'
+                }]
+            });
+        }
+
+        await User.update(
+            { email },
+            { where: { id: req.user.id } }
+        );
+
+        return res.status(201).json({ status: true, msg: 'You have changed a new email.' });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
 module.exports = router;
