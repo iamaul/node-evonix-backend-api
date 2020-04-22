@@ -171,7 +171,7 @@ router.post('/new', [
         }
 
         const userEmail = await User.findOne({
-            where: { email }
+            where: { email: email }
         });
 
         if (userEmail) {
@@ -243,7 +243,7 @@ router.post('/reset', [
 
     try {
         const user = await User.findOne({
-            where: { email },
+            where: { email: email },
             attributes: ['id', 'name']
         });
 

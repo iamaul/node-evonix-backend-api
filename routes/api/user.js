@@ -213,7 +213,7 @@ router.put('/change/email', [auth, [
 
     try {
         const user = await User.findOne({
-            where: { email }
+            where: { email: email }
         });
 
         if (user.email) {
@@ -225,11 +225,18 @@ router.put('/change/email', [auth, [
             });
         }
 
-        await User.update(
-            { email: email },
-            { email_verified: 0 },
-            { where: { id: req.user.id } }
-        );
+        if (user.email_verified) {
+            await User.update(
+                { email: email },
+                { email_verified: 0 },
+                { where: { id: req.user.id } }
+            );
+        } else {
+            await User.update(
+                { email: email },
+                { where: { id: req.user.id } }
+            );
+        }
 
         return res.status(201).json({ status: true, msg: 'You have changed a new email.' });
     } catch (error) {
