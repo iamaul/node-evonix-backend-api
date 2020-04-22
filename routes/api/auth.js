@@ -228,22 +228,16 @@ router.post('/new', [
  * @access  Public
  */
 router.post('/reset', [
-    check('email', 'Email is required.')
-        .not()
-        .isEmpty()
-        .isEmail()
-        .withMessage('Invalid email address.')
+    check('email', 'Invalid email address.').isEmail()
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email } = req.body;
-
     try {
         const user = await User.findOne({
-            where: { email },
+            where: { email: req.body.email },
             attributes: ['id', 'name']
         });
 
@@ -274,7 +268,7 @@ router.post('/reset', [
         });
 
         const message = {
-            to: email,
+            to: req.body.email,
             from: 'EvoniX Roleplay UCP <no-reply@evonix-rp.com>',
             subject: 'Forgot Password 🔒',
             html: `<p>Hey ${user.name},<br><br>To change a new password, please click the following link below:<br>` +
@@ -311,8 +305,6 @@ router.get('/reset/:code', [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { password } = req.body;
-
     try {
         const user_session = UserSession.findOne({
             where: {
@@ -334,7 +326,7 @@ router.get('/reset/:code', [
         }
 
         const salt = await bcrypt.genSalt(12);
-        const new_password = await bcrypt.hash(password, salt);
+        const new_password = await bcrypt.hash(req.body.password, salt);
 
         await User.update(
             { password: new_password },

@@ -201,23 +201,17 @@ router.put('/change/password', [auth, [
  * @desc    Change a new email
  * @access  Private
  */
-router.post('/change/email', [auth, [
-    check('email', 'Email is required.')
-        .not()
-        .isEmpty()
-        .isEmail()
-        .withMessage('Invalid email address.')
+router.put('/change/email', [auth, [
+    check('email', 'Invalid email address.').isEmail()
 ]], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email } = req.body;
-
     try {
         const user = await User.findOne({
-            where: { email }
+            where: { email: req.body.email }
         });
 
         if (user.email) {
@@ -232,7 +226,7 @@ router.post('/change/email', [auth, [
         const verifiedStatus = user.email_verified ? 0 : 1;
 
         await User.update(
-            { email },
+            { email: req.body.email },
             { email_verified: verifiedStatus },
             { where: { id: req.user.id } }
         );
