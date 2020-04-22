@@ -228,7 +228,7 @@ router.put('/change/email', [auth, [
         const verifiedStatus = user.email_verified ? 0 : 1;
 
         await User.update(
-            { email, email_verified: verifiedStatus },
+            { email: email, email_verified: verifiedStatus },
             { where: { id: req.user.id } }
         );
 
