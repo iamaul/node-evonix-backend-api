@@ -235,9 +235,11 @@ router.post('/reset', [
         return res.status(400).json({ errors: errors.array() });
     }
 
+    const { email } = req.body;
+
     try {
         const user = await User.findOne({
-            where: { email: req.body.email },
+            where: { email },
             attributes: ['id', 'name']
         });
 
@@ -268,7 +270,7 @@ router.post('/reset', [
         });
 
         const message = {
-            to: req.body.email,
+            to,
             from: 'EvoniX Roleplay UCP <no-reply@evonix-rp.com>',
             subject: 'Forgot Password 🔒',
             html: `<p>Hey ${user.name},<br><br>To change a new password, please click the following link below:<br>` +
