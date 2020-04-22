@@ -227,10 +227,13 @@ router.put('/change/email', [auth, [
 
         const verifiedStatus = user.email_verified ? 0 : 1;
 
-        await User.update(
-            { email: email, email_verified: verifiedStatus },
-            { where: { id: req.user.id } }
-        );
+        console.log(email);
+        console.log(verifiedStatus);
+
+        await User.update({ 
+            email, 
+            email_verified: verifiedStatus 
+        }, { where: { id: req.user.id } });
 
         return res.status(201).json({ status: true, msg: 'You have changed a new email.' });
     } catch (error) {

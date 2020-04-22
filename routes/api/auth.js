@@ -270,7 +270,7 @@ router.post('/reset', [
         });
 
         const message = {
-            to,
+            to: email,
             from: 'EvoniX Roleplay UCP <no-reply@evonix-rp.com>',
             subject: 'Forgot Password 🔒',
             html: `<p>Hey ${user.name},<br><br>To change a new password, please click the following link below:<br>` +
