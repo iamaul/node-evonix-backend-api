@@ -223,14 +223,14 @@ router.put('/change/email', [auth, [
                     msg: 'The email that you\'ve entered is already exists.'
                 }]
             });
+        } else {
+            const verifiedStatus = user.email_verified ? 0 : 1;
+
+            await User.update({ 
+                email: new_email, 
+                email_verified: verifiedStatus 
+            }, { where: { id: req.user.id } });
         }
-
-        const verifiedStatus = user.email_verified ? 0 : 1;
-
-        await User.update({ 
-            email: new_email, 
-            email_verified: verifiedStatus 
-        }, { where: { id: req.user.id } });
 
         return res.status(201).json({ status: true, msg: 'You have changed a new email.' });
     } catch (error) {
