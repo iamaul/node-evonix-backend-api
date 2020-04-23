@@ -212,11 +212,11 @@ router.put('/change/email', [auth, [
     const { new_email } = req.body;
 
     try {
-        const user = await User.findOne({
+        const email = await User.findOne({
             where: { email: new_email }
         });
 
-        if (user.email) {
+        if (email) {
             return res.status(400).json({
                 errors: [{
                     status: false,
