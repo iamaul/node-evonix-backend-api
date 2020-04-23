@@ -22,7 +22,12 @@ const user = require('./routes/api/user');
 const character = require('./routes/api/character');
 
 const app = express();
-app.use(cors());
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://101.50.3.61:3000/"); 
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    next();
+});
 
 app.use(express.json({ extended: false }));
 
