@@ -213,11 +213,11 @@ router.put('/change/email', [auth, [
 
     try {
         const user = await User.findOne({
-            where: { email: new_email },
-            attributes: ['email_verified']
+            where: { id: req.user.id },
+            attributes: ['email', 'email_verified']
         });
 
-        if (user) {
+        if (user.email) {
             return res.status(400).json({
                 errors: [{
                     status: false,
