@@ -212,12 +212,11 @@ router.put('/change/email', [auth, [
     const { new_email } = req.body;
 
     try {
-        const user = await User.findOne({
-            where: { id: req.user.id },
-            attributes: ['email', 'email_verified']
+        const userEmail = await User.findOne({
+            where: { email: new_email }
         });
 
-        if (user.email) {
+        if (userEmail) {
             return res.status(400).json({
                 errors: [{
                     status: false,
@@ -225,6 +224,10 @@ router.put('/change/email', [auth, [
                 }]
             });
         }
+
+        const user = await User.findOne({
+            where: { id: req.user.id }
+        });
 
         const verifiedStatus = user.email_verified ? 0 : 1;
 
