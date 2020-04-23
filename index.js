@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 
 require('dotenv').config()
 
@@ -23,8 +22,8 @@ const user = require('./routes/api/user');
 const character = require('./routes/api/character');
 
 const app = express();
-
 app.use(cors());
+
 app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) => res.send({ status: 'success', message: 'EvoniX Backend API v1.' }));
