@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { Op, DataTypes } = require('sequelize');
+const { validationResult } = require('express-validator');
 
 // Connection
 const database = require('../../config/database');
