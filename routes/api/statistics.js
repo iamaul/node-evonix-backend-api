@@ -91,7 +91,7 @@ router.get('/stats/player_properties', auth, async (req, res) => {
                 owner_sqlid: { [Op.not]: 0 }
             } 
         });
-        return res.status(201).json(player_properties);
+        return res.status(201).json(count);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
