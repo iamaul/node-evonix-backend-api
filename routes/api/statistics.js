@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const { Op, DataTypes } = require('sequelize');
 
 // Connection
@@ -97,3 +98,5 @@ router.get('/stats/player_properties', async (req, res) => {
         });
     }
 });
+
+module.exports = router;
