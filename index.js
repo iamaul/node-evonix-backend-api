@@ -20,6 +20,7 @@ database
 const auth = require('./routes/api/auth');
 const user = require('./routes/api/user');
 const character = require('./routes/api/character');
+const stats = require('./routes/api/statistics');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.get('/', (req, res) => res.send({ status: 'success', message: 'EvoniX Backen
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', user);
 app.use('/api/v1/characters', character);
+app.use('/api/v1/server', stats);
 
 const SERVER_PORT = process.env.PORT || 5000;
 

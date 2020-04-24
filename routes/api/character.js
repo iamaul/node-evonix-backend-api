@@ -29,23 +29,22 @@ router.get('/', auth, async (req, res) => {
     }
 
     try {
-        const chars = await Character.findAll({
+        const { count, rows } = await Character.findAndCountAll({
             where: {
                 userid: req.user.id
-            },
-            include: [User]
+            }
         });
 
-        if (!chars) {
+        if (count < 0) {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'You haven\'t created any characters yet.'
+                    msg: 'No characters are listed for this account.'
                 }]
             });
         }
 
-        return res.status(201).json({ status: true, chars });
+        return res.status(201).json({ status: true, result: { count, rows }});
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -65,11 +64,7 @@ router.get('/', auth, async (req, res) => {
 router.post('/create', [auth, [
     check('firstname', 'First name is required.').not().isEmpty(),
     check('lastname', 'Last name is required.').not().isEmpty(),
-    check('gender')
-        .exists()
-        .withMessage('Gender is required.')
-        .isNumeric()
-        .withMessage('Only numbers are allowed.')
+    check('gender', 'Gender is required.').not().isEmpty()
 ]], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
