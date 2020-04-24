@@ -33,7 +33,7 @@ router.get('/stats/users', auth, async (req, res) => {
 
     try {
         const count = await User.count();
-        return res.status(201).json({ status: true, users: count });
+        return res.status(201).json(count);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -62,7 +62,7 @@ router.get('/stats/player_vehicles', auth, async (req, res) => {
                 owner_sqlid: { [Op.not]: 0 }
             } 
         });
-        return res.status(201).json({ status: true, player_vehicles: count });
+        return res.status(201).json(count);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -91,7 +91,7 @@ router.get('/stats/player_properties', auth, async (req, res) => {
                 owner_sqlid: { [Op.not]: 0 }
             } 
         });
-        return res.status(201).json({ status: true, player_properties: count });
+        return res.status(201).json(player_properties);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
