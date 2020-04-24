@@ -6,6 +6,9 @@ const { Op, DataTypes } = require('sequelize');
 // Connection
 const database = require('../../config/database');
 
+// Middleware
+const auth = require('../../middleware/auth');
+
 // Models
 const UserModel = require('../../models/User');
 const User = UserModel(database, DataTypes);
@@ -21,7 +24,7 @@ const Property = PropertyModel(database, DataTypes);
  * @desc    Count records of users table
  * @access  Public
  */
-router.get('/stats/users', async (req, res) => {
+router.get('/stats/users', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -29,7 +32,7 @@ router.get('/stats/users', async (req, res) => {
 
     try {
         const count = await User.count();
-        return res.status(201).json(count);
+        return res.status(201).json({ status: true, users: count });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -46,7 +49,7 @@ router.get('/stats/users', async (req, res) => {
  * @desc    Count records of player's vehicles table
  * @access  Public
  */
-router.get('/stats/player_vehicles', async (req, res) => {
+router.get('/stats/player_vehicles', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -58,7 +61,7 @@ router.get('/stats/player_vehicles', async (req, res) => {
                 owner_sqlid: { [Op.not]: 0 }
             } 
         });
-        return res.status(201).json(count);
+        return res.status(201).json({ status: true, player_vehicles: count });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -75,7 +78,7 @@ router.get('/stats/player_vehicles', async (req, res) => {
  * @desc    Count records of player's properties table
  * @access  Public
  */
-router.get('/stats/player_properties', async (req, res) => {
+router.get('/stats/player_properties', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -87,7 +90,7 @@ router.get('/stats/player_properties', async (req, res) => {
                 owner_sqlid: { [Op.not]: 0 }
             } 
         });
-        return res.status(201).json(count);
+        return res.status(201).json({ status: true, player_properties: count });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
