@@ -143,7 +143,7 @@ router.post('/answers', auth, async (req, res) => {
 
     // const unix_timestamp = moment().unix();
 
-    return res.status(201).json({ status: true, result: req.body });
+    return res.status(201).json(req.body);
 
     // try {
     //     return res.status(201).json({ status: true, result: req.body });
