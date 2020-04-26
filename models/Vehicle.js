@@ -14,8 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             references: {
                 model: User,
                 key: 'id'
-            },
-            unique: true
+            }
         },
         model: { type: DataTypes.INTEGER },
         pos_x: { type: DataTypes.FLOAT },

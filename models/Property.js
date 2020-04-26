@@ -14,8 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             references: {
                 model: User,
                 key: 'id'
-            },
-            unique: true
+            }
         },
         type: { type: DataTypes.TINYINT },
         level: { type: DataTypes.TINYINT },

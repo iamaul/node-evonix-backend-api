@@ -14,8 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             references: {
                 model: User,
                 key: 'id'
-            },
-            unique: true
+            }
         },
         code: { type: DataTypes.STRING(129) },
         type: { type: DataTypes.STRING(60) }
