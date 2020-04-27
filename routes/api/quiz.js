@@ -135,11 +135,7 @@ router.post('/types', [auth, [
  * @desc    Create a quiz answers
  * @access  Private
  */
-router.post('/answers', [auth, [
-    check('*.quiz_id', 'Quiz is required.').not().isEmpty(),
-    check('*.answer', 'Quiz answer is required.').not().isEmpty(),
-    check('*.correct_answer', 'Correct answer is required.').not().isEmpty()
-]], async (req, res) => {
+router.post('/answers', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -147,8 +143,14 @@ router.post('/answers', [auth, [
 
     // const unix_timestamp = moment().unix();
 
+    for (const [key, value] of Object.entries(req.body)) {
+        if (value && value.length > 0) {
+            quizAnswers[key] = value;
+        }
+    }
+
     try {
-        return res.status(201).json(req.body);
+        return res.status(201).json(quizAnswers);
         // return res.status(201).json({ status: true, result: req.body });
     } catch (error) {
         console.error(error.message);
