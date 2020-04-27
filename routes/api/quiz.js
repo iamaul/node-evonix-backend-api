@@ -141,17 +141,23 @@ router.post('/answers', auth, async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    // const unix_timestamp = moment().unix();
+    const unix_timestamp = moment().unix();
 
-    for (const [key, value] of Object.entries(req.body)) {
-        if (value && value.length > 0) {
-            quizAnswers[key] = value;
-        }
-    }
+    const answers = req.body.map(obj => {
+        const container = {};
+
+        container.quiz_id = obj.quiz_id;
+        container.answer = obj.answer;
+        container.correct_answer = obj.correct_answer;
+        container.created_at = unix_timestamp;
+        container.updated_at = unix_timestamp;
+
+        return container;
+    });
 
     try {
-        return res.status(201).json(quizAnswers);
-        // return res.status(201).json({ status: true, result: req.body });
+        const quiz_answers = await QuizAnswer.bulkCreate(answers);
+        return res.status(201).json({ status: true, quiz_answers });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
