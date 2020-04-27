@@ -136,9 +136,9 @@ router.post('/types', [auth, [
  * @access  Private
  */
 router.post('/answers', [auth, [
-    check('quiz_id', 'Quiz is required.').not().isEmpty(),
-    check('answer', 'Quiz answer is required.').not().isEmpty(),
-    check('correct_answer', 'Correct answer is required.').not().isEmpty()
+    check('*.quiz_id', 'Quiz is required.').not().isEmpty(),
+    check('*.answer', 'Quiz answer is required.').not().isEmpty(),
+    check('*.correct_answer', 'Correct answer is required.').not().isEmpty()
 ]], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -147,19 +147,18 @@ router.post('/answers', [auth, [
 
     // const unix_timestamp = moment().unix();
 
-    return res.status(201).json(req.body);
-
-    // try {
-    //     return res.status(201).json({ status: true, result: req.body });
-    // } catch (error) {
-    //     console.error(error.message);
-    //     return res.status(500).json({
-    //         errors: [{
-    //             status: false,
-    //             msg: error.message
-    //         }]
-    //     });
-    // }
+    try {
+        return res.status(201).json(req.body);
+        // return res.status(201).json({ status: true, result: req.body });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
 });
 
 module.exports = router;
