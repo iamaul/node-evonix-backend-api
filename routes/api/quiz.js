@@ -79,7 +79,12 @@ router.post('/', [auth, upload.single('image'), [
     const unix_timestamp = moment().unix();
 
     try {   
-        let quiz = Quiz.build({ quiz_type_id, question, created_at: unix_timestamp, updated_at: unix_timestamp });
+        let quiz = Quiz.build({ 
+            quiz_type_id, 
+            question, 
+            created_at: unix_timestamp, 
+            updated_at: unix_timestamp 
+        });
         
         // Image file upload
         if (req.file) {
@@ -87,7 +92,7 @@ router.post('/', [auth, upload.single('image'), [
         }
 
         await quiz.save();
-        return res.status(201).json({ status: true, result: quiz, msg: 'Created quiz successfully.' });
+        return res.status(201).json({ status: true, msg: 'Created quiz successfully.', result: quiz });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -117,8 +122,12 @@ router.post('/types', [auth, [
     const unix_timestamp = moment().unix();
 
     try {
-        const quiz_type = await QuizType.create({ name, created_at: unix_timestamp, updated_at: unix_timestamp });
-        return res.status(201).json({ status: true, result: quiz_type, msg: 'Created quiz type successfully.' });
+        const quiz_type = await QuizType.create({ 
+            name, 
+            created_at: unix_timestamp, 
+            updated_at: unix_timestamp 
+        });
+        return res.status(201).json({ status: true, msg: 'Created quiz type successfully.', result: quiz_type });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
