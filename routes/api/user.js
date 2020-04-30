@@ -49,7 +49,7 @@ router.post('/email/verification', auth, async (req, res) => {
         }
 
         const user_session = UserSession.build({
-            userid: req.user.id,
+            user_id: req.user.id,
             code: uuidv4(),
             type: 'email_verification'
         });
@@ -122,7 +122,7 @@ router.get('/email/verification/:code', auth, async (req, res) => {
 
         await UserSession.destroy({
             where: {
-                userid: req.user.id
+                user_id: req.user.id
             },
             truncate: true
         });

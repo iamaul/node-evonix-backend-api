@@ -253,7 +253,7 @@ router.post('/reset', [
         }
 
         const user_session = UserSession.build({
-            userid: user.id,
+            user_id: user.id,
             code: uuidv4(),
             type: 'forgot_password'
         });
@@ -317,7 +317,7 @@ router.get('/reset/:code', [
                     { type: 'forgot_password' }
                 ]
             },
-            attributes: ['userid']
+            attributes: ['user_id']
         });
 
         if (!user_session) {
@@ -334,12 +334,12 @@ router.get('/reset/:code', [
 
         await User.update(
             { password: new_password },
-            { where: { id: user_session.userid } }
+            { where: { id: user_session.user_id } }
         );
         
         await UserSession.destroy({
             where: {
-                userid: user_session.userid
+                user_id: user_session.user_id
             },
             truncate: true
         });
