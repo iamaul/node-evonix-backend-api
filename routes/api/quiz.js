@@ -7,6 +7,7 @@ const { v4: uuidv4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
 const { DataTypes } = require('sequelize');
 
+
 // Connection
 const database = require('../../config/database');
 
@@ -22,7 +23,6 @@ const Quiz = QuizModel(database, DataTypes);
 
 const QuizAnswerModel = require('../../models/QuizAnswer');
 const QuizAnswer = QuizAnswerModel(database, DataTypes);
-
 
 /**
  * @desc    Format upload image file multer
@@ -82,6 +82,7 @@ router.post('/', [auth, upload.single('image'), [
         let quiz = Quiz.build({ 
             quiz_type_id, 
             question, 
+            created_by: req.user.id,
             created_at: unix_timestamp, 
             updated_at: unix_timestamp 
         });
@@ -105,11 +106,11 @@ router.post('/', [auth, upload.single('image'), [
 });
 
 /**
- * @route   POST /api/v1/quiz/types
- * @desc    Create a quiz types
+ * @route   POST /api/v1/quiz/type
+ * @desc    Create a quiz type
  * @access  Private
  */
-router.post('/types', [auth, [
+router.post('/type', [auth, [
     check('name', 'Name is required.').not().isEmpty()
 ]], async (req, res) => {
     const errors = validationResult(req);
@@ -124,6 +125,7 @@ router.post('/types', [auth, [
     try {
         const quiz_type = await QuizType.create({ 
             name, 
+            created_by: req.user.id,
             created_at: unix_timestamp, 
             updated_at: unix_timestamp 
         });
@@ -140,11 +142,78 @@ router.post('/types', [auth, [
 });
 
 /**
- * @route   POST /api/v1/quiz/answers
- * @desc    Create a quiz answers
+ * @route   PUT /api/v1/quiz/type/:id
+ * @desc    Update a quiz type
  * @access  Private
  */
-router.post('/answers', auth, async (req, res) => {
+router.put('/type/:id', [auth, [
+    check('name', 'Name is required.').not().isEmpty()
+]], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name } = req.body;
+
+    const unix_timestamp = moment().unix();
+
+    try {
+        const quiz_type = await QuizType.update({ 
+            name,
+            updated_by: req.user.id, 
+            updated_at: unix_timestamp 
+        }, { where: { id: req.params.id } });
+
+        return res.status(201).json({ status: true, msg: 'Updated quiz type successfully.', result: quiz_type });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   DELETE /api/v1/quiz/type/:id
+ * @desc    Delete a quiz type
+ * @access  Private
+ */
+router.delete('/type/:id', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        await QuizType.destroy({
+            where: {
+                id: req.params.id
+            },
+            truncate: true
+        });
+
+        return res.status(201).json({ status: true, msg: 'Deleted quiz type successfully.'});
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   POST /api/v1/quiz/answer
+ * @desc    Create a quiz answer
+ * @access  Private
+ */
+router.post('/answer', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -158,6 +227,7 @@ router.post('/answers', auth, async (req, res) => {
         container.quiz_id = obj.quiz_id;
         container.answer = obj.answer;
         container.correct_answer = obj.correct_answer;
+        container.created_by = req.user.id;
         container.created_at = unix_timestamp;
         container.updated_at = unix_timestamp;
 
@@ -165,8 +235,78 @@ router.post('/answers', auth, async (req, res) => {
     });
 
     try {
-        const quiz_answers = await QuizAnswer.bulkCreate(answers);
-        return res.status(201).json({ status: true, quiz_answers });
+        const result = await QuizAnswer.bulkCreate(answers);
+        return res.status(201).json({ status: true, msg: 'Created quiz answer successfully.', result });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   PUT /api/v1/quiz/answer
+ * @desc    Create a quiz answer
+ * @access  Private
+ */
+router.put('/answer', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const unix_timestamp = moment().unix();
+
+    const answers = req.body.map(obj => {
+        const container = {};
+
+        container.quiz_id = obj.quiz_id;
+        container.answer = obj.answer;
+        container.correct_answer = obj.correct_answer;
+        container.updated_by = req.user.id;
+        container.updated_at = unix_timestamp;
+
+        return container;
+    });
+
+    try {
+        const result = await QuizAnswer.bulkCreate(answers, { updateOnDuplicate: ['quiz_id', 'answer', 'correct_answer', 'updated_by', 'updated_at'] });
+        return res.status(201).json({ status: true, msg: 'Updated quiz answer successfully.', result });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   DELETE /api/v1/quiz/answer/:id
+ * @desc    Delete a quiz answer
+ * @access  Private
+ */
+router.delete('/answer/:id', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        await QuizAnswer.destroy({
+            where: {
+                id: req.params.id
+            },
+            truncate: true
+        });
+
+        return res.status(201).json({ status: true, msg: 'Deleted quiz answer successfully.'});
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
