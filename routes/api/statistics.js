@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { Op, DataTypes } = require('sequelize');
+const { Op } = require('sequelize');
 const { validationResult } = require('express-validator');
 
 // Connection
@@ -11,14 +11,9 @@ const database = require('../../config/database');
 const auth = require('../../middleware/auth');
 
 // Models
-const UserModel = require('../../models/User');
-const User = UserModel(database, DataTypes);
-
-const VehicleModel = require('../../models/Vehicle');
-const Vehicle = VehicleModel(database, DataTypes);
-
-const PropertyModel = require('../../models/Property');
-const Property = PropertyModel(database, DataTypes);
+const User = require('../../models/User');
+const Vehicle = require('../../models/Vehicle');
+const Property = require('../../models/Property');
 
 /**
  * @route   GET /api/v1/server/stats/users

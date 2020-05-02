@@ -4,19 +4,21 @@ const { DataTypes } = require('sequelize');
 const database = require('../config/database');
 
 // Models
-const UserModel = require('../models/User');
-const User = UserModel(database, DataTypes);
+const User = require('./User');
 
-module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('UserSession', {
-        userid: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: User,
-                key: 'id'
-            }
-        },
-        code: { type: DataTypes.STRING(129) },
-        type: { type: DataTypes.STRING(60) }
-    }, { tableName: 'user_sessions' });
-}
+const UserSession = database.define('UserSession', {
+    user_id: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: User,
+            key: 'id'
+        }
+    },
+    code: { type: DataTypes.STRING(129) },
+    type: { type: DataTypes.STRING(60) }
+}, { tableName: 'user_sessions' });
+
+User.hasMany(UserSession, { foreignKey: 'user_id' });
+UserSession.belongsTo(User, { foreignKey: 'user_id' });
+
+module.exports = UserSession;

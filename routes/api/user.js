@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
-const { Op, DataTypes } = require('sequelize');
+const { Op } = require('sequelize');
 
 // Connection
 const database = require('../../config/database');
@@ -14,11 +14,8 @@ const database = require('../../config/database');
 const auth = require('../../middleware/auth');
 
 // Models
-const UserModel = require('../../models/User');
-const User = UserModel(database, DataTypes);
-
-const UserSessionModel = require('../../models/UserSession');
-const UserSession = UserSessionModel(database, DataTypes);
+const User = require('../../models/User');
+const UserSession = require('../../models/UserSession');
 
 /**
  * @route   POST /api/v1/users/email/verification
