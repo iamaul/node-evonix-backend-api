@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const { check, validationResult } = require('express-validator');
-const { DataTypes } = require('sequelize');
 
 // Connection
 const database = require('../../config/database');
@@ -11,11 +10,7 @@ const database = require('../../config/database');
 const auth = require('../../middleware/auth');
 
 // Models
-const UserModel = require('../../models/User');
-const User = UserModel(database, DataTypes);
-
-const CharacterModel = require('../../models/Character');
-const Character = CharacterModel(database, DataTypes);
+const Character = require('../../models/Character');
 
 /**
  * @route   GET /api/v1/characters
