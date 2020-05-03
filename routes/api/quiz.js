@@ -100,6 +100,31 @@ router.post('/', [auth, admin, upload.single('image'), [
 });
 
 /**
+ * @route   GET /api/v1/quiz/type
+ * @desc    Get all quiz type
+ * @access  Private
+ */
+router.get('/type', [auth, admin], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const res = await QuizType.findAll({ order: ['created_at', 'DESC'] }); 
+        return res.status(201).json(res);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
  * @route   POST /api/v1/quiz/type
  * @desc    Create a quiz type
  * @access  Private
