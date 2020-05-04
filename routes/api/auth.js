@@ -91,7 +91,7 @@ router.post('/', [
         }
 
         await User.update(
-            { ucp_login_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress },
+            { login_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress },
             { where: { id: user.id } } 
         );
 
@@ -186,7 +186,7 @@ router.post('/new', [
             registered_date: unix_timestamp,
             admin: 0,
             helper: 0,
-            ucp_register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
         });
 
         const salt = await bcrypt.genSalt(12);

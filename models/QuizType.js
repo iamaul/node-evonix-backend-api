@@ -27,6 +27,8 @@ const QuizType = database.define('QuizType', {
     updated_at: { type: DataTypes.INTEGER }
 }, { tableName: 'quiz_types'});
 
+User.hasMany(QuizType, { foreignKey: 'created_by' });
+User.hasMany(QuizType, { foreignKey: 'updated_by' });
 QuizType.belongsTo(User, { foreignKey: 'created_by' });
 QuizType.belongsTo(User, { foreignKey: 'updated_by' });
 
