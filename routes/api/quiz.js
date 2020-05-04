@@ -111,8 +111,8 @@ router.get('/type', [auth, admin], async (req, res) => {
     }
 
     try {
-        const quiz_types = await QuizType.findAll({ order: [['created_at', 'DESC']] }); 
-        return res.status(201).json(quiz_types);
+        const result = await QuizType.findAll({ order: [['created_at', 'DESC']] }); 
+        return res.status(201).json(result);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
