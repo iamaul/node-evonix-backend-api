@@ -14,6 +14,7 @@ const auth = require('../../middleware/auth');
 const admin = require('../../middleware/admin');
 
 // Models
+const User = require('../../models/User');
 const QuizType = require('../../models/QuizType');
 const Quiz = require('../../models/Quiz');
 const QuizAnswer = require('../../models/QuizAnswer');
