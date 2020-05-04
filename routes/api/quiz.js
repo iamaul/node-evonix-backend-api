@@ -116,7 +116,6 @@ router.get('/type', [auth, admin], async (req, res) => {
             order: [['created_at', 'DESC']],
             include: [{
                 model: User,
-                as: 'user',
                 attributes: ['name']
             }] 
         }); 
