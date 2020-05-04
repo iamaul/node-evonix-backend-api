@@ -120,8 +120,7 @@ router.get('/email/verification/:code', auth, async (req, res) => {
         await UserSession.destroy({
             where: {
                 user_id: req.user.id
-            },
-            truncate: true
+            }
         });
 
         return res.status(201).json({ status: true, msg: 'You\'ve successfully verified your email account.' });

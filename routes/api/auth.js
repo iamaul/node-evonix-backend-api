@@ -339,8 +339,7 @@ router.get('/reset/:code', [
         await UserSession.destroy({
             where: {
                 user_id: user_session.user_id
-            },
-            truncate: true
+            }
         });
 
         return res.status(201).json({ status: true, msg: 'You have changed a new password.' });

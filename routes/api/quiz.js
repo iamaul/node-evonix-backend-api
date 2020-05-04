@@ -217,8 +217,7 @@ router.delete('/type/:id', [auth, admin], async (req, res) => {
         await QuizType.destroy({
             where: {
                 id: req.params.id
-            },
-            truncate: true
+            }
         });
 
         return res.status(201).json({ status: true, msg: 'Deleted quiz type successfully.'});
@@ -327,8 +326,7 @@ router.delete('/answer/:id', [auth, admin], async (req, res) => {
         await QuizAnswer.destroy({
             where: {
                 id: req.params.id
-            },
-            truncate: true
+            }
         });
 
         return res.status(201).json({ status: true, msg: 'Deleted quiz answer successfully.'});
