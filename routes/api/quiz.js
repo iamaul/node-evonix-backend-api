@@ -141,13 +141,14 @@ router.post('/type', [auth, admin, [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name } = req.body;
+    const { name, active } = req.body;
 
     const unix_timestamp = moment().unix();
 
     try {
         const quiz_type = await QuizType.create({ 
             name, 
+            active,
             created_by: req.user.id,
             created_at: unix_timestamp, 
             updated_at: unix_timestamp 
@@ -177,13 +178,14 @@ router.put('/type/:id', [auth, admin, [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name } = req.body;
+    const { name, active } = req.body;
 
     const unix_timestamp = moment().unix();
 
     try {
         const quiz_type = await QuizType.update({ 
             name,
+            active,
             updated_by: req.user.id, 
             updated_at: unix_timestamp 
         }, { where: { id: req.params.id } });
