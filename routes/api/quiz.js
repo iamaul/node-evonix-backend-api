@@ -116,8 +116,12 @@ router.get('/type', [auth, admin], async (req, res) => {
             order: [['created_at', 'DESC']],
             include: [{ 
                 model: User, 
-                as: 'quizUser',
+                as: 'quizCreatedBy',
                 attributes: ['name'] 
+            },{
+                model: User,
+                as: 'quizUpdatedBy',
+                attributes: ['name']
             }] 
         }); 
         return res.status(201).json(result);
