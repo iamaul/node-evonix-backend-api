@@ -35,10 +35,10 @@ const Quiz = database.define('Quiz', {
     updated_at: { type: DataTypes.INTEGER }
 }, { tableName: 'quizzes' });
 
+User.hasMany(Quiz);
+QuizType.hasMany(Quiz);
 Quiz.belongsTo(QuizType, { foreignKey: 'quiz_type_id' });
 Quiz.belongsTo(User, { foreignKey: 'created_by' });
 Quiz.belongsTo(User, { foreignKey: 'updated_by' });
-User.hasMany(Quiz);
-QuizType.hasMany(Quiz);
 
 module.exports = Quiz;
