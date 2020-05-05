@@ -78,8 +78,7 @@ router.post('/', [auth, admin, upload.single('image'), [
             quiz_type_id, 
             question, 
             created_by: req.user.id,
-            created_at: unix_timestamp, 
-            updated_at: unix_timestamp 
+            created_at: unix_timestamp 
         });
         
         // Image file upload
@@ -158,10 +157,9 @@ router.post('/type', [auth, admin, [
             name, 
             active,
             created_by: req.user.id,
-            created_at: unix_timestamp, 
-            updated_at: unix_timestamp 
+            created_at: unix_timestamp 
         });
-        return res.status(201).json({ status: true, msg: 'Created quiz type successfully.', result: quiz_type });
+        return res.status(201).json({ status: true, msg: 'Created quiz type successfully.', quiz_type });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -198,7 +196,7 @@ router.put('/type/:id', [auth, admin, [
             updated_at: unix_timestamp 
         }, { where: { id: req.params.id } });
 
-        return res.status(201).json({ status: true, msg: 'Updated quiz type successfully.', result: quiz_type });
+        return res.status(201).json({ status: true, msg: 'Updated quiz type successfully.', quiz_type });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -261,7 +259,6 @@ router.post('/answer', [auth, admin], async (req, res) => {
         container.correct_answer = obj.correct_answer;
         container.created_by = req.user.id;
         container.created_at = unix_timestamp;
-        container.updated_at = unix_timestamp;
 
         return container;
     });
