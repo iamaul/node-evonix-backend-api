@@ -114,7 +114,7 @@ router.get('/type', [auth, admin], async (req, res) => {
     try {
         const result = await QuizType.findAll({ 
             order: [['created_at', 'DESC']],
-            include: [{ model: User }] 
+            include: [{ model: User, attributes: ['name'] }] 
         }); 
         return res.status(201).json(result);
     } catch (error) {
