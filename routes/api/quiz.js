@@ -207,7 +207,7 @@ router.put('/type/:id', [auth, admin, [
                 as: 'quizTypeUpdatedBy',
                 attributes: ['name']
             }] 
-        }); 
+        }).map(res => res.get({ plain: true }));
 
         return res.status(201).json(result);
     } catch (error) {
