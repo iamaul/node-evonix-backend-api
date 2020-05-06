@@ -188,12 +188,6 @@ router.put('/type/:id', [auth, admin, [
 
     const unix_timestamp = moment().unix();
 
-    const quizTypeObj = {};
-    if (name) quizTypeObj.name = name;
-    if (active) quizTypeObj.active = active;
-    quizTypeObj.updated_by = req.user.id;
-    quizTypeObj.updated_at = unix_timestamp;
-
     try {
         let quiz_type = await QuizType.findOne({ where: { id: req.params.id } });
         if (!quiz_type) {
@@ -205,8 +199,12 @@ router.put('/type/:id', [auth, admin, [
             });
         }
 
-        await QuizType.bulkCreate(quizTypeObj, { updateOnDuplicate: ['name', 'active', 'updated_by', 'updated_at'] });
-        
+        quiz_type.name = name;
+        quiz_type.active = active;
+        quiz_type.updated_by = req.user.id;
+        quiz_type.updated_at = unix_timestamp;
+        await quiz_type.save();
+
         const result = await QuizType.findAll({
             order: [['created_at', 'DESC']],
             include: [{ 
