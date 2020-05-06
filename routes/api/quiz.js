@@ -189,14 +189,14 @@ router.put('/type/:id', [auth, admin, [
     const unix_timestamp = moment().unix();
 
     try {
-        const quiz_type = await QuizType.update({ 
+        await QuizType.update({ 
             name,
             active,
             updated_by: req.user.id, 
             updated_at: unix_timestamp 
         }, { where: { id: req.params.id } });
 
-        const result = await QuizType.findAll({ where: { id: quiz_type } });
+        const result = await QuizType.findAll();
 
         return res.status(201).json(result);
     } catch (error) {
