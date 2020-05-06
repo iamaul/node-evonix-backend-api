@@ -196,7 +196,9 @@ router.put('/type/:id', [auth, admin, [
             updated_at: unix_timestamp 
         }, { where: { id: req.params.id } });
 
-        return res.status(201).json(quiz_type);
+        const result = await QuizType.findAll({ where: { id: quiz_type } });
+
+        return res.status(201).json(result);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
