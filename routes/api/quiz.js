@@ -157,7 +157,8 @@ router.post('/type', [auth, admin, [
             name, 
             active,
             created_by: req.user.id,
-            created_at: unix_timestamp 
+            created_at: unix_timestamp,
+            updated_at: unix_timestamp 
         });
         return res.status(201).json(quiz_type);
     } catch (error) {
@@ -203,22 +204,9 @@ router.put('/type/:id', [auth, admin, [
         quiz_type.active = active;
         quiz_type.updated_by = req.user.id;
         quiz_type.updated_at = unix_timestamp;
-        await quiz_type.save();
+        quiz_type = await quiz_type.save();
 
-        const result = await QuizType.findAll({
-            order: [['created_at', 'DESC']],
-            include: [{ 
-                model: User, 
-                as: 'quizTypeCreatedBy',
-                attributes: ['name'] 
-            },{
-                model: User,
-                as: 'quizTypeUpdatedBy',
-                attributes: ['name']
-            }] 
-        });
-
-        return res.status(201).json(result);
+        return res.status(201).json(quiz_type);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
