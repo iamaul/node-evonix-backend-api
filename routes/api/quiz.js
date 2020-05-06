@@ -189,15 +189,24 @@ router.put('/type/:id', [auth, admin, [
     const unix_timestamp = moment().unix();
 
     try {
-        const quiz_type_id = await QuizType.update({ 
-            name,
-            active,
-            updated_by: req.user.id, 
-            updated_at: unix_timestamp 
-        }, { where: { id: req.params.id } });
+        let quiz_type = await QuizType.findOne({ where: { id: req.params.id } });
+        if (!quiz_type) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'The id of question type that you\'ve selected does not exist.'
+                }]
+            });
+        }
 
-        const quiz_type = await QuizType.findAll({
-            where: { id: quiz_type_id }, 
+        quiz_type.name = name;
+        quiz_type.active = active;
+        quiz_type.updated_by = req.user.id;
+        quiz_type.updated_at = unix_timestamp;
+        await quiz_type.save();
+
+        const result = await QuizType.findAll({
+            where: { id: req.params.id }, 
             order: [['created_at', 'DESC']],
             include: [{ 
                 model: User, 
@@ -210,7 +219,7 @@ router.put('/type/:id', [auth, admin, [
             }] 
         }).map(res => res.get({ plain: true }));
 
-        return res.status(201).json(quiz_type);
+        return res.status(201).json(result);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
