@@ -206,7 +206,6 @@ router.put('/type/:id', [auth, admin, [
         await quiz_type.save();
 
         const result = await QuizType.findAll({
-            where: { id: req.params.id }, 
             order: [['created_at', 'DESC']],
             include: [{ 
                 model: User, 
@@ -217,7 +216,7 @@ router.put('/type/:id', [auth, admin, [
                 as: 'quizTypeUpdatedBy',
                 attributes: ['name']
             }] 
-        }).map(res => res.get({ plain: true }));
+        });
 
         return res.status(201).json(result);
     } catch (error) {
