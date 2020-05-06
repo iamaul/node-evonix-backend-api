@@ -196,7 +196,18 @@ router.put('/type/:id', [auth, admin, [
             updated_at: unix_timestamp 
         }, { where: { id: req.params.id } });
 
-        const result = await QuizType.findAll({ order: [['updated_at', 'DESC']], raw: 'true' });
+        const result = await QuizType.findAll({ 
+            order: [['created_at', 'DESC']],
+            include: [{ 
+                model: User, 
+                as: 'quizTypeCreatedBy',
+                attributes: ['name'] 
+            },{
+                model: User,
+                as: 'quizTypeUpdatedBy',
+                attributes: ['name']
+            }] 
+        }); 
 
         return res.status(201).json(result);
     } catch (error) {
