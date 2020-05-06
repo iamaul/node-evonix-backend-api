@@ -189,14 +189,15 @@ router.put('/type/:id', [auth, admin, [
     const unix_timestamp = moment().unix();
 
     try {
-        await QuizType.update({ 
+        const quiz_type_id = await QuizType.update({ 
             name,
             active,
             updated_by: req.user.id, 
             updated_at: unix_timestamp 
         }, { where: { id: req.params.id } });
 
-        const result = await QuizType.findAll({ 
+        const quiz_type = await QuizType.findAll({
+            where: { id: quiz_type_id }, 
             order: [['created_at', 'DESC']],
             include: [{ 
                 model: User, 
@@ -209,7 +210,7 @@ router.put('/type/:id', [auth, admin, [
             }] 
         }).map(res => res.get({ plain: true }));
 
-        return res.status(201).json(result);
+        return res.status(201).json(quiz_type);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
