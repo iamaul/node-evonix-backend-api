@@ -115,11 +115,11 @@ router.get('/type', [auth, admin], async (req, res) => {
             order: [['created_at', 'DESC']],
             include: [{ 
                 model: User, 
-                as: 'quizCreatedBy',
+                as: 'quizTypeCreatedBy',
                 attributes: ['name'] 
             },{
                 model: User,
-                as: 'quizUpdatedBy',
+                as: 'quizTypeUpdatedBy',
                 attributes: ['name']
             }] 
         }); 
