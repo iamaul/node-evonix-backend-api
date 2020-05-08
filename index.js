@@ -34,7 +34,7 @@ var corsMiddleware = function (req, res, next) {
 app.use(corsMiddleware);
 
 app.use(express.json({ extended: false }));
-app.use('/public', express.static('public'));
+app.use('/public', express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => res.send({ status: 'success', message: 'EvoniX Backend API v1.' }));
 app.use('/api/v1/auth', auth);
