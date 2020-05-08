@@ -11,7 +11,42 @@ const auth = require('../../middleware/auth');
 const admin = require('../../middleware/admin');
 
 // Models
+const User = require('../../models/User');
 const Quiz = require('../../models/Quiz');
+
+/**
+ * @route   GET /api/v1/quiz
+ * @desc    Get all quiz
+ * @access  Private
+ */
+router.get('/', [auth, admin], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const result = await Quiz.findAll({ 
+            order: [['created_at', 'DESC']],
+            include: [{
+                model: User,
+                as: 'quizCreatedBy'
+            },{
+                model: User,
+                as: 'quizUpdatedBy'
+            }] 
+        }); 
+        return res.status(201).json(result);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
 
 /**
  * @desc    Format upload image file multer
