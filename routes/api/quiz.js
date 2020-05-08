@@ -53,7 +53,7 @@ router.get('/', [auth, admin], async (req, res) => {
  */
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './public/quiz/images/');
+        cb(null, 'public/quiz/images/');
     },
     filename: (req, file, cb) => {
         const fileName = file.originalname.toLowerCase().split(' ').join('-');
