@@ -30,10 +30,12 @@ router.get('/', [auth, admin], async (req, res) => {
             order: [['created_at', 'DESC']],
             include: [{
                 model: User,
-                as: 'quizCreatedBy'
+                as: 'quizCreatedBy',
+                attributes: ['name']
             },{
                 model: User,
-                as: 'quizUpdatedBy'
+                as: 'quizUpdatedBy',
+                attributes: ['name']
             }] 
         }); 
         return res.status(201).json(result);
