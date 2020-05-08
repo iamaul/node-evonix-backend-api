@@ -6,18 +6,12 @@ const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
 
-// Connection
-const database = require('../../config/database');
-
 // Middleware
 const auth = require('../../middleware/auth');
 const admin = require('../../middleware/admin');
 
 // Models
-const User = require('../../models/User');
-const QuizType = require('../../models/QuizType');
 const Quiz = require('../../models/Quiz');
-const QuizAnswer = require('../../models/QuizAnswer');
 
 /**
  * @desc    Format upload image file multer
@@ -34,17 +28,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage,
+    limits: { fileSize: 3000000 },
     fileFilter: (req, file, cb) => {
         if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
             cb(null, true);
         } else {
             cb(null, false);
-            return res.status(400).json({
-                errors: [{
-                    status: false,
-                    msg: 'Only .png, .jpg and .jpeg format are allowed.'
-                }]
-            });
+            return cb(new Error('Only .png, .jpg and .jpeg format are allowed.'));
         }
     }
 });
@@ -55,11 +45,9 @@ const upload = multer({
  * @access  Private
  */
 router.post('/', [auth, admin, upload.single('image'), [
-    check('quiz_type_id', 'Quiz type is required.')
+    check('title', 'Title is required.')
         .not()
-        .isEmpty()
-        .isNumeric()
-        .withMessage('Quiz type must be a number.'),
+        .isEmpty(),
     check('question', 'Question is required.')
         .not()
         .isEmpty()
@@ -69,13 +57,13 @@ router.post('/', [auth, admin, upload.single('image'), [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { quiz_type_id, question } = req.body;
+    const { title, question } = req.body;
 
     const unix_timestamp = moment().unix();
 
     try {   
         let quiz = Quiz.build({ 
-            quiz_type_id, 
+            title, 
             question, 
             created_by: req.user.id,
             created_at: unix_timestamp 
@@ -86,8 +74,8 @@ router.post('/', [auth, admin, upload.single('image'), [
             quiz.image = req.file.filename;
         }
 
-        await quiz.save();
-        return res.status(201).json({ status: true, msg: 'Created quiz successfully.', result: quiz });
+        quiz = await quiz.save();
+        return res.status(201).json(quiz);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -100,251 +88,24 @@ router.post('/', [auth, admin, upload.single('image'), [
 });
 
 /**
- * @route   GET /api/v1/quiz/type
- * @desc    Get all quiz type
+ * @route   DELETE /api/v1/quiz/:id
+ * @desc    Delete a quiz
  * @access  Private
  */
-router.get('/type', [auth, admin], async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
     try {
-        const result = await QuizType.findAll({ 
-            order: [['created_at', 'DESC']],
-            include: [{ 
-                model: User, 
-                as: 'quizTypeCreatedBy',
-                attributes: ['name'] 
-            },{
-                model: User,
-                as: 'quizTypeUpdatedBy',
-                attributes: ['name']
-            }] 
-        }); 
-        return res.status(201).json(result);
-    } catch (error) {
-        console.error(error.message);
-        return res.status(500).json({
-            errors: [{
-                status: false,
-                msg: error.message
-            }]
-        });
-    }
-});
-
-/**
- * @route   POST /api/v1/quiz/type
- * @desc    Create a quiz type
- * @access  Private
- */
-router.post('/type', [auth, admin, [
-    check('name', 'Name is required.').not().isEmpty()
-]], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { name, active } = req.body;
-
-    const unix_timestamp = moment().unix();
-
-    try {
-        const quiz_type = await QuizType.create({ 
-            name, 
-            active,
-            created_by: req.user.id,
-            created_at: unix_timestamp,
-            updated_at: unix_timestamp 
-        });
-        return res.status(201).json(quiz_type);
-    } catch (error) {
-        console.error(error.message);
-        return res.status(500).json({
-            errors: [{
-                status: false,
-                msg: error.message
-            }]
-        });
-    }
-});
-
-/**
- * @route   PUT /api/v1/quiz/type/:id
- * @desc    Update a quiz type
- * @access  Private
- */
-router.put('/type/:id', [auth, admin, [
-    check('name', 'Name is required.').not().isEmpty()
-]], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { name, active } = req.body;
-
-    const unix_timestamp = moment().unix();
-
-    try {
-        let quiz_type = await QuizType.findOne({ where: { id: req.params.id } });
-        if (!quiz_type) {
-            return res.status(400).json({
-                errors: [{
-                    status: false,
-                    msg: 'The id of question type that you\'ve selected does not exist.'
-                }]
-            });
-        }
-
-        quiz_type.name = name;
-        quiz_type.active = active;
-        quiz_type.updated_by = req.user.id;
-        quiz_type.updated_at = unix_timestamp;
-        quiz_type = await quiz_type.save();
-
-        return res.status(201).json(quiz_type);
-    } catch (error) {
-        console.error(error.message);
-        return res.status(500).json({
-            errors: [{
-                status: false,
-                msg: error.message
-            }]
-        });
-    }
-});
-
-/**
- * @route   DELETE /api/v1/quiz/type/:id
- * @desc    Delete a quiz type
- * @access  Private
- */
-router.delete('/type/:id', [auth, admin], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-        await QuizType.destroy({
+        await Quiz.destroy({
             where: {
                 id: req.params.id
             }
         });
 
-        return res.status(201).json({ status: true, msg: 'Deleted quiz type successfully.'});
-    } catch (error) {
-        console.error(error.message);
-        return res.status(500).json({
-            errors: [{
-                status: false,
-                msg: error.message
-            }]
-        });
-    }
-});
-
-/**
- * @route   POST /api/v1/quiz/answer
- * @desc    Create a quiz answer
- * @access  Private
- */
-router.post('/answer', [auth, admin], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const unix_timestamp = moment().unix();
-
-    const answers = req.body.map(obj => {
-        const container = {};
-
-        container.quiz_id = obj.quiz_id;
-        container.answer = obj.answer;
-        container.correct_answer = obj.correct_answer;
-        container.created_by = req.user.id;
-        container.created_at = unix_timestamp;
-
-        return container;
-    });
-
-    try {
-        const result = await QuizAnswer.bulkCreate(answers);
-        return res.status(201).json({ status: true, msg: 'Created quiz answer successfully.', result });
-    } catch (error) {
-        console.error(error.message);
-        return res.status(500).json({
-            errors: [{
-                status: false,
-                msg: error.message
-            }]
-        });
-    }
-});
-
-/**
- * @route   PUT /api/v1/quiz/answer
- * @desc    Create a quiz answer
- * @access  Private
- */
-router.put('/answer', [auth, admin], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const unix_timestamp = moment().unix();
-
-    const answers = req.body.map(obj => {
-        const container = {};
-
-        container.quiz_id = obj.quiz_id;
-        container.answer = obj.answer;
-        container.correct_answer = obj.correct_answer;
-        container.updated_by = req.user.id;
-        container.updated_at = unix_timestamp;
-
-        return container;
-    });
-
-    try {
-        const result = await QuizAnswer.bulkCreate(answers, { updateOnDuplicate: ['quiz_id', 'answer', 'correct_answer', 'updated_by', 'updated_at'] });
-        return res.status(201).json({ status: true, msg: 'Updated quiz answer successfully.', result });
-    } catch (error) {
-        console.error(error.message);
-        return res.status(500).json({
-            errors: [{
-                status: false,
-                msg: error.message
-            }]
-        });
-    }
-});
-
-/**
- * @route   DELETE /api/v1/quiz/answer/:id
- * @desc    Delete a quiz answer
- * @access  Private
- */
-router.delete('/answer/:id', [auth, admin], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-        await QuizAnswer.destroy({
-            where: {
-                id: req.params.id
-            }
-        });
-
-        return res.status(201).json({ status: true, msg: 'Deleted quiz answer successfully.'});
+        return res.status(201).json({ status: true, msg: 'Deleted quiz successfully.'});
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
