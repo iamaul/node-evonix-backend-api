@@ -161,7 +161,7 @@ router.put('/:id', [auth, admin, [
         quiz.title = title;
         quiz.question = question;
         quiz.image = image;
-        quiz.created_by = req.user.id;
+        quiz.updated_by = req.user.id;
         quiz.updated_at = unix_timestamp;
         quiz = await quiz.save();
 
