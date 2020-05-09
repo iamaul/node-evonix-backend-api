@@ -145,6 +145,8 @@ router.put('/:id', [auth, admin, [
 
     const { title, question, image } = req.body;
 
+    const unix_timestamp = moment().unix();
+
     try {
         let quiz = await Quiz.findOne({ where: { id: req.params.id } });
         if (!quiz) {
