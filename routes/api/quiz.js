@@ -143,6 +143,8 @@ router.put('/:id', [auth, admin, [
         return res.status(400).json({ errors: errors.array() });
     }
 
+    const { title, question, image } = req.body;
+
     try {
         let quiz = await Quiz.findOne({ where: { id: req.params.id } });
         if (!quiz) {
