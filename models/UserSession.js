@@ -18,7 +18,6 @@ const UserSession = database.define('UserSession', {
     type: { type: DataTypes.STRING(60) }
 }, { tableName: 'user_sessions' });
 
-User.hasMany(UserSession, { foreignKey: 'user_id' });
-UserSession.belongsTo(User, { foreignKey: 'user_id' });
+UserSession.belongsTo(User, { foreignKey: 'user_id', as: 'userSessionBy' });
 
 module.exports = UserSession;

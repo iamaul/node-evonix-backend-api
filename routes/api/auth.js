@@ -75,7 +75,7 @@ router.post('/', [
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'The username or email that you\'ve entered does not exists.'
+                    msg: 'The username or email address that you\'ve entered does not exist.'
                 }]
             });
         }
@@ -97,8 +97,7 @@ router.post('/', [
 
         const payload = {
             user: { 
-                id: user.id,
-                admin: user.admin
+                id: user.id
             }
         }
 
@@ -134,7 +133,7 @@ router.post('/new', [
         .isLength({ min: 3, max: 20 })
         .withMessage('Username must be between 3-20 characters.')
         .matches(/^[a-zA-Z0-9_.]+$/, 'i')
-        .withMessage('Only these characters are allowed (a-z, A-Z, 0-9).'),
+        .withMessage('Only these characters are allowed (a-z, A-Z, 0-9, _underscore, .dot).'),
     check('email', 'Invalid email address.').isEmail(),
     check('password', 'Password is required.')
         .exists()
@@ -159,7 +158,7 @@ router.post('/new', [
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'The username that you\'ve entered is already exists.'
+                    msg: 'The username that you\'ve entered is already exist.'
                 }]
             });
         }
@@ -172,7 +171,7 @@ router.post('/new', [
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'The email that you\'ve entered is already exists.'
+                    msg: 'The email address that you\'ve entered is already exist.'
                 }]
             });
         }
@@ -186,7 +185,9 @@ router.post('/new', [
             registered_date: unix_timestamp,
             admin: 0,
             helper: 0,
-            register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+            passed_quiz_multiple_choice: 0,
+            approved_user_app: 0
         });
 
         const salt = await bcrypt.genSalt(12);
@@ -196,8 +197,7 @@ router.post('/new', [
 
         const payload = {
             user: {
-                id: user.id,
-                admin: user.admin
+                id: user.id
             }
         }
 
@@ -246,7 +246,7 @@ router.post('/reset', [
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'The email address that you\'ve entered does not exists.'
+                    msg: 'The email address that you\'ve entered does not exist.'
                 }]
             });
         }
