@@ -97,7 +97,9 @@ router.post('/', [
 
         const payload = {
             user: { 
-                id: user.id
+                id: user.id,
+                admin: user.admin,
+                helper: user.helper
             }
         }
 
@@ -197,7 +199,9 @@ router.post('/new', [
 
         const payload = {
             user: {
-                id: user.id
+                id: user.id,
+                admin: user.admin,
+                helper: user.helper
             }
         }
 
