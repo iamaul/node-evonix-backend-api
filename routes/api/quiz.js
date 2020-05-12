@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const moment = require('moment');
-const multer = require('multer');
-const { v4: uuidv4 } = require('uuid');
+// const multer = require('multer');
+// const { v4: uuidv4 } = require('uuid');
+const Sequelize = require('sequelize');
 const { check, validationResult } = require('express-validator');
 
 // Middleware
@@ -62,7 +63,7 @@ router.get('/scenario', auth, async (req, res) => {
     }
 
     try {
-        const result = await Quiz.findAll({ order: 'rand()', limit: 1 }); 
+        const result = await Quiz.findAll({ order: [[Sequelize.literal('RAND()')]], limit: 1 }); 
         return res.status(201).json(result);
     } catch (error) {
         console.error(error.message);
