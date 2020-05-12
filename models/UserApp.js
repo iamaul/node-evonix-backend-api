@@ -15,7 +15,7 @@ const UserApp = database.define('UserApp', {
             key: 'id'
         }
     },
-    approved_id: {
+    admin_id: {
         type: DataTypes.INTEGER,
         references: {
             model: User,

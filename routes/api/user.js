@@ -13,11 +13,13 @@ const database = require('../../config/database');
 
 // Middleware
 const auth = require('../../middleware/auth');
+const admin = require('../../middleware/admin');
 
 // Models
 const User = require('../../models/User');
 const UserSession = require('../../models/UserSession');
 const UserApp = require('../../models/UserApp');
+const Quiz = require('../../models/Quiz');
 
 /**
  * @route   POST /api/v1/users/email/verification
@@ -276,6 +278,92 @@ router.post('/application', auth, async (req, res) => {
         await app.save();
 
         return res.status(201).json({ status: true, msg: 'You have submitted your application.' });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   GET /api/v1/users/application
+ * @desc    Get all user apps
+ * @access  Private
+ */
+router.get('/application', [auth, admin], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const result = await UserApp.findAll({ 
+            order: [['created_at', 'DESC']],
+            include: [{
+                model: User,
+                as: 'userAppCreatedBy',
+                attributes: ['id', 'name', 'status']
+            },{
+                model: User,
+                as: 'userAppApprovedBy',
+                attributes: ['name']
+            },{
+                model: Quiz,
+                as: 'userAppQuiz',
+                attributes: ['title', 'question', 'image']
+            }] 
+        }); 
+        return res.status(201).json(result);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   UPDATE /api/v1/users/application/:confirm/:id
+ * @desc    Update a user application
+ * @access  Private
+ */
+router.put('/:confirm/:id', [auth, admin], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const unix_timestamp = moment().unix();
+
+    try {
+        let user_apps = await UserApp.findOne({ where: { user_id: req.params.id } });
+        if (!user_apps) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'The id of user apps that you\'ve selected does not exist.'
+                }]
+            });
+        }
+
+        let user = await User.findOne({ where: { id: req.params.id } });
+        user.status = (req.params.confirm ? 3 : 2);
+        user = await user.save();
+
+        user_apps.admin_id = req.user.id;
+        user_apps.updated_at = unix_timestamp;
+        user_apps = await user_apps.save();
+
+        const data = { user, user_apps };
+
+        return res.status(201).json(data);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
