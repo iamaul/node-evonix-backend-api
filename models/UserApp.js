@@ -29,8 +29,8 @@ const UserApp = database.define('UserApp', {
             key: 'id'
         }
     },
-    answer: { type: DataTypes.TEXT },
     score: { type: DataTypes.INTEGER },
+    answer: { type: DataTypes.TEXT },
     created_at: { type: DataTypes.INTEGER },
     updated_at: { type: DataTypes.INTEGER }
 }, { tableName: 'user_applications' });
