@@ -50,6 +50,31 @@ router.get('/', [auth, admin], async (req, res) => {
     }
 });
 
+/**
+ * @route   GET /api/v1/quiz/scenario
+ * @desc    Get all quiz scenarios
+ * @access  Private
+ */
+router.get('/scenario', [auth, admin], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const result = await Quiz.findAll({ order: 'rand()', limit: 1 }); 
+        return res.status(201).json(result);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
 // /**
 //  * @desc    Format upload image file multer
 //  */

@@ -3,6 +3,7 @@ const router = express.Router();
 
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const moment = require('moment');
 const { v4: uuidv4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
 const { Op } = require('sequelize');
@@ -16,6 +17,7 @@ const auth = require('../../middleware/auth');
 // Models
 const User = require('../../models/User');
 const UserSession = require('../../models/UserSession');
+const UserApp = require('../../models/UserApp');
 
 /**
  * @route   POST /api/v1/users/email/verification
@@ -40,7 +42,7 @@ router.post('/email/verification', auth, async (req, res) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'Your email is verified.'
+                    msg: 'Your email is already verified.'
                 }]
             });
         }
@@ -107,7 +109,7 @@ router.get('/email/verification/:code', auth, async (req, res) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'The link does\'nt seems right. We couldn\'t help you to verify email.'
+                    msg: 'The link does\'nt seems right. We couldn\'t help you to verify your email.'
                 }]
             });
         }
@@ -136,7 +138,7 @@ router.get('/email/verification/:code', auth, async (req, res) => {
 });
 
 /**
- * @route   POST /api/v1/users/change/password
+ * @route   PUT /api/v1/users/change/password
  * @desc    Change a new password
  * @access  Private
  */
@@ -233,6 +235,47 @@ router.put('/change/email', [auth, [
         }, { where: { id: req.user.id } });
 
         return res.status(201).json({ status: true, msg: 'You have changed a new email.' });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   POST /api/v1/users/application
+ * @desc    Submit a user app
+ * @access  Private
+ */
+router.post('/application', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { userId, id, score, answer } = req.body;
+
+    try {
+        const unix_timestamp = moment().unix();
+
+        let app = UserApp.build({
+            user_id: userId,
+            quiz_id: id,
+            score,
+            answer,
+            created_at: unix_timestamp
+        });
+        await User.update(
+            { status: 1 }, 
+            { where: { id: app.user_id } }
+        );
+        await app.save();
+
+        return res.status(201).json({ status: true, msg: 'You have submitted your application.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
