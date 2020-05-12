@@ -55,7 +55,7 @@ router.get('/', [auth, admin], async (req, res) => {
  * @desc    Get all quiz scenarios
  * @access  Private
  */
-router.get('/scenario', [auth, admin], async (req, res) => {
+router.get('/scenario', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });

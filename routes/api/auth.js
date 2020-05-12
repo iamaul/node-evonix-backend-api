@@ -109,7 +109,7 @@ router.post('/', [
             { expiresIn: 360000 },
             (error, token) => {
                 if (error) throw error;
-                return res.status(201).json({ status: true, token });
+                return res.status(201).json({ token });
             }
         );
     } catch (error) {
@@ -209,7 +209,7 @@ router.post('/new', [
             { expiresIn: 360000 },
             (error, token) => {
                 if (error) throw error;
-                return res.status(201).json({ status: true, token });
+                return res.status(201).json({ token });
             }
         );
     } catch (error) {
