@@ -63,7 +63,7 @@ router.get('/scenario', auth, async (req, res) => {
     }
 
     try {
-        const result = await Quiz.findAll({ order: Sequelize.literal('rand()'), limit: 1 }); 
+        const result = await Quiz.findAll({ order: [Sequelize.literal('rand()')], limit: 1 }); 
         return res.status(201).json(result);
     } catch (error) {
         console.error(error.message);
