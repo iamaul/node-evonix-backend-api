@@ -187,9 +187,7 @@ router.post('/new', [
             registered_date: unix_timestamp,
             admin: 0,
             helper: 0,
-            register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-            passed_quiz_multiple_choice: 0,
-            approved_user_app: 0
+            register_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
         });
 
         const salt = await bcrypt.genSalt(12);
