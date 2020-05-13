@@ -330,7 +330,7 @@ router.get('/application', [auth, admin], async (req, res) => {
 });
 
 /**
- * @route   UPDATE /api/v1/users/application/:confirm/:id
+ * @route   UPDATE /api/v1/users/application/:confirm/:id/:user_id
  * @desc    Update a user application
  * @access  Private
  */
@@ -353,17 +353,15 @@ router.put('/:confirm/:id/:user_id', [auth, admin], async (req, res) => {
             });
         }
 
-        let user = await User.findOne({ where: { id: req.params.user_id } });
-        user.status = (req.params.confirm ? 3 : 2);
-        user = await user.save();
+        await User.update({ 
+            status: (req.params.confirm ? 3 : 2)
+        }, { where: { id: req.params.user_id } });
 
         user_apps.admin_id = req.user.id;
         user_apps.updated_at = unix_timestamp;
         user_apps = await user_apps.save();
 
-        const data = { user, user_apps };
-
-        return res.status(201).json(data);
+        return res.status(201).json(user_apps);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
