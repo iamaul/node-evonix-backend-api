@@ -330,11 +330,11 @@ router.get('/application', [auth, admin], async (req, res) => {
 });
 
 /**
- * @route   UPDATE /api/v1/users/application/:confirm/:id/:user_id
+ * @route   PUT /api/v1/users/application/:confirm/:id/:user_id
  * @desc    Update a user application
  * @access  Private
  */
-router.put('/:confirm/:id/:user_id', [auth, admin], async (req, res) => {
+router.put('/application/:confirm/:id/:user_id', [auth, admin], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
