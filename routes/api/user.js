@@ -306,12 +306,10 @@ router.get('/application', [auth, admin], async (req, res) => {
             include: [{
                 model: User,
                 attributes: ['name', 'status']
-            }],
-            include: [{
+            },{
                 model: User,
                 attributes: ['name']
-            }],
-            include: [{
+            },{
                 model: Quiz,
                 attributes: ['title', 'question', 'image']
             }] 
