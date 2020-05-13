@@ -302,19 +302,15 @@ router.get('/application', [auth, admin], async (req, res) => {
 
     try {
         const result = await UserApp.findAll({
-            subQuery: false, 
             order: [['created_at', 'DESC']],
             include: [{
                 model: User,
-                as: 'users',
                 attributes: ['name', 'status']
             },{
                 model: User,
-                as: 'admins',
                 attributes: ['name']
             },{
                 model: Quiz,
-                as: 'quizzes',
                 attributes: ['title', 'question', 'image']
             }] 
         }); 
