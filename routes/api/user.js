@@ -302,18 +302,19 @@ router.get('/application', [auth, admin], async (req, res) => {
 
     try {
         const result = await UserApp.findAll({ 
+            attributes: ['user_id', 'admin_id', 'score', 'answer', 'created_at', 'updated_at'],
             order: [['created_at', 'DESC']],
             include: [{
                 model: User,
-                as: 'userAppUser',
+                as: 'users',
                 attributes: ['name', 'status']
             },{
                 model: User,
-                as: 'userAppAdmin',
+                as: 'admins',
                 attributes: ['name']
             },{
                 model: Quiz,
-                as: 'userAppQuiz',
+                as: 'quizzes',
                 attributes: ['title', 'question', 'image']
             }] 
         }); 
