@@ -36,7 +36,7 @@ const UserApp = database.define('UserApp', {
 }, { tableName: 'user_applications' });
 
 UserApp.belongsTo(User, { foreign_key: 'user_id', as: 'userAppCreatedBy' });
-UserApp.belongsTo(User, { foreign_key: 'approved_id', as: 'userAppApprovedBy' });
+UserApp.belongsTo(User, { foreign_key: 'admin_id', as: 'userAppApprovedBy' });
 UserApp.belongsTo(Quiz, { foreign_key: 'quiz_id', as: 'userAppQuiz' });
 
 module.exports = UserApp;
