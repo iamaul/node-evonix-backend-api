@@ -35,8 +35,8 @@ const UserApp = database.define('UserApp', {
     updated_at: { type: DataTypes.INTEGER }
 }, { tableName: 'user_applications' });
 
-UserApp.belongsTo(User, { foreignKey: 'user_id', as: 'users' });
-UserApp.belongsTo(User, { foreignKey: 'admin_id', as: 'admins' });
-UserApp.belongsTo(Quiz, { foreignKey: 'quiz_id', as: 'quizzes' });
+UserApp.belongsTo(User, { foreignKey: 'user_id', as: 'userAppUser' });
+UserApp.belongsTo(User, { foreignKey: 'admin_id', as: 'userAppAdmin' });
+UserApp.belongsTo(Quiz, { foreignKey: 'quiz_id', as: 'userAppQuiz' });
 
 module.exports = UserApp;
