@@ -305,15 +305,15 @@ router.get('/application', [auth, admin], async (req, res) => {
             order: [['created_at', 'DESC']],
             include: [{
                 model: User,
-                as: 'users',
+                as: 'userAppUser',
                 attributes: ['name', 'status']
             },{
                 model: User,
-                as: 'admins',
+                as: 'userAppAdmin',
                 attributes: ['name']
             },{
                 model: Quiz,
-                as: 'quizzes',
+                as: 'userAppQuiz',
                 attributes: ['title', 'question', 'image']
             }] 
         }); 
