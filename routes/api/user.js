@@ -302,7 +302,6 @@ router.get('/application', [auth, admin], async (req, res) => {
 
     try {
         const result = await UserApp.findAll({ 
-            attributes: ['user_id', 'admin_id', 'score', 'answer', 'created_at', 'updated_at'],
             order: [['created_at', 'DESC']],
             include: [{
                 model: User,
@@ -335,7 +334,7 @@ router.get('/application', [auth, admin], async (req, res) => {
  * @desc    Update a user application
  * @access  Private
  */
-router.put('/:confirm/:id', [auth, admin], async (req, res) => {
+router.put('/:confirm/:id/:user_id', [auth, admin], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -344,7 +343,7 @@ router.put('/:confirm/:id', [auth, admin], async (req, res) => {
     const unix_timestamp = moment().unix();
 
     try {
-        let user_apps = await UserApp.findOne({ where: { user_id: req.params.id } });
+        let user_apps = await UserApp.findOne({ where: { id: req.params.id } });
         if (!user_apps) {
             return res.status(400).json({
                 errors: [{
@@ -354,7 +353,7 @@ router.put('/:confirm/:id', [auth, admin], async (req, res) => {
             });
         }
 
-        let user = await User.findOne({ where: { id: req.params.id } });
+        let user = await User.findOne({ where: { id: req.params.user_id } });
         user.status = (req.params.confirm ? 3 : 2);
         user = await user.save();
 
