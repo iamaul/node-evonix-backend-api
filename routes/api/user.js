@@ -343,7 +343,22 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
     const unix_timestamp = moment().unix();
 
     try {
-        let user_apps = await UserApp.findOne({ where: { id: req.params.id } });
+        let user_apps = await UserApp.findOne({ 
+            where: { id: req.params.id },
+            include: [{
+                model: User,
+                as: 'userAppUser',
+                attributes: ['name', 'status']
+            },{
+                model: User,
+                as: 'userAppAdmin',
+                attributes: ['name']
+            },{
+                model: Quiz,
+                as: 'userAppQuiz',
+                attributes: ['title', 'question', 'image']
+            }]  
+        });
         if (!user_apps) {
             return res.status(400).json({
                 errors: [{
@@ -353,8 +368,9 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
             });
         }
 
+        let confirmStatus = (req.params.status === 1 ? 3 : 2);
         await User.update({ 
-            status: (req.params.status ? 3 : 2)
+            status: confirmStatus
         }, { where: { id: req.params.user_id } });
 
         user_apps.admin_id = req.user.id;
