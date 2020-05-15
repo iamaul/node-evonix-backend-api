@@ -306,7 +306,10 @@ router.get('/application', [auth, admin], async (req, res) => {
             include: [{
                 model: User,
                 as: 'userAppUser',
-                attributes: ['name', 'status']
+                attributes: ['name', 'status'],
+                where: {
+                    status: { [Op.ne]: 0 }
+                }
             },{
                 model: User,
                 as: 'userAppAdmin',
@@ -368,9 +371,10 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
             });
         }
 
-        let confirmStatus = (req.params.status === 1 ? 3 : 2);
+        console.log(req.params.status ? 3 : 2);
+
         await User.update({ 
-            status: confirmStatus
+            status: (req.params.status ? 3 : 2)
         }, { where: { id: req.params.user_id } });
 
         user_apps.admin_id = req.user.id;
