@@ -371,10 +371,8 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
             });
         }
 
-        console.log(req.params.status ? 3 : 2);
-
         await User.update({ 
-            status: (req.params.status ? 3 : 2)
+            status: req.params.status
         }, { where: { id: req.params.user_id } });
 
         user_apps.admin_id = req.user.id;
