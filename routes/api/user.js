@@ -330,11 +330,11 @@ router.get('/application', [auth, admin], async (req, res) => {
 });
 
 /**
- * @route   PUT /api/v1/users/application/:confirm/:id/:user_id
+ * @route   PUT /api/v1/users/application/:status/:id/:user_id
  * @desc    Update a user application
  * @access  Private
  */
-router.put('/application/:confirm/:id/:user_id', [auth, admin], async (req, res) => {
+router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -354,7 +354,7 @@ router.put('/application/:confirm/:id/:user_id', [auth, admin], async (req, res)
         }
 
         await User.update({ 
-            status: (req.params.confirm ? 3 : 2)
+            status: (req.params.status ? 3 : 2)
         }, { where: { id: req.params.user_id } });
 
         user_apps.admin_id = req.user.id;
