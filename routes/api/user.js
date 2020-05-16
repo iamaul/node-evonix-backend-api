@@ -347,20 +347,7 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
 
     try {
         let user_apps = await UserApp.findOne({ 
-            where: { id: req.params.id },
-            include: [{
-                model: User,
-                as: 'userAppUser',
-                attributes: ['name', 'status']
-            },{
-                model: User,
-                as: 'userAppAdmin',
-                attributes: ['name']
-            },{
-                model: Quiz,
-                as: 'userAppQuiz',
-                attributes: ['title', 'question', 'image']
-            }]  
+            where: { id: req.params.id }  
         });
         if (!user_apps) {
             return res.status(400).json({
@@ -377,9 +364,26 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
 
         user_apps.admin_id = req.user.id;
         user_apps.updated_at = unix_timestamp;
-        user_apps = await user_apps.save();
+        await user_apps.save();
 
-        return res.status(201).json(user_apps);
+        const result = await UserApp.findAll({
+            where: { id: req.params.id },
+            include: [{
+                model: User,
+                as: 'userAppUser',
+                attributes: ['name', 'status']
+            },{
+                model: User,
+                as: 'userAppAdmin',
+                attributes: ['name']
+            },{
+                model: Quiz,
+                as: 'userAppQuiz',
+                attributes: ['title', 'question', 'image']
+            }]
+        });
+
+        return res.status(201).json(result);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
