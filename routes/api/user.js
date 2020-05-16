@@ -367,7 +367,7 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
         await user_apps.save();
 
         const result = await UserApp.findAll({
-            where: { id: req.params.id },
+            order: [['updated_at', 'DESC']],
             include: [{
                 model: User,
                 as: 'userAppUser',
