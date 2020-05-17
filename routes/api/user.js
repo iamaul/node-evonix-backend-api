@@ -339,27 +339,16 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
     const unix_timestamp = moment().unix();
 
     try {
-        let user_apps = await UserApp.findOne({ 
-            where: { id: req.params.id }  
-        });
-        if (!user_apps) {
-            return res.status(400).json({
-                errors: [{
-                    status: false,
-                    msg: 'The id of user apps that you\'ve selected does not exist.'
-                }]
-            });
-        }
-
         await User.update({ 
             approved: req.params.status
         }, { where: { id: req.params.user_id } });
-        
-        user_apps.admin_id = req.user.id;
-        user_apps.status = req.params.status;
-        user_apps.updated_at = unix_timestamp;
-        await user_apps.save();
 
+        await UserApp.update({
+            admin_id: req.user.id,
+            status: req.params.status,
+            updated_at: unix_timestamp
+        }, { where: { id: req.params.id } });
+        
         const result = await UserApp.findAll({
             order: [['updated_at', 'DESC']],
             include: [{
