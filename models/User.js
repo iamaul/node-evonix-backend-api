@@ -11,8 +11,8 @@ const User = database.define('User', {
     registered_date: { type: DataTypes.BIGINT },
     admin: { type: DataTypes.INTEGER },
     helper: { type: DataTypes.INTEGER },
+    approved: { type: DataTypes.TINYINT },
     lastlogin: { type: DataTypes.INTEGER },
-    status: { type: DataTypes.TINYINT },
     register_ip: { type: DataTypes.STRING(20) },
     login_ip: { type: DataTypes.STRING(20) },
     ucp_login_ip: { type: DataTypes.STRING(20) }

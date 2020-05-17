@@ -271,13 +271,9 @@ router.post('/application', auth, async (req, res) => {
             answer,
             created_at: unix_timestamp
         });
-        await User.update(
-            { status: 1 }, 
-            { where: { id: app.user_id } }
-        );
         await app.save();
 
-        return res.status(201).json({ status: true, msg: 'You have submitted your application.' });
+        return res.status(201).json({ status: true, msg: 'Submitting your application ...' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -306,10 +302,7 @@ router.get('/application', [auth, admin], async (req, res) => {
             include: [{
                 model: User,
                 as: 'userAppUser',
-                attributes: ['name', 'status'],
-                where: {
-                    status: { [Op.ne]: 0 }
-                }
+                attributes: ['name']
             },{
                 model: User,
                 as: 'userAppAdmin',
@@ -359,10 +352,11 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
         }
 
         await User.update({ 
-            status: req.params.status
+            approved: req.params.status
         }, { where: { id: req.params.user_id } });
-
+        
         user_apps.admin_id = req.user.id;
+        user_apps.status = req.params.status;
         user_apps.updated_at = unix_timestamp;
         await user_apps.save();
 
@@ -371,7 +365,7 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
             include: [{
                 model: User,
                 as: 'userAppUser',
-                attributes: ['name', 'status']
+                attributes: ['name']
             },{
                 model: User,
                 as: 'userAppAdmin',
