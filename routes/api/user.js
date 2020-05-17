@@ -272,9 +272,8 @@ router.post('/application', auth, async (req, res) => {
             created_at: unix_timestamp
         });
         await User.update({
-            status: 1,
-            where: { id: userId }
-        });
+            status: 1
+        }, { where: { id: userId } });
         await app.save();
 
         return res.status(201).json({ status: true, msg: 'Submitting your application ...' });
