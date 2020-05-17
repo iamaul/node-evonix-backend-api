@@ -220,7 +220,7 @@ router.put('/change/email', [auth, [
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'The email that you\'ve entered is already exists.'
+                    msg: 'The email that you\'ve entered is already exist.'
                 }]
             });
         }
@@ -339,15 +339,25 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
     const unix_timestamp = moment().unix();
 
     try {
+        let user_app = await UserApp.findOne({ where: { id: req.params.id } });
+
+        if (!user_app) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'The id of user application you\'ve selected does not exist.'
+                }]
+            });
+        }
+
         await User.update({ 
-            approved: req.params.status
+            status: req.params.status
         }, { where: { id: req.params.user_id } });
 
-        await UserApp.update({
-            admin_id: req.user.id,
-            status: req.params.status,
-            updated_at: unix_timestamp
-        }, { where: { id: req.params.id } });
+        user_app.admin_id = req.user.id;
+        user_app.status = req.params.status;
+        user_app.updated_at = unix_timestamp;
+        await user_app.save();
         
         const result = await UserApp.findAll({
             order: [['updated_at', 'DESC']],

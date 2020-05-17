@@ -31,6 +31,7 @@ const UserApp = database.define('UserApp', {
     },
     score: { type: DataTypes.INTEGER },
     answer: { type: DataTypes.TEXT },
+    status: { type: DataTypes.TINYINT },
     created_at: { type: DataTypes.INTEGER },
     updated_at: { type: DataTypes.INTEGER }
 }, { tableName: 'user_applications' });
