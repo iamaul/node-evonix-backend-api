@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 // Connection
 const database = require('../config/database');
 
-const User = database.define('Ban', {
+const Ban = database.define('Ban', {
     account: { type: DataTypes.STRING(24) },
     issuer: { type: DataTypes.STRING(24) },
     reason: { type: DataTypes.STRING(128) },
