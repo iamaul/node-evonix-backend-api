@@ -22,6 +22,7 @@ const user = require('./routes/api/user');
 const character = require('./routes/api/character');
 const stats = require('./routes/api/statistics');
 const quiz = require('./routes/api/quiz');
+const ban = require('./routes/api/ban');
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use('/api/v1/users', user);
 app.use('/api/v1/characters', character);
 app.use('/api/v1/server', stats);
 app.use('/api/v1/quiz', quiz);
+app.use('/api/v1/ban', ban);
 
 const SERVER_PORT = process.env.PORT || 5000;
 

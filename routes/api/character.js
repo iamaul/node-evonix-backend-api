@@ -3,9 +3,6 @@ const router = express.Router();
 
 const { check, validationResult } = require('express-validator');
 
-// Connection
-const database = require('../../config/database');
-
 // Middleware
 const auth = require('../../middleware/auth');
 

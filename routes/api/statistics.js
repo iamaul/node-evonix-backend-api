@@ -4,9 +4,6 @@ const router = express.Router();
 const { Op } = require('sequelize');
 const { validationResult } = require('express-validator');
 
-// Connection
-const database = require('../../config/database');
-
 // Middleware
 const auth = require('../../middleware/auth');
 

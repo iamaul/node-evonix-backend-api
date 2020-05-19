@@ -8,9 +8,6 @@ const { v4: uuidv4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
 const { Op } = require('sequelize');
 
-// Connection
-const database = require('../../config/database');
-
 // Middleware
 const auth = require('../../middleware/auth');
 const admin = require('../../middleware/admin');
