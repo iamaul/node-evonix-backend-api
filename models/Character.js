@@ -81,6 +81,7 @@ const Character = database.define('Character', {
     mask_number: { type: DataTypes.INTEGER }
 }, { tableName: 'characters' });
 
-Character.belongsTo(User, { foreignKey: 'userid', targetKey: 'userid', as: 'charUser' });
+User.hasMany(Character, { foreignKey: 'userid', as: 'userChars' });
+Character.belongsTo(User, { foreignKey: 'userid', as: 'charUser' });
 
 module.exports = Character;
