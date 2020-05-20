@@ -21,6 +21,6 @@ const User = database.define('User', {
     ucp_login_ip: { type: DataTypes.STRING(20) }
 }, { tableName: 'users' });
 
-User.hasMany(Character, { foreignKey: 'userid' });
+User.hasMany(Character, { foreignKey: 'userid', targetKey: 'userid', as: 'userChar' });
 
 module.exports = User;
