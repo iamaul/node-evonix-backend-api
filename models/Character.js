@@ -34,6 +34,8 @@ const Character = database.define('Character', {
     pos_a: { type: DataTypes.FLOAT },
     money: { type: DataTypes.INTEGER },
     bank: { type: DataTypes.INTEGER },
+    bank_saving: { type: DataTypes.INTEGER },
+    paycheck: { type: DataTypes.INTEGER },
     max_health: { type: DataTypes.FLOAT },
     health: { type: DataTypes.FLOAT },
     armour: { type: DataTypes.FLOAT },
@@ -54,21 +56,18 @@ const Character = database.define('Character', {
     faction_divname: { type: DataTypes.STRING(30) },
     faction_duty: { type: DataTypes.TINYINT },
     faction_dutytime: { type: DataTypes.INTEGER },
+    faction_dutypaycheck: { type: DataTypes.INTEGER },
     faction_skin: { type: DataTypes.INTEGER },
     handcuff_status: { type: DataTypes.TINYINT },
     garbage: { type: DataTypes.INTEGER },
-    radio_status: { type: DataTypes.TINYINT },
-    radio_channel1: { type: DataTypes.INTEGER },
-    radio_channel2: { type: DataTypes.INTEGER },
-    radio_channel3: { type: DataTypes.INTEGER },
-    radio_channel4: { type: DataTypes.INTEGER },
-    radio_main: { type: DataTypes.INTEGER },
+    tutorial: { type: DataTypes.TINYINT },
+    radio_main: { type: DataTypes.TINYINT },
     headache: { type: DataTypes.INTEGER },
     drug_addiction: { type: DataTypes.FLOAT },
     drug_addiction_timer: { type: DataTypes.INTEGER },
     license_driving: { type: DataTypes.INTEGER },
     license_flying: { type: DataTypes.INTEGER },
-    license_sealing: { type: DataTypes.INTEGER },
+    license_sailing: { type: DataTypes.INTEGER },
     admin_jail_timer: { type: DataTypes.INTEGER },
     admin_jail_issuer: { type: DataTypes.STRING(24) },
     admin_jail_reason: { type: DataTypes.STRING(100) },
@@ -77,10 +76,11 @@ const Character = database.define('Character', {
     jail_arrest_sqlid: { type: DataTypes.INTEGER },
     prison_sentence: { type: DataTypes.INTEGER },
     prison_timer: { type: DataTypes.INTEGER },
-    prison_arrest_sqlid: { type: DataTypes.INTEGER }
+    prison_arrest_sqlid: { type: DataTypes.INTEGER },
+    mask_status: { type: DataTypes.TINYINT },
+    mask_number: { type: DataTypes.INTEGER }
 }, { tableName: 'characters' });
 
-User.hasMany(Character, { foreignKey: 'userid' });
 Character.belongsTo(User, { foreignKey: 'userid' });
 
 module.exports = Character;

@@ -3,6 +3,9 @@ const { DataTypes } = require('sequelize');
 // Connection
 const database = require('../config/database');
 
+// Models
+const Character = require('./Character');
+
 const User = database.define('User', {
     name: { type: DataTypes.STRING(24) },
     email: { type: DataTypes.STRING(100) },
@@ -17,5 +20,7 @@ const User = database.define('User', {
     login_ip: { type: DataTypes.STRING(20) },
     ucp_login_ip: { type: DataTypes.STRING(20) }
 }, { tableName: 'users' });
+
+User.hasMany(Character, { foreignKey: 'userid' });
 
 module.exports = User;

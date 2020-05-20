@@ -31,12 +31,14 @@ router.get('/', auth, async (req, res) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'No characters are listed for this account.'
+                    msg: 'No characters are listed for this user.'
                 }]
             });
         }
 
-        return res.status(201).json({ status: true, result: { count, rows }});
+        const data = { count, rows };
+
+        return res.status(201).json(data);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -63,7 +65,6 @@ router.post('/create', [auth, [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    // Skin
     const maleSkins = [
         1, 2, 3, 4, 5, 
         6, 7, 8, 14, 15, 
@@ -104,8 +105,7 @@ router.post('/create', [auth, [
         262, 264, 268, 269, 270, 
         271, 272, 273, 289, 291, 
         292, 293, 294, 295, 296, 
-        297, 299, 300, 301, 302,
-        303, 304, 305, 310, 311,
+        297, 299
     ];
     
     const femaleSkins = [
@@ -115,14 +115,11 @@ router.post('/create', [auth, [
         77, 88, 89, 90, 91, 
         92, 93, 131, 141, 148, 
         150, 151, 157, 169, 172, 
-        190, 191, 192, 193, 211,
-        306, 307, 308, 309
+        190, 191, 192, 193, 211
     ];
 
-    // Initial skin value
     let skin = 0;
 
-    // Destructor form body
     const { 
         firstname, 
         lastname,  
@@ -139,16 +136,13 @@ router.post('/create', [auth, [
         charData.gender = gender;
     }
 
-    // Random skin character based on gender
-    if (gender == 0) {
+    if (gender === 0) {
         skin = [Math.floor(Math.random() * maleSkins.length)];
         charData.skin_id = skin;
     } else {
         skin = [Math.floor(Math.random() * femaleSkins.length)];
         charData.skin_id = skin;
     }
-
-    console.log(charData);
 
     try {
         const user_chars = Character.count({
@@ -168,7 +162,7 @@ router.post('/create', [auth, [
 
         const character = Character.build({ charData });
         await character.save();
-        return res.status(201).json({ status: true, charData });
+        return res.status(201).json(charData);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
