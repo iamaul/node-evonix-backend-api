@@ -62,7 +62,6 @@ const Character = database.define('Character', {
     garbage: { type: DataTypes.INTEGER },
     tutorial: { type: DataTypes.TINYINT },
     radio_main: { type: DataTypes.TINYINT },
-    headache: { type: DataTypes.INTEGER },
     drug_addiction: { type: DataTypes.FLOAT },
     drug_addiction_timer: { type: DataTypes.INTEGER },
     license_driving: { type: DataTypes.INTEGER },
