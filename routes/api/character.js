@@ -51,13 +51,25 @@ router.get('/', auth, async (req, res) => {
 });
 
 /**
- * @route   POST /api/v1/characters/create
- * @desc    User create a character
+ * @route   POST /api/v1/characters/new
+ * @desc    Create a character
  * @access  Private
  */
-router.post('/create', [auth, [
-    check('firstname', 'First name is required.').not().isEmpty(),
-    check('lastname', 'Last name is required.').not().isEmpty(),
+router.post('/new', [auth, [
+    check('firstname', 'First name is required.')
+        .not()
+        .isEmpty()
+        .isLength({ min: 2 })
+        .withMessage('First name must be at least 2 minimum characters.')
+        .matches(/^[a-zA-Z]+$/, 'i')
+        .withMessage('Only these characters are allowed (a-z, A-Z).'),
+    check('lastname', 'Last name is required.')
+        .not()
+        .isEmpty()
+        .isLength({ min: 2 })
+        .withMessage('Last name must be at least 2 minimum characters.')
+        .matches(/^[a-zA-Z]+$/, 'i')
+        .withMessage('Only these characters are allowed (a-z, A-Z).'),
     check('gender', 'Gender is required.').not().isEmpty()
 ]], async (req, res) => {
     const errors = validationResult(req);
@@ -162,7 +174,7 @@ router.post('/create', [auth, [
 
         const character = Character.build({ charData });
         await character.save();
-        return res.status(201).json(charData);
+        return res.status(201).json(character);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
