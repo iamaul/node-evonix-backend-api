@@ -172,7 +172,7 @@ router.post('/new', [auth, [
             });
         }
 
-        const character = Character.build({ charData });
+        const character = Character.build(charData);
         await character.save();
         return res.status(201).json(character);
     } catch (error) {
