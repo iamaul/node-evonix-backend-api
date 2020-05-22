@@ -161,7 +161,7 @@ router.post('/new', [auth, [
             }
         });
 
-        if (user_chars < 5) {
+        if (user_chars === 5) {
             return res.status(400).json({
                 errors: [{
                     status: false,
