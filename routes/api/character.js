@@ -172,7 +172,14 @@ router.post('/new', [auth, [
 
         const character = Character.build(charData);
         await character.save();
-        return res.status(201).json(character);
+
+        const { count, rows } = await Character.findAndCountAll({
+            where: {
+                userid: req.user.id
+            }
+        });
+        const data = { count, rows };
+        return res.status(201).json(data);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
