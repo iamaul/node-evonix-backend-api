@@ -17,7 +17,7 @@ const Character = database.define('Character', {
     name: { type: DataTypes.STRING(24) },
     lastlogin: { type: DataTypes.INTEGER },
     skin_id: { type: DataTypes.INTEGER },
-    gender: { type: DataTypes.STRING(8) },
+    gender: { type: DataTypes.TINYINT },
     birth_day: { type: DataTypes.MEDIUMINT },
     birth_month: { type: DataTypes.MEDIUMINT },
     birth_year: { type: DataTypes.INTEGER },
