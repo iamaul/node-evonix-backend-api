@@ -151,11 +151,8 @@ router.post('/new', [auth, [
     if (gender === 0) {
         skin = [Math.floor(Math.random() * maleSkins.length)];
         charData.skin_id = skin;
-    } else if (gender === 1) {
-        skin = [Math.floor(Math.random() * femaleSkins.length)];
-        charData.skin_id = skin;
     } else {
-        skin = [Math.floor(Math.random() * maleSkins.length * femaleSkins.length)];
+        skin = [Math.floor(Math.random() * femaleSkins.length)];
         charData.skin_id = skin;
     }
 
