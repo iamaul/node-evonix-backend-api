@@ -144,9 +144,7 @@ router.post('/new', [auth, [
     if (firstname && lastname) {
         charData.name = firstname + "_" + lastname;
     }
-    if (gender) {
-        charData.gender = gender;
-    }
+    charData.gender = gender;
 
     if (gender === 0) {
         skin = [Math.floor(Math.random() * maleSkins.length)];
