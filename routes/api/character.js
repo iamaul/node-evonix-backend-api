@@ -155,7 +155,7 @@ router.post('/new', [auth, [
     }
 
     try {
-        const charname = Character.findOne({ 
+        const charname = await Character.findOne({ 
             where: { name: charData.name }
         });
 
@@ -168,7 +168,7 @@ router.post('/new', [auth, [
             });
         }
 
-        const user_chars = Character.count({
+        const user_chars = await Character.count({
             where: {
                 userid: req.user.id
             }
