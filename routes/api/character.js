@@ -155,6 +155,19 @@ router.post('/new', [auth, [
     }
 
     try {
+        const charname = Character.findOne({ 
+            where: { name: charData.name }
+        });
+
+        if (charname) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'You can\'t use that character name as it\'s already in use.'
+                }]
+            });
+        }
+
         const user_chars = Character.count({
             where: {
                 userid: req.user.id
