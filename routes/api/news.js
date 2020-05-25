@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const moment = require('moment');
+const slugify = require('slugify');
 const { check, validationResult } = require('express-validator');
 
 // Middleware
@@ -10,6 +11,7 @@ const admin = require('../../middleware/admin');
 
 // Models
 const News = require('../../models/News');
+const User = require('../../models/User');
 
 /**
  * @route   GET /api/v1/news/headline
@@ -144,8 +146,9 @@ router.post('/', [auth, admin, [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, slug, content, image } = req.body;
+    const { title, content, image } = req.body;
     
+    const slug = slugify(title);
     const unix_timestamp = moment().unix();
 
     try {
@@ -185,8 +188,9 @@ router.put('/:id', [auth, admin, [
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, slug, content, image } = req.body;
+    const { title, content, image } = req.body;
     
+    const slug = slugify(title);
     const unix_timestamp = moment().unix();
 
     try {
