@@ -125,7 +125,7 @@ router.post('/', [auth, admin, [
     const unix_timestamp = moment().unix();
 
     try {   
-        let quiz = Quiz.build({ 
+        const quiz = Quiz.build({ 
             title, 
             question, 
             image,
@@ -138,7 +138,7 @@ router.post('/', [auth, admin, [
         //     quiz.image = req.file.filename;
         // }
 
-        quiz = await quiz.save();
+        await quiz.save();
         return res.status(201).json(quiz);
     } catch (error) {
         console.error(error.message);

@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const { validationResult } = require('express-validator');
-// const { Op } = require('sequelize');
 
 // Middleware
 const auth = require('../../middleware/auth');
