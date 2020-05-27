@@ -18,7 +18,7 @@ const User = require('../../models/User');
  * @desc    Get headline news
  * @access  Private
  */
-router.get('/headline', [auth, admin], async (req, res) => {
+router.get('/headline', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -55,7 +55,7 @@ router.get('/headline', [auth, admin], async (req, res) => {
  * @desc    Get all news
  * @access  Private
  */
-router.get('/', [auth, admin], async (req, res) => {
+router.get('/', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -91,7 +91,7 @@ router.get('/', [auth, admin], async (req, res) => {
  * @desc    Get news detail
  * @access  Private
  */
-router.get('/:slug', [auth, admin], async (req, res) => {
+router.get('/:slug', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -139,7 +139,8 @@ router.get('/:slug', [auth, admin], async (req, res) => {
  */
 router.post('/', [auth, admin, [
     check('title', 'Title is required.').not().isEmpty(),
-    check('content', 'Content is required.').not().isEmpty()
+    check('content', 'Content is required.').not().isEmpty(),
+    check('image', 'Image is required.').not().isEmpty()
 ]], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -153,11 +154,11 @@ router.post('/', [auth, admin, [
 
     try {
         const news = News.build({
-            author_id: req.user.id,
             title,
             slug,
             content,
             image,
+            created_by: req.user.id,
             created_at: unix_timestamp
         });
         await news.save();
@@ -181,7 +182,8 @@ router.post('/', [auth, admin, [
  */
 router.put('/:id', [auth, admin, [
     check('title', 'Title is required.').not().isEmpty(),
-    check('content', 'Content is required.').not().isEmpty()
+    check('content', 'Content is required.').not().isEmpty(),
+    check('image', 'Image is required.').not().isEmpty()
 ]], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -204,11 +206,11 @@ router.put('/:id', [auth, admin, [
             });
         }
 
-        news.updated_by = req.user.id;
         news.title = title;
         news.slug = slug;
         news.content = content;
         news.image = image;
+        news.updated_by = req.user.id;
         news.updated_at = unix_timestamp;
         news = await news.save();
 
