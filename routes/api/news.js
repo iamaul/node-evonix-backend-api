@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
     }
 
     try {
-        const res = await News.findAll({ 
+        const result = await News.findAll({ 
             order: [['created_at', 'DESC']],
             include: [{
                 model: User,
@@ -74,7 +74,7 @@ router.get('/', async (req, res) => {
                 attributes: ['name']
             }]  
         });
-        return res.status(201).json(res);
+        return res.status(201).json(result);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
