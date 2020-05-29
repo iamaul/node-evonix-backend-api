@@ -149,7 +149,7 @@ router.post('/', [auth, admin, [
 
     const { title, content, image } = req.body;
     
-    const slug = slugify(title);
+    const slug = slugify(title, { lower: true });
     const unix_timestamp = moment().unix();
 
     try {
@@ -192,7 +192,7 @@ router.put('/:id', [auth, admin, [
 
     const { title, content, image } = req.body;
     
-    const slug = slugify(title);
+    const slug = slugify(title, { lower: true });
     const unix_timestamp = moment().unix();
 
     try {
