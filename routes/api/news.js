@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
     }
 
     try {
-        const { count, rows } = await News.findAndCountAll({ 
+        const res = await News.findAll({ 
             order: [['created_at', 'DESC']],
             include: [{
                 model: User,
@@ -74,8 +74,7 @@ router.get('/', async (req, res) => {
                 attributes: ['name']
             }]  
         });
-        const result = { count, rows }; 
-        return res.status(201).json(result);
+        return res.status(201).json(res);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
