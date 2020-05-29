@@ -18,7 +18,7 @@ const User = require('../../models/User');
  * @desc    Get headline news
  * @access  Private
  */
-router.get('/headline', auth, async (req, res) => {
+router.get('/headline', async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -55,14 +55,14 @@ router.get('/headline', auth, async (req, res) => {
  * @desc    Get all news
  * @access  Private
  */
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
     try {
-        const result = await News.findAll({ 
+        const { count, rows } = await News.findAndCountAll({ 
             order: [['created_at', 'DESC']],
             include: [{
                 model: User,
@@ -73,7 +73,8 @@ router.get('/', auth, async (req, res) => {
                 as: 'newsUpdatedBy',
                 attributes: ['name']
             }]  
-        }); 
+        });
+        const result = { count, rows }; 
         return res.status(201).json(result);
     } catch (error) {
         console.error(error.message);
@@ -91,7 +92,7 @@ router.get('/', auth, async (req, res) => {
  * @desc    Get news detail
  * @access  Private
  */
-router.get('/:slug', auth, async (req, res) => {
+router.get('/:slug', async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
