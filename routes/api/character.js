@@ -8,6 +8,9 @@ const auth = require('../../middleware/auth');
 
 // Models
 const Character = require('../../models/Character');
+const AdminWarn = require('../../models/AdminWarn');
+const Vehicle = require('../../models/Vehicle');
+const Property = require('../../models/Property');
 
 /**
  * @route   GET /api/v1/characters
@@ -193,6 +196,93 @@ router.post('/new', [auth, [
         });
         const data = { count, rows };
         return res.status(201).json(data);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   GET /api/v1/characters/:char_id/admin_warn
+ * @desc    Get character's admin warns
+ * @access  Private
+ */
+router.get('/:char_id/admin_warn', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const adminwarn = await AdminWarn.findAll({ 
+            where: { char_id: req.params.char_id },
+            order: [['timestamp', 'DESC']]
+        });
+
+        return res.status(201).json(adminwarn);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   GET /api/v1/characters/:owner_sqlid/vehicle
+ * @desc    Get character's vehicle
+ * @access  Private
+ */
+router.get('/:owner_sqlid/vehicle', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const veh = await Vehicle.findAll({ 
+            where: { owner_sqlid: req.params.owner_sqlid },
+            order: [['mileage', 'DESC']]
+        });
+
+        return res.status(201).json(veh);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   GET /api/v1/characters/:owner_sqlid/property
+ * @desc    Get character's property
+ * @access  Private
+ */
+router.get('/:owner_sqlid/property', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const veh = await Property.findAll({ 
+            where: { owner_sqlid: req.params.owner_sqlid },
+            order: [['price', 'DESC']]
+        });
+
+        return res.status(201).json(veh);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({

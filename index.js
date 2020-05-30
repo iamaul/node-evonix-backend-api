@@ -24,8 +24,6 @@ const stats = require('./routes/api/statistics');
 const quiz = require('./routes/api/quiz');
 const ban = require('./routes/api/ban');
 const news = require('./routes/api/news');
-const vehicle = require('./routes/api/vehicle');
-const property = require('./routes/api/property');
 
 const app = express();
 
