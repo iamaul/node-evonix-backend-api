@@ -46,8 +46,6 @@ app.use('/api/v1/server', stats);
 app.use('/api/v1/quiz', quiz);
 app.use('/api/v1/ban', ban);
 app.use('/api/v1/news', news);
-app.use('/api/v1/vehicle', vehicle);
-app.use('/api/v1/property', property);
 
 const SERVER_PORT = process.env.PORT || 5000;
 
