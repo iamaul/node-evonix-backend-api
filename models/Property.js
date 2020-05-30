@@ -4,13 +4,13 @@ const { DataTypes } = require('sequelize');
 const database = require('../config/database');
 
 // Models
-const User = require('./User');
+const Character = require('./Character');
 
 const Property = database.define('Property', {
     owner_sqlid: {
         type: DataTypes.INTEGER,
         references: {
-            model: User,
+            model: Character,
             key: 'id'
         }
     },
@@ -35,7 +35,7 @@ const Property = database.define('Property', {
     exit_a: { type: DataTypes.FLOAT }
 }, { tableName: 'property' });
 
-User.hasMany(Property, { foreignKey: 'owner_sqlid' });
-Property.belongsTo(User, { foreignKey: 'owner_sqlid' });
+Character.hasMany(Property, { foreignKey: 'owner_sqlid', as: 'charProperties' });
+Property.belongsTo(Character, { foreignKey: 'owner_sqlid', as: 'propertyChar' });
 
 module.exports = Property;

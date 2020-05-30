@@ -4,13 +4,13 @@ const { DataTypes } = require('sequelize');
 const database = require('../config/database');
 
 // Models
-const User = require('./User');
+const Character = require('./Character');
 
 const Vehicle = database.define('Vehicle', {
     owner_sqlid: {
         type: DataTypes.INTEGER,
         references: {
-            model: User,
+            model: Character,
             key: 'id'
         }
     },
@@ -26,6 +26,10 @@ const Vehicle = database.define('Vehicle', {
     world: { type: DataTypes.INTEGER },
     interior: { type: DataTypes.INTEGER },
     faction_sqlid: { type: DataTypes.INTEGER },
+    rental_sqlid: { type: DataTypes.INTEGER },
+    rental_timer: { type: DataTypes.INTEGER },
+    rental_price: { type: DataTypes.INTEGER },
+    name: { type: DataTypes.STRING(32) },
     lock_status: { type: DataTypes.TINYINT },
     save_x: { type: DataTypes.FLOAT },
     save_y: { type: DataTypes.FLOAT },
@@ -39,11 +43,13 @@ const Vehicle = database.define('Vehicle', {
     damage_tires: { type: DataTypes.INTEGER },
     health: { type: DataTypes.FLOAT },
     max_health: { type: DataTypes.FLOAT },
+    mileage: { type: DataTypes.FLOAT },
     fuel: { type: DataTypes.FLOAT },
-    number_plate: { type: DataTypes.STRING(32) }
+    number_plate: { type: DataTypes.STRING(32) },
+    component: { type: DataTypes.INTEGER }
 }, { tableName: 'vehicles' });
 
-User.hasMany(Vehicle, { foreignKey: 'owner_sqlid' });
-Vehicle.belongsTo(User, { foreignKey: 'owner_sqlid' });
+Character.hasMany(Vehicle, { foreignKey: 'owner_sqlid', as: 'charVehicles' });
+Vehicle.belongsTo(Character, { foreignKey: 'owner_sqlid', as: 'vehicleChar' });
 
 module.exports = Vehicle;
