@@ -8,6 +8,7 @@ const auth = require('../../middleware/auth');
 
 // Models
 const Property = require('../../models/Property');
+const Character = require('../../models/Character');
 
 /**
  * @route   GET /api/v1/property/:owner_sqlid
