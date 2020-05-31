@@ -166,7 +166,7 @@ router.post('/email/verification', auth, async (req, res) => {
                                                         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">To verify your email, please click the following link below:</p>
-                                                            <p>http://101.50.3.61:3000/email/verification/${user_session.code}</p>
+                                                            <p><a href="http://101.50.3.61:3000/email/verification/${user_session.code}">http://101.50.3.61:3000/email/verification/${user_session.code}</a></p>
                                                         </td>
                                                     </tr>
                                                 </table>
