@@ -483,6 +483,8 @@ router.put('/reset/:code', [
         const salt = await bcrypt.genSalt(12);
         const new_password = await bcrypt.hash(password, salt);
 
+        console.log(user_session.user_id);
+
         await User.update({ 
             password: new_password 
         }, { where: { id: user_session.user_id } });
