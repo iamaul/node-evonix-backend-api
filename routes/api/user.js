@@ -228,11 +228,11 @@ router.post('/email/verification', auth, async (req, res) => {
 });
 
 /**
- * @route   GET /api/v1/users/email/verification/:code
+ * @route   PUT /api/v1/users/email/verification/:code
  * @desc    Confirm email verification
  * @access  Private
  */
-router.get('/email/verification/:code', auth, async (req, res) => {
+router.put('/email/verification/:code', auth, async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
