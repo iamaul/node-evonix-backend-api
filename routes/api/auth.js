@@ -442,11 +442,11 @@ router.post('/reset', [
 });
 
 /**
- * @route   GET /api/v1/auth/reset/:code
+ * @route   PUT /api/v1/auth/reset/:code
  * @desc    User request a new password
  * @access  Public
  */
-router.get('/reset/:code', [
+router.put('/reset/:code', [
     check('password')
         .exists()
         .withMessage('Password is required.')
