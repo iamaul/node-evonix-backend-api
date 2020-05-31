@@ -443,7 +443,7 @@ router.put('/reset/:code', [
     const { password } = req.body;
 
     try {
-        const user_session = UserSession.findOne({
+        const user_session = await UserSession.findOne({
             where: {
                 [Op.and]: [
                     { code: req.params.code },
@@ -464,8 +464,6 @@ router.put('/reset/:code', [
 
         const salt = await bcrypt.genSalt(12);
         const new_password = await bcrypt.hash(password, salt);
-
-        console.log(user_session.user_id);
 
         await User.update({ 
             password: new_password 
