@@ -238,7 +238,7 @@ router.post('/reset', [
     try {
         const user = await User.findOne({
             where: { email },
-            attributes: ['id', 'name']
+            attributes: ['id', 'name', 'email_verified']
         });
 
         if (!user) {
@@ -249,7 +249,7 @@ router.post('/reset', [
                 }]
             });
         }
-
+        
         if (user.email_verified === 0) {
             return res.status(400).json({
                 errors: [{
@@ -483,10 +483,9 @@ router.put('/reset/:code', [
         const salt = await bcrypt.genSalt(12);
         const new_password = await bcrypt.hash(password, salt);
 
-        await User.update(
-            { password: new_password },
-            { where: { id: user_session.user_id } }
-        );
+        await User.update({ 
+            password: new_password 
+        }, { where: { id: user_session.user_id } });
         
         await UserSession.destroy({
             where: {
