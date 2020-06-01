@@ -348,15 +348,9 @@ router.put('/change/email', [auth, [
             });
         }
 
-        const user = await User.findOne({
-            where: { id: req.user.id }
-        });
-
-        const verifiedStatus = user.email_verified ? 0 : 1;
-
         await User.update({ 
             email: new_email, 
-            email_verified: verifiedStatus 
+            email_verified: 0 
         }, { where: { id: req.user.id } });
 
         return res.status(201).json({ status: true, msg: 'You have changed a new email.' });
