@@ -10,7 +10,13 @@ const Faction = database.define('Faction', {
     name: { type: DataTypes.STRING(60) },
     alias: { type: DataTypes.STRING(30) },
     type: { type: DataTypes.TINYINT },
-    leader_sqlid: { type: DataTypes.INTEGER },
+    leader_sqlid: {
+        type: DataTypes.INTEGER(11),
+        references: {
+            model: Character,
+            key: 'id'
+        }
+    },
     rank_member: { type: DataTypes.TINYINT },
     rank_manager: { type: DataTypes.TINYINT },
     rank_leader: { type: DataTypes.TINYINT },
