@@ -50,7 +50,13 @@ const Character = database.define('Character', {
     job_exp: { type: DataTypes.TINYINT },
     job_level: { type: DataTypes.TINYINT },
     job_timer: { type: DataTypes.TINYINT },
-    faction_sqlid: { type: DataTypes.INTEGER },
+    faction_sqlid: {
+        type: DataTypes.INTEGER(11),
+        references: {
+            model: Faction,
+            key: 'id'
+        }
+    },
     faction_rank: { type: DataTypes.INTEGER },
     faction_rankname: { type: DataTypes.STRING(30) },
     faction_div: { type: DataTypes.INTEGER },
