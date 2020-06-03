@@ -5,6 +5,7 @@ const database = require('../config/database');
 
 // Models
 const User = require('./User');
+const Faction = require('./Faction');
 
 const Character = database.define('Character', {
     userid: {
@@ -82,5 +83,6 @@ const Character = database.define('Character', {
 
 User.hasMany(Character, { foreignKey: 'userid', as: 'userChars' });
 Character.belongsTo(User, { foreignKey: 'userid', as: 'charUser' });
+Character.belongsTo(Faction, { foreignKey: 'faction_sqlid', as: 'charFaction' });
 
 module.exports = Character;

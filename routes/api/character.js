@@ -9,8 +9,10 @@ const auth = require('../../middleware/auth');
 // Models
 const Character = require('../../models/Character');
 const AdminWarn = require('../../models/AdminWarn');
+const Inventory = require('../../models/Inventory');
 const Vehicle = require('../../models/Vehicle');
 const Property = require('../../models/Property');
+const Faction = require('../../models/Faction');
 
 /**
  * @route   GET /api/v1/characters
@@ -27,7 +29,12 @@ router.get('/', auth, async (req, res) => {
         const { count, rows } = await Character.findAndCountAll({
             where: {
                 userid: req.user.id
-            }
+            },
+            include: [{
+                model: Faction,
+                as: 'charFaction',
+                attributes: ['name', 'alias']
+            }]
         });
 
         if (count < 0) {
@@ -225,6 +232,35 @@ router.get('/:char_id/admin_warn', auth, async (req, res) => {
         });
 
         return res.status(201).json(adminwarn);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   GET /api/v1/characters/:char_id/inventory
+ * @desc    Get character's inventory
+ * @access  Private
+ */
+router.get('/:char_id/inventory', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const inventory = await Inventory.findAll({ 
+            where: { char_id: req.params.char_id },
+            order: [['amount', 'DESC']]
+        });
+
+        return res.status(201).json(inventory);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
