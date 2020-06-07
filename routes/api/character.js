@@ -33,7 +33,7 @@ router.get('/', auth, async (req, res) => {
             include: [{
                 model: Faction,
                 as: 'charFaction',
-                attributes: ['name', 'alias']
+                attributes: ['id', 'name', 'alias']
             }]
         });
 
@@ -49,6 +49,92 @@ router.get('/', auth, async (req, res) => {
         const data = { count, rows };
 
         return res.status(201).json(data);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   GET /api/v1/characters/:id
+ * @desc    Get character details
+ * @access  Private
+ */
+router.get('/:id', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const char = await Character.findOne({
+            where: {
+                id: req.params.id
+            },
+            include: [{
+                model: Faction,
+                as: 'charFaction'
+            }]
+        });
+
+        if (!char) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'Characters not found.'
+                }]
+            });
+        }
+
+        return res.status(201).json(char);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   GET /api/v1/characters/faction/:faction_sqlid
+ * @desc    Get faction members
+ * @access  Private
+ */
+router.get('/faction/:faction_sqlid', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const char = await Character.findAll({
+            where: {
+                faction_sqlid: req.params.faction_sqlid
+            },
+            include: [{
+                model: Faction,
+                as: 'charFaction'
+            }]
+        });
+
+        if (!char) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'Faction members not found.'
+                }]
+            });
+        }
+
+        return res.status(201).json(char);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -203,6 +289,57 @@ router.post('/new', [auth, [
         });
         const data = { count, rows };
         return res.status(201).json(data);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   DELETE /api/v1/characters/:id
+ * @desc    Delete a character
+ * @access  Private
+ */
+router.delete('/:id', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const unix_timestamp = moment().unix() + (24*60*60); // current timestamp + add 24 hours
+
+    try {
+        const user = await User.findOne({
+            where: { id: req.user.id },
+            attributes: ['delay_character_deletion']
+        });
+
+        if (moment().unix() < user.delay_character_deletion) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'You still have 24 hours time delay for character deletion.'
+                }]
+            });
+        }
+
+        // Update user character_delete timestamp
+        await User.update({
+            delay_character_deletion: unix_timestamp
+        }, { where: { id: req.user.id } });
+
+        await Character.destroy({
+            where: {
+                id: req.params.id
+            }
+        });
+
+        return res.status(201).json({ status: true, msg: 'Deleted character successfully.'});
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({

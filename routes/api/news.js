@@ -270,6 +270,43 @@ router.delete('/:id', [auth, admin], async (req, res) => {
 });
 
 /**
+ * @route   GET /api/v1/news/faction/:faction_sqlid
+ * @desc    Get all faction news
+ * @access  Private
+ */
+router.get('/', async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const result = await News.findAll({
+            where: { faction: req.params.faction_sqlid }, 
+            order: [['created_at', 'DESC']],
+            include: [{
+                model: User,
+                as: 'newsCreatedBy',
+                attributes: ['name']
+            },{
+                model: User,
+                as: 'newsUpdatedBy',
+                attributes: ['name']
+            }]  
+        });
+        return res.status(201).json(result);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
  * @route   POST /api/v1/news/faction
  * @desc    Create a faction news
  * @access  Private

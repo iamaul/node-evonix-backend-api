@@ -13,6 +13,7 @@ const User = database.define('User', {
     helper: { type: DataTypes.INTEGER },
     status: { type: DataTypes.TINYINT },
     lastlogin: { type: DataTypes.INTEGER },
+    delay_character_deletion: { type: DataTypes.INTEGER },
     register_ip: { type: DataTypes.STRING(20) },
     login_ip: { type: DataTypes.STRING(20) },
     ucp_login_ip: { type: DataTypes.STRING(20) }

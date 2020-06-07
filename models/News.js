@@ -11,6 +11,8 @@ const News = database.define('News', {
     slug: { type: DataTypes.STRING(55) },
     content: { type: DataTypes.TEXT },
     image: { type: DataTypes.STRING(45) },
+    published: { type: DataTypes.TINYINT },
+    faction: { type: DataTypes.INTEGER },
     created_by: {
         type: DataTypes.INTEGER,
         references: {
