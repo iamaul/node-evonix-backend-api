@@ -415,7 +415,7 @@ router.put('/change/password', [auth, [
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">You've successfully changed your password, if you did not request this change, you can <a href="http://101.50.3.61:3000/forgot/password">forgot your password</a> to secure your account immediately:</p>
                                                             <p>
-                                                                <b>Browser</b>: ${navigator.userAgent}<br/>
+                                                                <b>Browser</b>: ${req.get('User-Agent')}<br/>
                                                                 <b>Location</b>: ${traceIp.city}, ${traceIp.region}, ${traceIp.country}<br/>
                                                                 <b>Timezone</b>: ${traceIp.timezone}
                                                             </p>
@@ -597,7 +597,7 @@ router.put('/change/email', [auth, [
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">You've successfully changed your password, if you did not request this change, you can contact <a href="https://support.evonix-rp.com">us</a> to secure your account immediately:</p>
                                                             <p>
-                                                                <b>Browser</b>: ${navigator.userAgent}<br/>
+                                                                <b>Browser</b>: ${req.get('User-Agent')}<br/>
                                                                 <b>Location</b>: ${traceIp.city}, ${traceIp.region}, ${traceIp.country}<br/>
                                                                 <b>Timezone</b>: ${traceIp.timezone}
                                                             </p>
