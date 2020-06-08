@@ -9,14 +9,15 @@ const User = database.define('User', {
     email_verified: { type: DataTypes.TINYINT },
     password: { type: DataTypes.STRING(129) },
     registered_date: { type: DataTypes.BIGINT },
+    register_ip: { type: DataTypes.STRING(20) },
+    login_ip: { type: DataTypes.STRING(20) },
+    ucp_login_ip: { type: DataTypes.STRING(20) },
     admin: { type: DataTypes.INTEGER },
+    admin_division: { type: DataTypes.TINYINT },
     helper: { type: DataTypes.INTEGER },
     status: { type: DataTypes.TINYINT },
     lastlogin: { type: DataTypes.INTEGER },
-    delay_character_deletion: { type: DataTypes.INTEGER },
-    register_ip: { type: DataTypes.STRING(20) },
-    login_ip: { type: DataTypes.STRING(20) },
-    ucp_login_ip: { type: DataTypes.STRING(20) }
+    delay_character_deletion: { type: DataTypes.INTEGER }
 }, { tableName: 'users' });
 
 module.exports = User;
