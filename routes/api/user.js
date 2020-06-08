@@ -289,8 +289,7 @@ router.put('/change/password', [auth, [
         const user = await User.findOne({
             where: {
                 id: req.user.id
-            },
-            attributes: ['email']
+            }
         });
 
         const password_verify = await bcrypt.compare(old_password, user.password);
@@ -480,12 +479,11 @@ router.put('/change/email', [auth, [
     const traceIp = geoip.lookup(ip);
 
     try {
-        const userEmail = await User.findOne({
-            where: { email: new_email },
-            attributes: ['email']
+        const user = await User.findOne({
+            where: { email: new_email }
         });
 
-        if (userEmail) {
+        if (user) {
             return res.status(400).json({
                 errors: [{
                     status: false,
@@ -495,7 +493,7 @@ router.put('/change/email', [auth, [
         }
 
         const message = {
-            to: userEmail.email,
+            to: user.email,
             from: 'EvoniX UCP <no-reply@evonix-rp.com>',
             subject: 'Your email address changed ✉️',
             html: `
