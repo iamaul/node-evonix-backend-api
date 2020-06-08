@@ -88,7 +88,7 @@ router.post('/', [
         }
 
         await User.update(
-            { login_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress },
+            { ucp_login_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress },
             { where: { id: user.id } } 
         );
 
