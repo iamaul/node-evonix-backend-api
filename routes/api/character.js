@@ -35,7 +35,7 @@ router.get('/', auth, async (req, res) => {
             include: [{
                 model: Faction,
                 as: 'charFaction',
-                attributes: ['id', 'name', 'alias']
+                attributes: ['id', 'name', 'alias', 'leader_sqlid']
             }]
         });
 
