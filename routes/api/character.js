@@ -8,6 +8,7 @@ const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
 // Models
+const User = require('../../models/User');
 const Character = require('../../models/Character');
 const AdminWarn = require('../../models/AdminWarn');
 const Inventory = require('../../models/Inventory');
