@@ -310,6 +310,16 @@ router.put('/change/password', [auth, [
             { where: { id: req.user.id } }
         );
 
+        let transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: process.env.SMTP_SECURE,
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASSWORD
+            }
+        });
+
         const message = {
             to: user.email,
             from: 'EvoniX UCP <no-reply@evonix-rp.com>',
@@ -492,6 +502,16 @@ router.put('/change/email', [auth, [
                 }]
             });
         }
+
+        let transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: process.env.SMTP_SECURE,
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASSWORD
+            }
+        });
 
         const message = {
             to: user.email,
