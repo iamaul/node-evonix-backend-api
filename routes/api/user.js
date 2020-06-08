@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
-const ipLocation = require('iplocation');
+const geoip = require('geoip-lite');
 const { v4: uuidv4 } = require('uuid');
 const { check, validationResult } = require('express-validator');
 const { Op } = require('sequelize');
@@ -291,8 +291,7 @@ router.put('/change/password', [auth, [
             attributes: ['email', 'ucp_login_ip']
         });
 
-        const traceIp = await ipLocation(user.ucp_login_ip);
-        console.log(traceIp);
+        const traceIp = geoip.lookup(user.ucp_login_ip);
 
         const password_verify = await bcrypt.compare(old_password, user.password);
         if (!password_verify) {
@@ -418,7 +417,8 @@ router.put('/change/password', [auth, [
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">You've successfully changed your password, if you did not request this change, you can <a href="http://101.50.3.61:3000/forgot/password">forgot your password</a> to secure your account immediately:</p>
                                                             <p>
                                                                 <b>Browser</b>: ${navigator.userAgent}<br/>
-                                                                <b>Location</b>: ${traceIp.city}, ${traceIp.region.name}, ${traceIp.country.name}
+                                                                <b>Location</b>: ${traceIp.city}, ${traceIp.region}, ${traceIp.country}<br/>
+                                                                <b>Timezone</b>: ${traceIp.timezone}
                                                             </p>
                                                         </td>
                                                     </tr>
@@ -492,8 +492,7 @@ router.put('/change/email', [auth, [
             });
         }
 
-        const traceIp = await ipLocation(userEmail.ucp_login_ip);
-        console.log(traceIp);
+        const traceIp = geoip.lookup(userEmail.ucp_login_ip);
 
         const message = {
             to: userEmail.email,
@@ -601,7 +600,8 @@ router.put('/change/email', [auth, [
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">You've successfully changed your password, if you did not request this change, you can contact <a href="https://support.evonix-rp.com">us</a> to secure your account immediately:</p>
                                                             <p>
                                                                 <b>Browser</b>: ${navigator.userAgent}<br/>
-                                                                <b>Location</b>: ${traceIp.city}, ${traceIp.region.name}, ${traceIp.country.name}
+                                                                <b>Location</b>: ${traceIp.city}, ${traceIp.region}, ${traceIp.country}<br/>
+                                                                <b>Timezone</b>: ${traceIp.timezone}
                                                             </p>
                                                         </td>
                                                     </tr>
