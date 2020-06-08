@@ -282,16 +282,17 @@ router.put('/change/password', [auth, [
     }
 
     const { old_password, password } = req.body;
-    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    const traceIp = await ipLocation(ip);
 
     try {
         const user = await User.findOne({
             where: {
                 id: req.user.id
             },
-            attributes: ['email']
+            attributes: ['email', 'ucp_login_ip']
         });
+
+        const traceIp = await ipLocation(user.ucp_login_ip);
+        console.log(traceIp);
 
         const password_verify = await bcrypt.compare(old_password, user.password);
         if (!password_verify) {
@@ -479,7 +480,7 @@ router.put('/change/email', [auth, [
     try {
         const userEmail = await User.findOne({
             where: { email: new_email },
-            attributes: ['email']
+            attributes: ['email', 'ucp_login_ip']
         });
 
         if (userEmail) {
@@ -490,6 +491,9 @@ router.put('/change/email', [auth, [
                 }]
             });
         }
+
+        const traceIp = await ipLocation(userEmail.ucp_login_ip);
+        console.log(traceIp);
 
         const message = {
             to: userEmail.email,
