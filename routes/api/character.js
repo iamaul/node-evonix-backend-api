@@ -341,7 +341,20 @@ router.delete('/:id', auth, async (req, res) => {
             }
         });
 
-        return res.status(201).json({ status: true, msg: 'Deleted character successfully.'});
+        const { count, rows } = await Character.findAndCountAll({
+            where: {
+                userid: req.user.id
+            },
+            include: [{
+                model: Faction,
+                as: 'charFaction',
+                attributes: ['id', 'name', 'alias']
+            }]
+        });
+
+        const data = { count, rows };
+
+        return res.status(201).json(data);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
