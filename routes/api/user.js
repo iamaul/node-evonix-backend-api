@@ -423,7 +423,7 @@ router.put('/change/password', [auth, [
                                                     <tr>
                                                         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
-                                                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">You've successfully changed your password, if you did not request this change, you can <a href="http://101.50.3.61:3000/forgot/password">forgot your password</a> to secure your account immediately:</p>
+                                                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">You've successfully changed your password. If you did not request this change, you can <a href="http://101.50.3.61:3000/forgot/password">forget your password</a> to secure your account immediately!</p>
                                                             <p>
                                                                 <b>IP</b>: ${ip}<br/>
                                                                 <b>Browser</b>: ${req.get('User-Agent')}<br/>
@@ -490,11 +490,11 @@ router.put('/change/email', [auth, [
     const traceIp = geoip.lookup(ip);
 
     try {
-        const user = await User.findOne({
+        const userEmail = await User.findOne({
             where: { email: new_email }
         });
 
-        if (user) {
+        if (userEmail) {
             return res.status(400).json({
                 errors: [{
                     status: false,
@@ -502,6 +502,10 @@ router.put('/change/email', [auth, [
                 }]
             });
         }
+
+        const user = await User.findOne({
+            where: { id: req.user.id }
+        });
 
         let transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
@@ -616,7 +620,7 @@ router.put('/change/email', [auth, [
                                                     <tr>
                                                         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
-                                                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">You've successfully changed your password, if you did not request this change, you can contact <a href="https://support.evonix-rp.com">us</a> to secure your account immediately:</p>
+                                                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">You've successfully changed your email. Next time you sign in to EvoniX UCP, use the email ${new_email}. If you did not request this change, you can contact <a href="https://support.evonix-rp.com">us</a> to secure your account immediately!</p>
                                                             <p>
                                                                 <b>IP</b>: ${ip}<br/>
                                                                 <b>Browser</b>: ${req.get('User-Agent')}<br/>

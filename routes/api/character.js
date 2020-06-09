@@ -325,7 +325,7 @@ router.delete('/:id', auth, async (req, res) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'You still have 24 hours time delay for character deletion.'
+                    msg: 'You\'ll have to wait 24 hours before deleting your character again.'
                 }]
             });
         }
