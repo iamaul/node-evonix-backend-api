@@ -15,6 +15,7 @@ const Inventory = require('../../models/Inventory');
 const Vehicle = require('../../models/Vehicle');
 const Property = require('../../models/Property');
 const Faction = require('../../models/Faction');
+const Bizz = require('../../models/Bizz');
 
 /**
  * @route   GET /api/v1/characters
@@ -335,6 +336,16 @@ router.delete('/:id', auth, async (req, res) => {
             delay_character_deletion: unix_timestamp
         }, { where: { id: req.user.id } });
 
+        // Update bizz owner
+        await Bizz.update({
+            owner_sqlid: 0
+        }, { where: { owner_sqlid: req.params.id } });
+
+        // Update property owner
+        await Property.update({
+            owner_sqlid: 0
+        }, { where: { owner_sqlid: req.params.id } });
+
         await Character.destroy({
             where: {
                 id: req.params.id
@@ -465,12 +476,41 @@ router.get('/:owner_sqlid/property', auth, async (req, res) => {
     }
 
     try {
-        const veh = await Property.findAll({ 
+        const property = await Property.findAll({ 
             where: { owner_sqlid: req.params.owner_sqlid },
             order: [['price', 'DESC']]
         });
 
-        return res.status(201).json(veh);
+        return res.status(201).json(property);
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   GET /api/v1/characters/:owner_sqlid/bizz
+ * @desc    Get character's bizz
+ * @access  Private
+ */
+router.get('/:owner_sqlid/bizz', auth, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const bizz = await Bizz.findAll({ 
+            where: { owner_sqlid: req.params.owner_sqlid },
+            order: [['price', 'DESC']]
+        });
+
+        return res.status(201).json(bizz);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
