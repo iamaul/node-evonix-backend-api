@@ -4,7 +4,7 @@ RUN mkdir -p /evonix-app/api
 
 WORKDIR /evonix-app/api
 
-COPY package*.json ./evonix-app/api
+COPY . .
 
 RUN npm install
 
