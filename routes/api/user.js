@@ -702,7 +702,7 @@ router.post('/application', auth, async (req, res) => {
         }, { where: { id: userId } });
         await app.save();
 
-        return res.status(201).json({ status: true, msg: 'Submitting your application ...' });
+        return res.status(201).json({ status: true, msg: 'Application submitted.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
