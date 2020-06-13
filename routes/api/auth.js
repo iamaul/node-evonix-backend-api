@@ -458,7 +458,7 @@ router.post('/reset', [
                             <td class="container" style="font-family: sans-serif; font-size: 14px; vertical-align: top; display: block; Margin: 0 auto; max-width: 580px; padding: 10px; width: 580px;">
                                 <div class="content" style="box-sizing: border-box; display: block; Margin: 0 auto; max-width: 580px; padding: 10px;">
                                     <!-- START CENTERED WHITE CONTAINER -->
-                                    <img src="http://101.50.3.61:3000/assets/images/evonix-logo.png" />
+                                    <img src="https://ucp.evonix-rp.com/assets/images/evonix-logo.png" />
                                     <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Hi ${user.name}, you have requested a reset password link.</span>
                                     <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;">
                                         <!-- START MAIN CONTENT AREA -->
@@ -469,7 +469,7 @@ router.post('/reset', [
                                                         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">To change a new password, please click the following link below:</p>
-                                                            <p><a href="http://101.50.3.61:3000/forgot/password/${user_session.code}">Change New Password</a></p>
+                                                            <p><a href="https://ucp.evonix-rp.com/forgot/password/${user_session.code}">Change New Password</a></p>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -482,7 +482,7 @@ router.post('/reset', [
                                         <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
                                             <tr>
                                                 <td class="content-block" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #999999; text-align: center;">
-                                                    <span class="apple-link" style="color: #999999; font-size: 12px; text-align: center;">Copyright &copy; 2020 EvoniX Community.</span>
+                                                    <span class="apple-link" style="color: #999999; font-size: 12px; text-align: center;">Copyright &copy; 2020 EvoniX UCP.</span>
                                                 </td>
                                             </tr>
                                         </table>
