@@ -121,6 +121,95 @@ router.post('/', [
 });
 
 /**
+ * @route   POST /api/v1/auth/admin
+ * @desc    Authenticate user along their token
+ * @access  Public
+ */
+router.post('/admin', [
+    check('usermail', 'Username is required.').not().isEmpty(),
+    check('password', 'Password is required.').exists()
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { usermail, password } = req.body;
+
+    try {
+        // Check if user/email exists
+        const user = await User.findOne({
+            where: {
+                [Op.or]: [
+                    { name: usermail },
+                    { email: usermail }
+                ]
+            },
+            attributes: ['admin']
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'The username or email address that you\'ve entered does not exist.'
+                }]
+            });
+        }
+
+        if (user.admin < 1) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'You are not authorized to access this page.'
+                }]
+            });
+        } 
+
+        const verify = await bcrypt.compare(password, user.password);
+        if (!verify) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'The password that you\'ve entered is incorrect.'
+                }]
+            });
+        }
+
+        await User.update(
+            { ucp_login_ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress },
+            { where: { id: user.id } } 
+        );
+
+        const payload = {
+            user: { 
+                id: user.id,
+                admin: user.admin,
+                helper: user.helper
+            }
+        }
+
+        jwt.sign(
+            payload,
+            process.env.JWT_TOKEN,
+            { expiresIn: 360000 },
+            (error, token) => {
+                if (error) throw error;
+                return res.status(201).json({ token });
+            }
+        );
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
  * @route   POST /api/v1/auth/new
  * @desc    Create a new user auth
  * @access  Public
