@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 require('dotenv').config()
 
@@ -27,13 +28,17 @@ const news = require('./routes/api/news');
 
 const app = express();
 
-var corsMiddleware = function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://167.99.65.76');
-    res.header('Access-Control-Allow-Methods', 'OPTIONS, GET, PUT, PATCH, POST, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Authorization');
-    next();
+var whitelist = ['https://ucp.evonix-rp.com', 'https://acp.evonix-rp.com']
+var corsOptionsDelegate = function (req, callback) {
+    var corsOptions;
+    if (whitelist.indexOf(req.header('Origin')) !== -1) {
+        corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+    } else {
+        corsOptions = { origin: false } // disable CORS for this request
+    }
+    callback(null, corsOptions) // callback expects two parameters: error and options
 }
-app.use(corsMiddleware);
+app.use(cors(corsOptionsDelegate));
 
 app.use(express.json({ extended: false }));
 // app.use(express.static('public'));
