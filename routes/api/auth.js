@@ -103,7 +103,7 @@ router.post('/', [
         jwt.sign(
             payload,
             process.env.JWT_TOKEN,
-            { expiresIn: 360000 },
+            { expiresIn: '24h' },
             (error, token) => {
                 if (error) throw error;
                 return res.status(201).json({ token });
@@ -203,7 +203,7 @@ router.post('/new', [
         jwt.sign(
             payload,
             process.env.JWT_TOKEN,
-            { expiresIn: 360000 },
+            { expiresIn: '24h' },
             (error, token) => {
                 if (error) throw error;
                 return res.status(201).json({ token });
