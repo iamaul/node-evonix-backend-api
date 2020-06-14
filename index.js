@@ -40,7 +40,7 @@ var corsOptionsDelegate = function (req, callback) {
 }
 app.use(cors(corsOptionsDelegate));
 
-app.use(express.json({ extended: false }));
+app.use(express.json());
 // app.use(express.static('public'));
 
 app.get('/', (req, res) => res.send({ status: 'success', message: 'EvoniX Backend API v1.' }));
