@@ -28,7 +28,7 @@ const news = require('./routes/api/news');
 
 const app = express();
 
-var whitelist = ['https://ucp.evonix-rp.com', 'https://acp.evonix-rp.com']
+var whitelist = ['https://ucp.evonix-rp.com', 'https://acepe.evonix-rp.com']
 var corsOptionsDelegate = function (req, callback) {
     var corsOptions;
     if (whitelist.indexOf(req.header('Origin')) !== -1) {
