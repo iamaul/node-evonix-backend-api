@@ -448,12 +448,12 @@ router.get('/reset/:code', async (req, res) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'The link page is invalid or session has been expired.'
+                    msg: 'The page link is invalid or session has been expired.'
                 }]
             });
         }
 
-        return res.status(201).json({ status: true, msg: 'The link page you\'ve accessed is validated.' });
+        return res.status(201).json({ status: true, msg: 'The page link you\'ve accessed is valid.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
