@@ -380,7 +380,7 @@ router.post('/reset', [
                                                         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">To change a new password, please click the following link below:</p>
-                                                            <p><a href="https://ucp.evonix-rp.com/forgot/password/${user_session.code}">Change New Password</a></p>
+                                                            <p><a href="https://ucp.evonix-rp.com/reset/password/${user_session.code}">Change New Password</a></p>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -412,6 +412,48 @@ router.post('/reset', [
         await transporter.sendMail(message);
 
         return res.status(201).json({ status: true, msg: 'We\'ve sent an email to you, please check your email in Inbox or Spam.' });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            errors: [{
+                status: false,
+                msg: error.message
+            }]
+        });
+    }
+});
+
+/**
+ * @route   GET /api/v1/auth/reset/:code
+ * @desc    Verify user request a new password link
+ * @access  Public
+ */
+router.get('/reset/:code', async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const user_session = await UserSession.findOne({
+            where: {
+                [Op.and]: [
+                    { code: req.params.code },
+                    { type: 'forgot_password' }
+                ]
+            }
+        });
+
+        if (!user_session) {
+            return res.status(400).json({
+                errors: [{
+                    status: false,
+                    msg: 'The link page is invalid or session has been expired.'
+                }]
+            });
+        }
+
+        return res.status(201).json({ status: true, msg: 'The link page you\'ve accessed is validated.' });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
@@ -457,7 +499,7 @@ router.put('/reset/:code', [
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'The link does\'nt seem right. We couldn\'t help you to reset a new password.'
+                    msg: 'The link page is invalid or session has been expired.'
                 }]
             });
         }
