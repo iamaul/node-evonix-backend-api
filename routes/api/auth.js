@@ -144,8 +144,7 @@ router.post('/admin', [
                     { name: usermail },
                     { email: usermail }
                 ]
-            },
-            attributes: ['admin', 'helper']
+            }
         });
 
         if (!user) {
