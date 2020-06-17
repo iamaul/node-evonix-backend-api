@@ -157,7 +157,7 @@ router.post('/admin', [
             });
         }
 
-        if (user.admin === 0 || user.helper === 0) {
+        if (user.admin === 0) {
             return res.status(400).json({
                 errors: [{
                     status: false,
