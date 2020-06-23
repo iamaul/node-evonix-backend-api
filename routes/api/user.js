@@ -799,6 +799,19 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
             }
         });
 
+        let message = '';
+        if (req.params.status === 2) {
+            message = `
+                <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:</p>
+                <p style="text-align: justify;">${user_app.answer}<br/><br/><b>Reason: ${req.params.reason}</p>
+            `
+        } else {
+            message = `
+                <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Your application was approved by Admin. In order to go into the game, you have to create a character to do so please click the following link below:</p>
+                <p style="text-align: justify;"><a href="https://ucp.evonix-rp.com/characters">Create A Character</a></p>
+            `
+        }
+
         const message = {
             to: user.email,
             from: 'EvoniX UCP <no-reply@evonix-rp.com>',
@@ -902,8 +915,7 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
                                                     <tr>
                                                         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
-                                                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">${req.params.status === 2 ? 'Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:' : 'Your application was approved by Admin. In order to go into the game, you have to create a character to do so please click the link below:'}</p>
-                                                            <p style="text-align: justify;">${req.params.status === 2 ? user_app.answer + '<br/><b>Reason</b>: ' + reason : '<a href="https://ucp.evonix-rp.com/characters">Create A Character</a>'}</p>
+                                                            ${message}
                                                         </td>
                                                     </tr>
                                                 </table>
