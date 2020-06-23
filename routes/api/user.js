@@ -797,7 +797,7 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
         let user = await User.findOne({ where: { id: req.params.user_id } });
 
         let messageStatus = '';
-        if (req.params.reason !== null) {
+        if (req.params.status == 2 && req.params.reason !== null) {
             messageStatus = `
                 <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:</p>
                 <p style="text-align: justify;">
