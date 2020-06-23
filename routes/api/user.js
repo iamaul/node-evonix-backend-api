@@ -789,6 +789,19 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
 
         let user = await User.findOne({ where: { id: req.params.user_id } });
 
+        let messageStatus = '';
+        if (req.params.status === 2) {
+            messageStatus = `
+                <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:</p>
+                <p style="text-align: justify;">${user_app.answer}<br/><br/><b>Reason: ${req.params.reason}</p>
+            `
+        } else if (req.params.status === 3) {
+            messageStatus = `
+                <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Your application was approved by Admin. In order to go into the game, you have to create a character to do so please click the following link below:</p>
+                <p style="text-align: justify;"><a href="https://ucp.evonix-rp.com/characters">Create A Character</a></p>
+            `
+        }
+
         let transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
@@ -798,19 +811,6 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
                 pass: process.env.SMTP_PASSWORD
             }
         });
-
-        let messageStatus = '';
-        if (req.params.status === 2) {
-            messageStatus = `
-                <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:</p>
-                <p style="text-align: justify;">${user_app.answer}<br/><br/><b>Reason: ${req.params.reason}</p>
-            `
-        } else {
-            messageStatus = `
-                <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Your application was approved by Admin. In order to go into the game, you have to create a character to do so please click the following link below:</p>
-                <p style="text-align: justify;"><a href="https://ucp.evonix-rp.com/characters">Create A Character</a></p>
-            `
-        }
 
         const message = {
             to: user.email,
