@@ -799,14 +799,14 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
             }
         });
 
-        let message = '';
+        let messageStatus = '';
         if (req.params.status === 2) {
-            message = `
+            messageStatus = `
                 <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:</p>
                 <p style="text-align: justify;">${user_app.answer}<br/><br/><b>Reason: ${req.params.reason}</p>
             `
-        } else if (req.params.status === 3) {
-            message = `
+        } else {
+            messageStatus = `
                 <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Your application was approved by Admin. In order to go into the game, you have to create a character to do so please click the following link below:</p>
                 <p style="text-align: justify;"><a href="https://ucp.evonix-rp.com/characters">Create A Character</a></p>
             `
@@ -915,7 +915,7 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
                                                     <tr>
                                                         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
-                                                            ${message}
+                                                            ${messageStatus}
                                                         </td>
                                                     </tr>
                                                 </table>
