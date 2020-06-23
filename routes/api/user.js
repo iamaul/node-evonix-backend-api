@@ -768,7 +768,14 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
     const unix_timestamp = moment().unix();
 
     try {
-        let user_app = await UserApp.findOne({ where: { id: req.params.id } });
+        let user_app = await UserApp.findOne({ 
+            where: { id: req.params.id },
+            include: [{
+                model: Quiz,
+                as: 'userAppQuiz',
+                attributes: ['question', 'image']
+            }]
+        });
 
         if (!user_app) {
             return res.status(400).json({
@@ -793,7 +800,13 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
         if (req.params.reason) {
             messageStatus = `
                 <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:</p>
-                <p style="text-align: justify;">${user_app.answer}<br/><br/><b>Reason: ${req.params.reason}</p>
+                <p style="text-align: justify;">
+                    <img src="${user_app.userAppQuiz && user_app.userAppQuiz.image}" style="display: block; margin-left: auto; margin-right: auto; max-width: 100%; height: auto;" />
+                    <hr>
+                    <b>Question</b>: ${user_app.userAppQuiz && user_app.userAppQuiz.question}<br/>
+                    <b>Your answer</b>: ${user_app.answer}<br/><br/>
+                    <b>Reason: ${req.params.reason}
+                </p>
             `;
         } else {
             messageStatus = `
