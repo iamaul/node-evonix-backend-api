@@ -805,7 +805,7 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
                     <hr>
                     <b>Question</b>: ${user_app.userAppQuiz && user_app.userAppQuiz.question}<br/>
                     <b>Your answer</b>: ${user_app.answer}<br/><br/>
-                    <b>Reason: ${req.params.reason}
+                    <b>Reason</b>: ${req.params.reason}
                 </p>
             `;
         } else {
