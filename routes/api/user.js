@@ -755,11 +755,11 @@ router.get('/application', [auth, admin], async (req, res) => {
 });
 
 /**
- * @route   PUT /api/v1/users/application/:status/:id/:user_id
+ * @route   PUT /api/v1/users/application/:status/:id/:user_id/:reason
  * @desc    Update a user application
  * @access  Private
  */
-router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) => {
+router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -786,7 +786,6 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
         user_app.admin_id = req.user.id;
         user_app.status = req.params.status;
         user_app.updated_at = unix_timestamp;
-        await user_app.save();
 
         let user = await User.findOne({ where: { id: req.params.user_id } });
 
@@ -903,8 +902,8 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
                                                     <tr>
                                                         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
-                                                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">${req.params.status === 2 ? 'Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:' : 'Your application was accepted by Admin. In order to go into the game, you have to create a character to do so please click the link below:'}</p>
-                                                            <p>${req.params.status === 2 ? user_app.answer : '<a href="https://ucp.evonix-rp.com/characters">Create A Character</a>'}</p>
+                                                            <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">${req.params.status === 2 ? 'Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:' : 'Your application was approved by Admin. In order to go into the game, you have to create a character to do so please click the link below:'}</p>
+                                                            <p style="text-align: justify;">${req.params.status === 2 ? user_app.answer + '<br/><b>Reason</b>: ' + reason : '<a href="https://ucp.evonix-rp.com/characters">Create A Character</a>'}</p>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -933,6 +932,7 @@ router.put('/application/:status/:id/:user_id', [auth, admin], async (req, res) 
                 </html>
             `
         }
+        await user_app.save();
         await transporter.sendMail(message);
         
         const result = await UserApp.findAll({
