@@ -805,7 +805,7 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
                 <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:</p>
                 <p style="text-align: justify;">${user_app.answer}<br/><br/><b>Reason: ${req.params.reason}</p>
             `
-        } else {
+        } else if (req.params.status === 3) {
             message = `
                 <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Your application was approved by Admin. In order to go into the game, you have to create a character to do so please click the following link below:</p>
                 <p style="text-align: justify;"><a href="https://ucp.evonix-rp.com/characters">Create A Character</a></p>
