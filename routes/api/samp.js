@@ -11,7 +11,7 @@ const axios = require('axios');
 router.get('/', async (req, res) => {
     try {
         const info = await axios.get('https://api.open.mp/server/13.212.169.37:7777');
-        return res.status(201).json(info);
+        return res.status(201).json({ data: JSON.stringify(info) });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({
