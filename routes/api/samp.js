@@ -27,19 +27,20 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/new', async (req, res) => {
-    try {
-        const data = await sampquery(options);
-        return res.status(201).json(data);
-    } catch (error) {
-        console.error(error.message);
-        return res.status(500).json({
-            errors: [{
-                status: false,
-                msg: error.message
-            }]
-        });
-    }
+router.get('/new', (req, res) => {
+    sampquery(options, function (error, response) {
+        if (error) {
+            console.error(error.message);
+            return res.status(500).json({
+                errors: [{
+                    status: false,
+                    msg: error.message
+                }]
+            });
+        } else {
+            return res.status(201).json(response);
+        }
+    });
 });
 
 module.exports = router;
