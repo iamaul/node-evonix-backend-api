@@ -6,13 +6,6 @@ var sampquery = require('samp-query');
 var options = { 
     host: '13.212.169.37' 
 }
-var options2 = {
-    host: '13.212.169.37',
-    host: '139.99.125.54',
-    host: '139.99.113.204',
-    host: '139.99.88.201',
-    host: '51.79.212.100'
-}
 
 /**
  * @route   GET /api/v1/server
@@ -36,22 +29,6 @@ router.get('/', async (req, res) => {
 
 router.get('/new', (req, res) => {
     sampquery(options, function (error, response) {
-        if (error) {
-            console.error(error.message);
-            return res.status(500).json({
-                errors: [{
-                    status: false,
-                    msg: error.message
-                }]
-            });
-        } else {
-            return res.status(201).json(response);
-        }
-    });
-});
-
-router.get('/list', (req, res) => {
-    sampquery(options2, function (error, response) {
         if (error) {
             console.error(error.message);
             return res.status(500).json({
