@@ -51,7 +51,7 @@ router.get('/new', (req, res) => {
 });
 
 router.get('/list', (req, res) => {
-    options2.map(item => {
+    options2.map((item, i) => {
         sampquery(item.host, function (error, response) {
             if (error) {
                 console.error(error.message);
