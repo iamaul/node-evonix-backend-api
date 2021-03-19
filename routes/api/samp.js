@@ -51,18 +51,20 @@ router.get('/new', (req, res) => {
 });
 
 router.get('/list', (req, res) => {
-    sampquery(options2, function (error, response) {
-        if (error) {
-            console.error(error.message);
-            return res.status(500).json({
-                errors: [{
-                    status: false,
-                    msg: error.message
-                }]
-            });
-        } else {
-            return res.status(201).json(response);
-        }
+    options2.map(item => {
+        sampquery(item.host, function (error, response) {
+            if (error) {
+                console.error(error.message);
+                return res.status(500).json({
+                    errors: [{
+                        status: false,
+                        msg: error.message
+                    }]
+                });
+            } else {
+                return res.status(201).json(response);
+            }
+        });
     });
 });
 
