@@ -18,6 +18,7 @@ database
     });
 
 // Routes
+const samp = require('./routes/api/samp');
 const auth = require('./routes/api/auth');
 const user = require('./routes/api/user');
 const character = require('./routes/api/character');
@@ -28,7 +29,13 @@ const news = require('./routes/api/news');
 
 const app = express();
 
-var whitelist = ['https://evonix-ucp.vercel.app', 'https://ucp.evonix-rp.com', 'https://evonix-acp.vercel.app', 'https://acepe.evonix-rp.com']
+var whitelist = [
+    'https://evonix-ucp.vercel.app', 
+    'https://ucp.evonix-rp.com', 
+    'https://evonix-acp.vercel.app', 
+    'https://acepe.evonix-rp.com',
+    'https://api.open.mp'
+]
 var corsOptionsDelegate = function (req, callback) {
     var corsOptions;
     if (whitelist.indexOf(req.header('Origin')) !== -1) {
@@ -41,9 +48,9 @@ var corsOptionsDelegate = function (req, callback) {
 app.use(cors(corsOptionsDelegate));
 
 app.use(express.json());
-// app.use(express.static('public'));
 
 app.get('/', (req, res) => res.send({ status: 'success', message: 'EvoniX Backend API v1.' }));
+app.use('/api/v1/server', samp);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', user);
 app.use('/api/v1/characters', character);
