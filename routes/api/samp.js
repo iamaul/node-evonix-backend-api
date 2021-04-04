@@ -4,7 +4,7 @@ const router = express.Router();
 const axios = require('axios');
 var sampquery = require('samp-query');
 var options = { 
-    host: '13.212.169.37' 
+    host: '54.255.115.159' 
 }
 
 /**
