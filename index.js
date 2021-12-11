@@ -47,7 +47,7 @@ var corsOptionsDelegate = function (req, callback) {
 }
 app.use(cors(corsOptionsDelegate));
 
-app.use(express.json());
+app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) => res.send({ status: 'success', message: 'EvoniX Backend API v1.' }));
 app.use('/api/v1/server', samp);
