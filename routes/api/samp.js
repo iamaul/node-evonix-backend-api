@@ -4,7 +4,7 @@ const router = express.Router();
 const axios = require('axios');
 var sampquery = require('samp-query');
 var options = { 
-    host: '54.255.115.159' 
+    host: '128.199.167.43' 
 }
 
 /**
@@ -14,7 +14,7 @@ var options = {
  */
 router.get('/', async (req, res) => {
     try {
-        const { data: info } = await axios.get('https://api.open.mp/server/13.212.169.37:7777'); 
+        const { data: info } = await axios.get('https://api.open.mp/server/128.199.167.43:7777'); 
         return res.status(201).json(info);
     } catch (error) {
         console.error(error.message);
