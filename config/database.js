@@ -1,10 +1,8 @@
 const Sequelize = require('sequelize');
 
-const connectionUri = `mariadb://${process.env.MYSQL_USER}:${process.env.MYSQL_PASSWORD}@${process.env.MYSQL_HOST}:${process.env.MYSQL_PORT}/${process.env.MYSQL_DATABASE}`;
-
-module.exports = new Sequelize(connectionUri, {
-    dialect: 'mariadb',
-    dialectOptions: { timezone: 'Etc/GMT+7' },
+module.exports = new Sequelize(`${process.env.MYSQL_DATABASE}`, `${process.env.MYSQL_USER}`, `${process.env.MYSQL_PASSWORD}`, {
+    host: `${process.env.MYSQL_HOST}`,
+    dialect: 'mysql',
     define: { timestamps: false },
     operatorAliases: false,
     pool: {
