@@ -470,6 +470,7 @@ router.post('/reset', [
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hi <b>${user.name}</b>,</p>
                                                             <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">To change a new password, please click the following link below:</p>
                                                             <p><a href="https://ucp.evonix-rp.com/reset/password/${user_session.code}">Change New Password</a></p>
+                                                            <p>Or click this link <a href="https://ucp.evonix-rp.com/reset/password/${user_session.code}">https://ucp.evonix-rp.com/reset/password/${user_session.code}</a>, If the link button above is not working</p>
                                                         </td>
                                                     </tr>
                                                 </table>
