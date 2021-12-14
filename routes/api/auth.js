@@ -538,7 +538,7 @@ router.get('/reset/:code', async (req, res) => {
             return res.status(400).json({
                 errors: [{
                     status: false,
-                    msg: 'The page link is invalid or session has been expired.'
+                    msg: 'The link page is invalid or session has been expired.'
                 }]
             });
         }
