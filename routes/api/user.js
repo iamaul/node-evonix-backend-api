@@ -414,7 +414,7 @@ router.put('/change/password', [auth, [
                                 <div class="content" style="box-sizing: border-box; display: block; Margin: 0 auto; max-width: 580px; padding: 10px;">
                                     <!-- START CENTERED WHITE CONTAINER -->
                                     <img src="https://ucp.evonix-rp.com/assets/images/evonix-logo.png" />
-                                    <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Hi ${user.name}, your password was changed.</span>
+                                    <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Hi ${user.name}, your password has been changed.</span>
                                     <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;">
                                         <!-- START MAIN CONTENT AREA -->
                                         <tr>
@@ -611,7 +611,7 @@ router.put('/change/email', [auth, [
                                 <div class="content" style="box-sizing: border-box; display: block; Margin: 0 auto; max-width: 580px; padding: 10px;">
                                     <!-- START CENTERED WHITE CONTAINER -->
                                     <img src="https://ucp.evonix-rp.com/assets/images/evonix-logo.png" />
-                                    <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Hi ${user.name}, your email address was changed.</span>
+                                    <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Hi ${user.name}, your email address has been changed.</span>
                                     <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;">
                                         <!-- START MAIN CONTENT AREA -->
                                         <tr>
@@ -799,7 +799,7 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
         let messageStatus = '';
         if (req.params.status == 2 && req.params.reason !== null) {
             messageStatus = `
-                <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Your application was denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:</p>
+                <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Your application has been denied by Admin. You may be wondering why your application is denied, please take a look again at your application below:</p>
                 <p style="text-align: justify;">
                     <img src="${user_app.userAppQuiz && user_app.userAppQuiz.image}" style="display: block; margin-left: auto; margin-right: auto; max-width: 100%; height: auto;" />
                     <hr>
@@ -810,7 +810,7 @@ router.put('/application/:status/:id/:user_id/:reason', [auth, admin], async (re
             `;
         } else {
             messageStatus = `
-                <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Your application was approved by Admin. In order to go into the game, you have to create a character to do so please click the following link below:</p>
+                <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Your application has been approved by Admin. In order to go into the game, you have to create a character to do so please click the following link below:</p>
                 <p style="text-align: justify;"><a href="https://ucp.evonix-rp.com/characters">Create A Character</a></p>
             `;
         }
