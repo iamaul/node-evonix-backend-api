@@ -34,7 +34,8 @@ var whitelist = [
     'https://ucp.evonix-rp.com', 
     'https://evonix-acp.vercel.app', 
     'https://acepe.evonix-rp.com',
-    'https://api.open.mp'
+    'https://api.open.mp',
+    'https://evonix-ucp-revamp.iamaul.me'
 ]
 var corsOptionsDelegate = function (req, callback) {
     var corsOptions;
