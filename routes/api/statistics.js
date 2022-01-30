@@ -22,7 +22,7 @@ const Character = require('../../models/Character');
  * @desc    Count records of users table
  * @access  Public
  */
-router.get('/stats/users', auth, async (req, res) => {
+router.get('/stats/users', async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -47,7 +47,7 @@ router.get('/stats/users', auth, async (req, res) => {
  * @desc    Count records of player's vehicles table
  * @access  Public
  */
-router.get('/stats/player_vehicles', auth, async (req, res) => {
+router.get('/stats/player_vehicles', async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -76,7 +76,7 @@ router.get('/stats/player_vehicles', auth, async (req, res) => {
  * @desc    Count records of player's properties table
  * @access  Public
  */
-router.get('/stats/player_properties', auth, async (req, res) => {
+router.get('/stats/player_properties', async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -105,7 +105,7 @@ router.get('/stats/player_properties', auth, async (req, res) => {
  * @desc    Count records of user applications
  * @access  Public
  */
-router.get('/stats/user_applications', auth, async (req, res) => {
+router.get('/stats/user_applications', async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
