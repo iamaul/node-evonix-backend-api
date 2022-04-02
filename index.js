@@ -34,20 +34,25 @@ var whitelist = [
     'https://ucp.evonix-rp.com', 
     'https://evonix-acp.vercel.app', 
     'https://acepe.evonix-rp.com',
-    'https://api.open.mp',
     'https://evonix-ucp-revamp.iamaul.me',
     'https://evonix-ucp-revamp-iamaul.vercel.app'
 ]
-var corsOptionsDelegate = function (req, callback) {
-    var corsOptions;
-    if (whitelist.indexOf(req.header('Origin')) !== -1) {
-        corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-    } else {
-        corsOptions = { origin: false } // disable CORS for this request
-    }
-    callback(null, corsOptions) // callback expects two parameters: error and options
+
+const corsOptions = {
+    origin: whitelist,
+    credentials: true,
 }
-app.use(cors(corsOptionsDelegate));
+
+// var corsOptionsDelegate = function (req, callback) {
+//     var corsOptions;
+//     if (whitelist.indexOf(req.header('Origin')) !== -1) {
+//         corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+//     } else {
+//         corsOptions = { origin: false } // disable CORS for this request
+//     }
+//     callback(null, corsOptions) // callback expects two parameters: error and options
+// }
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
