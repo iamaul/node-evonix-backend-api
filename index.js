@@ -29,26 +29,26 @@ const news = require('./routes/api/news');
 
 const app = express();
 
-var whitelist = [
-    'https://evonix-ucp.vercel.app', 
-    'https://ucp.evonix-rp.com', 
-    'https://evonix-acp.vercel.app', 
-    'https://acepe.evonix-rp.com',
-    'https://evonix-ucp-revamp.iamaul.me',
-    'https://evonix-ucp-revamp-iamaul.vercel.app'
-]
+// var whitelist = [
+//     'https://evonix-ucp.vercel.app', 
+//     'https://ucp.evonix-rp.com', 
+//     'https://evonix-acp.vercel.app', 
+//     'https://acepe.evonix-rp.com',
+//     'https://evonix-ucp-revamp.iamaul.me',
+//     'https://evonix-ucp-revamp-iamaul.vercel.app'
+// ]
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error("Not allowed by CORS"))
-    }
-  },
-  credentials: true,
-}
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (!origin || whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error("Not allowed by CORS"))
+//     }
+//   },
+//   credentials: true,
+// }
+app.use(cors());
 
 app.use(express.json());
 
