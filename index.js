@@ -30,12 +30,12 @@ const news = require('./routes/api/news');
 const app = express();
 
 var whitelist = [
-    'https://evonix-ucp.vercel.app/', 
-    'https://ucp.evonix-rp.com/', 
-    'https://evonix-acp.vercel.app/', 
-    'https://acepe.evonix-rp.com/',
-    'https://evonix-ucp-revamp.iamaul.me/',
-    'https://evonix-ucp-revamp-iamaul.vercel.app/'
+    'https://evonix-ucp.vercel.app', 
+    'https://ucp.evonix-rp.com', 
+    'https://evonix-acp.vercel.app', 
+    'https://acepe.evonix-rp.com',
+    'https://evonix-ucp-revamp.iamaul.me',
+    'https://evonix-ucp-revamp-iamaul.vercel.app'
 ]
 
 const corsOptions = {
