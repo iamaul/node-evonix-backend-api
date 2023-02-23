@@ -31,7 +31,7 @@
     "mysql2": "^2.3.3",
     "nodemailer": "^6.4.8",
     "samp-query": "^0.1.5",
-    "sequelize": "^5.21.13",
+    "sequelize": "^6.28.2",
     "slugify": "^1.4.0",
     "uuid": "^7.0.3"
   }
